@@ -1,7 +1,7 @@
 {
-  "name": "element-react",
-  "version": "1.4.33",
-  "description": "Element UI for React",
+  "name": "kyligence-ui-react",
+  "version": "0.0.1",
+  "description": "Kyligence UI for React",
   "private": false,
   "main": "dist/npm/es5/index.js",
   "jsnext:main": "next.js",
@@ -18,19 +18,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ElemeFE/element-react.git"
+    "url": "git+https://github.com/Kyligence/element-react.git"
   },
   "keywords": [
-    "Element",
+    "Kyligence",
     "UI",
     "React"
   ],
-  "author": "ELEME Inc",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ElemeFE/element-react/issues"
+    "url": "https://github.com/Kyligence/element-react/issues"
   },
-  "homepage": "https://github.com/ElemeFE/element-react",
+  "homepage": "https://github.com/Kyligence/element-react",
   "devDependencies": {
     "@types/react": "^16.8.1",
     "babel-cli": "^6.26.0",
@@ -47,7 +46,7 @@
     "codemirror": "^5.43.0",
     "core-js": "^2.6.3",
     "css-loader": "^2.1.0",
-    "element-theme-default": "^1.4.13",
+    "kyligence-theme-default": "^0.0.1",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.0",
     "eslint": "^5.13.0",

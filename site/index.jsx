@@ -4,7 +4,7 @@ import { AppContainer } from 'react-hot-loader';
 
 import 'core-js';
 
-import 'element-theme-default';
+import 'kyligence-theme-default';
 
 import './styles/base.scss';
 import './styles/prism.css';
