@@ -18,7 +18,8 @@ export default class Tooltip extends Component {
     transition: "fade-in-linear",
     visibleArrow: true,
     openDelay: 0,
-    manual: false
+    manual: false,
+    positionFixed: false,
   }
 
   constructor(props: Object) {
@@ -29,24 +30,29 @@ export default class Tooltip extends Component {
     }
   }
 
-  componentWillReceiveProps(props: Object) {
-    if (props.visible !== this.props.visible) {
-      this.setState({
-        showPopper: props.visible
-      });
+  componentWillReceiveProps(nextProps: Object) {
+    const { visible: oldVisible } = this.props;
+    const { visible: newVisible } = nextProps;
+
+    if (oldVisible !== newVisible) {
+      this.setState({ showPopper: newVisible });
     }
   }
 
   showPopper(): void {
-    if (!this.props.manual) {
+    const { manual, openDelay } = this.props;
+
+    if (!manual) {
       this.timeout = setTimeout(() => {
         this.setState({ showPopper: true });
-      }, this.props.openDelay);
+      }, openDelay);
     }
   }
 
   hidePopper(): void {
-    if (!this.props.manual) {
+    const { manual } = this.props;
+
+    if (!manual) {
       clearTimeout(this.timeout);
       this.setState({ showPopper: false });
     }
@@ -54,16 +60,21 @@ export default class Tooltip extends Component {
 
   onEnter(): void {
     const { popper, reference, arrow } = this.refs;
+    const { placement, positionFixed } = this.props;
 
     if (arrow) {
       arrow.setAttribute('x-arrow', '');
     }
 
     this.popperJS = new Popper(reference, popper, {
-      placement: this.props.placement,
+      placement,
+      positionFixed,
       modifiers: {
         computeStyle: {
           gpuAcceleration: false
+        },
+        preventOverflow: {
+          boundariesElement: 'window',
         }
       }
     });
@@ -74,20 +85,23 @@ export default class Tooltip extends Component {
   }
 
   render(): React.DOM {
-    const { effect, content, disabled, transition, visibleArrow } = this.props;
+    const { effect, content, disabled, transition, visibleArrow, popperClass, children } = this.props;
+    const { showPopper } = this.state;
 
     return (
       <div style={this.style()} className={this.className('el-tooltip')} onMouseEnter={this.showPopper.bind(this)} onMouseLeave={this.hidePopper.bind(this)}>
         <div ref="reference" className="el-tooltip__rel">
-          <div>{ this.props.children }</div>
+          <div>{children}</div>
         </div>
         {
           !disabled && (
             <Transition name={transition} onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
-              <View show={this.state.showPopper} >
-                <div ref="popper" className={ this.classNames("el-tooltip__popper", `is-${effect}`) }>
-                  <div>{ content }</div>
-                  { visibleArrow && <div ref="arrow" className="popper__arrow"/> }
+              <View show={showPopper}>
+                <div ref="popper" className={this.classNames("el-tooltip__popper", `is-${effect}`, popperClass)}>
+                  <div>{content}</div>
+                  {visibleArrow && (
+                    <div ref="arrow" className="popper__arrow" />
+                  )}
                 </div>
               </View>
             </Transition>
@@ -116,5 +130,7 @@ Tooltip.propTypes = {
   // 手动控制模式，设置为 true 后，mouseenter 和 mouseleave 事件将不会生效
   manual: PropTypes.bool,
   // 手动控制状态的展示
-  visible: PropTypes.bool
+  visible: PropTypes.bool,
+  positionFixed: PropTypes.bool,
+  popperClass: PropTypes.string,
 };

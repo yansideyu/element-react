@@ -15,7 +15,7 @@ render() {
       <i className="el-icon-edit"></i>
       <i className="el-icon-share"></i>
       <i className="el-icon-delete"></i>
-      <Button type="primary" icon="search">Search</Button>
+      <Button type="primary" icon="el-icon-search">Search</Button>
     </div>
   )
 }

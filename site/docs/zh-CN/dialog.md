@@ -12,7 +12,8 @@ constructor(props) {
   super(props);
 
   this.state = {
-    dialogVisible: false
+    dialogVisible: false,
+    bodyDialogVisible: false,
   };
 }
 
@@ -20,6 +21,7 @@ render() {
   return (
     <div>
       <Button type="text" onClick={ () => this.setState({ dialogVisible: true }) }>点击打开 Dialog</Button>
+      <Button type="text" onClick={ () => this.setState({ bodyDialogVisible: true }) }>点击打开 Body 上的 Dialog</Button>
       <Dialog
         title="提示"
         size="tiny"
@@ -33,6 +35,23 @@ render() {
         <Dialog.Footer className="dialog-footer">
           <Button onClick={ () => this.setState({ dialogVisible: false }) }>取消</Button>
           <Button type="primary" onClick={ () => this.setState({ dialogVisible: false }) }>确定</Button>
+        </Dialog.Footer>
+      </Dialog>
+
+      <Dialog
+        title="body上的提示"
+        size="tiny"
+        visible={ this.state.bodyDialogVisible }
+        onCancel={ () => this.setState({ bodyDialogVisible: false }) }
+        lockScroll={ false }
+        appendToBody={ true }
+      >
+        <Dialog.Body>
+          <span>这是一段信息</span>
+        </Dialog.Body>
+        <Dialog.Footer className="dialog-footer">
+          <Button onClick={ () => this.setState({ bodyDialogVisible: false }) }>取消</Button>
+          <Button type="primary" onClick={ () => this.setState({ bodyDialogVisible: false }) }>确定</Button>
         </Dialog.Footer>
       </Dialog>
     </div>
@@ -55,7 +74,14 @@ constructor(props) {
     dialogVisible3: false,
     form: {
       name: '',
-      region: ''
+      region: '',
+      members: [
+        'zhangsan1',
+        'zhangsan2',
+        'zhangsan3',
+        'zhangsan4',
+        'zhangsan5',
+      ]
     }
   };
 
@@ -132,6 +158,15 @@ render() {
                 <Select.Option label="区域二" value="beijing"></Select.Option>
               </Select>
             </Form.Item>
+            <Form.Item label="活动人员" labelWidth="120">
+              <Select multiple value={this.state.form.members} placeholder="请选择活动人员">
+                <Select.Option label="很帅的张三1" value="zhangsan1"></Select.Option>
+                <Select.Option label="很帅的张三2" value="zhangsan2"></Select.Option>
+                <Select.Option label="很帅的张三3" value="zhangsan3"></Select.Option>
+                <Select.Option label="很帅的张三4" value="zhangsan4"></Select.Option>
+                <Select.Option label="很帅的张三5" value="zhangsan5"></Select.Option>
+              </Select>
+            </Form.Item>
           </Form>
         </Dialog.Body>
 
@@ -154,6 +189,7 @@ render() {
 | top       | Dialog CSS 中的 top 值（仅在 size 不为 full 时有效） | string    | —                       | 15%     |
 | modal     | 是否需要遮罩层   | boolean   | — | true |
 | lockScroll | 是否在 Dialog 出现时将 body 滚动锁定 | boolean | — | true |
+| appendToBody | 是否挂载在 Body 上 | boolean | — | false |
 | customClass      | Dialog 的自定义类名 | string    | — | — |
 | closeOnClickModal | 是否可以通过点击 modal 关闭 Dialog | boolean    | — | true |
 | closeOnPressEscape | 是否可以通过按下 ESC 关闭 Dialog | boolean    | — | true |

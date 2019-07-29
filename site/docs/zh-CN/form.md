@@ -568,6 +568,7 @@ render() {
 | labelPosition | 表单域标签的位置 | string |  right/left/top            | right |
 | labelWidth | 表单域标签的宽度，所有的 form-item 都会继承 form 组件的 labelWidth 的值 | string | — | — |
 | labelSuffix | 表单域标签的后缀 | string | — | — |
+| scrollToError | 校验后是否滚动到第一个错误 | bool | — | false |
 
 ### Form Methods
 

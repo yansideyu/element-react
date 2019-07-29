@@ -170,22 +170,22 @@ export default class Transfer extends Component {
         </TransferPanel>
         <div className="el-transfer__buttons">
           <Button
+            plain
+            icon="el-icon-arrow-left"
             type="primary"
-            size="small"
             onClick={this.addToLeft}
             disabled={rightChecked.length === 0}
           >
-            <i className="el-icon-arrow-left" />
             {buttonTexts[0] !== undefined && <span>{buttonTexts[0]}</span>}
           </Button>
           <Button
+            plain
+            icon="el-icon-arrow-right"
             type="primary"
-            size="small"
             onClick={this.addToRight}
             disabled={leftChecked.length === 0}
           >
             {buttonTexts[1] !== undefined && <span>{buttonTexts[1]}</span>}
-            <i className="el-icon-arrow-right" />
           </Button>
         </div>
         <TransferPanel

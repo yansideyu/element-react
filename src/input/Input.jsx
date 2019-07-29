@@ -70,27 +70,40 @@ export default class Input extends Component {
   }
 
   handleBlur(e: SyntheticEvent<any>): void {
-    const { onBlur } = this.props
-    if (this.props.trim) this.handleTrim()
+    const { onBlur, trim } = this.props
+    if (trim) this.handleTrim()
     if (onBlur) onBlur(e)
   }
 
   handleTrim(): void {
+    const { onChange } = this.props;
+
     this.refs.input.value = this.refs.input.value.trim()
-    if(this.props.onChange) {
+    if(onChange) {
       // this's for controlled components
-      this.props.onChange(this.refs.input.value.trim())
+      onChange(this.refs.input.value.trim())
     }
   }
 
-  handleIconClick(e: SyntheticEvent<any>): void {
-    if (this.props.onIconClick) {
-      this.props.onIconClick(e)
+  handlePrefixIconClick(e: SyntheticEvent<any>): void {
+    const { onPrefixIconClick } = this.props;
+
+    if (onPrefixIconClick) {
+      onPrefixIconClick(e)
+    }
+  }
+
+  handleSuffixIconClick(e: SyntheticEvent<any>): void {
+    const { onSuffixIconClick } = this.props;
+
+    if (onSuffixIconClick) {
+      onSuffixIconClick(e)
     }
   }
 
   resizeTextarea(): void {
     const { autosize, type } = this.props;
+    const { textareaStyle } = this.state;
 
     if (!autosize || type !== 'textarea') {
       return;
@@ -101,27 +114,32 @@ export default class Input extends Component {
     const textareaCalcStyle = calcTextareaHeight(this.refs.textarea, minRows, maxRows);
 
     this.setState({
-      textareaStyle: Object.assign({}, this.state.textareaStyle, textareaCalcStyle)
+      textareaStyle: Object.assign({}, textareaStyle, textareaCalcStyle)
     });
   }
 
   render(): React.DOM {
-    const { type, size, prepend, append, icon, autoComplete, validating, rows, onMouseEnter, onMouseLeave, trim,
+    const {
+      type, size, prepend, append, prefixIcon, suffixIcon, autoComplete, validating, rows, trim,
+      onMouseEnter, onMouseLeave, onPrefixIconClick, onSuffixIconClick,
       ...otherProps
     } = this.props;
+    const { textareaStyle } = this.state;
 
     const classname = this.classNames(
       type === 'textarea' ? 'el-textarea' : 'el-input',
       size && `el-input--${size}`, {
-        'is-disabled': this.props.disabled,
+        'is-disabled': otherProps.disabled,
         'el-input-group': prepend || append,
         'el-input-group--append': !!append,
-        'el-input-group--prepend': !!prepend
+        'el-input-group--prepend': !!prepend,
+        'el-input--prefix': !!prefixIcon,
+        'el-input--suffix': !!suffixIcon,
       }
     );
 
     if ('value' in this.props) {
-      otherProps.value = this.fixControlledValue(this.props.value);
+      otherProps.value = this.fixControlledValue(otherProps.value);
 
       delete otherProps.defaultValue;
     }
@@ -129,7 +147,6 @@ export default class Input extends Component {
     delete otherProps.resize;
     delete otherProps.style;
     delete otherProps.autosize;
-    delete otherProps.onIconClick;
 
     if (type === 'textarea') {
       return (
@@ -137,19 +154,27 @@ export default class Input extends Component {
           <textarea { ...otherProps }
             ref="textarea"
             className="el-textarea__inner"
-            style={this.state.textareaStyle}
+            style={textareaStyle}
             rows={rows}
             onChange={this.handleChange.bind(this)}
             onFocus={this.handleFocus.bind(this)}
             onBlur={this.handleBlur.bind(this)}
-          ></textarea>
+          />
         </div>
       )
     } else {
+      const prefixIconClass = this.classNames('el-input__prefix', 'el-input__icon', prefixIcon, { 'is-clickable': !!onPrefixIconClick });
+      const suffixIconClass = this.classNames('el-input__suffix', 'el-input__icon', suffixIcon, { 'is-clickable': !!onSuffixIconClick });
       return (
         <div style={this.style()} className={this.className(classname)} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
           { prepend && <div className="el-input-group__prepend">{prepend}</div> }
-          { typeof icon === 'string' ? <i className={`el-input__icon el-icon-${icon}`} onClick={this.handleIconClick.bind(this)}>{prepend}</i> : icon }
+          { typeof prefixIcon === 'string' ? (
+            <i
+              className={prefixIconClass}
+              onClick={this.handlePrefixIconClick.bind(this)}
+              onKeyDown={this.handlePrefixIconClick.bind(this)}
+            />
+          ) : prefixIcon }
           <input { ...otherProps }
             ref="input"
             type={type}
@@ -160,6 +185,13 @@ export default class Input extends Component {
             onBlur={this.handleBlur.bind(this)}
           />
           { validating && <i className="el-input__icon el-icon-loading"></i> }
+          { typeof suffixIcon === 'string' ? (
+            <i
+              className={suffixIconClass}
+              onClick={this.handleSuffixIconClick.bind(this)}
+              onKeyDown={this.handleSuffixIconClick.bind(this)}
+            />
+          ) : suffixIcon }
           { append && <div className="el-input-group__append">{append}</div> }
         </div>
       )
@@ -170,7 +202,8 @@ export default class Input extends Component {
 Input.propTypes = {
   // base
   type: PropTypes.string,
-  icon: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  prefixIcon: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  suffixIcon: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   disabled: PropTypes.bool,
   name: PropTypes.string,
   placeholder: PropTypes.string,
@@ -183,7 +216,7 @@ Input.propTypes = {
   trim: PropTypes.bool,
 
   // type !== 'textarea'
-  size: PropTypes.oneOf(['large', 'small', 'mini']),
+  size: PropTypes.oneOf(['small']),
   prepend: PropTypes.node,
   append: PropTypes.node,
 
@@ -196,7 +229,8 @@ Input.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
-  onIconClick: PropTypes.func,
+  onPrefixIconClick: PropTypes.func,
+  onSuffixIconClick: PropTypes.func,
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
 

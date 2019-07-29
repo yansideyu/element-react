@@ -1,0 +1,91 @@
+@charset "UTF-8";
+@import "./common/var.css";
+@import "./common/popup.css";
+
+@component-namespace el {
+
+  @b dialog {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-white);
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--dialog-box-shadow);
+    box-sizing: border-box;
+    margin-bottom: 50px;
+
+    @modifier tiny {
+      width: var(--dialog-tiny-width);
+    }
+
+    @modifier small {
+      width: var(--dialog-small-width);
+    }
+
+    @modifier large {
+      width: var(--dialog-large-width);
+    }
+
+    @modifier full {
+      width: 100%;
+      top: 0;
+      margin-bottom: 0;
+      height: 100%;
+      overflow: auto;
+    }
+
+    @e wrapper {
+      position: fixed 0 0 0 0;
+      overflow: auto;
+      margin: 0;
+    }
+
+    @e header {
+      padding: 15px 20px;
+      border-bottom: 1px solid #cccccc;
+      @utils-clearfix;
+    }
+
+    @e headerbtn {
+      float: right;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0;
+      cursor: pointer;
+      font-size: 16px;
+
+      .el-dialog__close {
+        color: var(--dialog-close-color);
+        font-size: 12px;
+        vertical-align: middle;
+        line-height: 22px;
+      }
+      
+      &:focus, &:hover {
+        .el-dialog__close {
+          color: var(--dialog-close-hover-color);
+        }
+      }
+    }
+
+    @e title {
+      font-size: var(--dialog-title-font-size);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-base-black);
+    }
+
+    @e body {
+      padding: 20px 20px;
+      color: var(--color-base-black);
+      font-size: var(--dialog-font-size);
+    }
+
+    @e footer {
+      padding: 10px 20px;
+      text-align: right;
+      box-sizing: border-box;
+      border-top: 1px solid #cccccc;
+    }
+  }
+}

@@ -40,22 +40,30 @@ export default class Form extends Component {
     });
   }
 
+  scrollToError(errorsList: Array<any>): void {
+    if (errorsList.length && this.props.scrollToError) {
+      const field = this.state.fields.filter(field => field.props.prop === errorsList[0][0].field)[0];
+      field.getDomNode().scrollIntoView();
+    }
+  }
+
   validate(callback: Function): void {
     let valid = true;
     let count = 0;
-
+    const errorsList = [];
     // 如果需要验证的fields为空，调用验证时立刻返回callback
     if (this.state.fields.length === 0 && callback) {
       callback(true);
     }
-
-    this.state.fields.forEach(field => {
-      field.validate('', errors => {
+    this.state.fields.forEach((field) => {
+      field.validate('', (errors) => {
         if (errors) {
           valid = false;
+          errorsList.push(errors);
         }
         if (typeof callback === 'function' && ++count === this.state.fields.length) {
           callback(valid);
+          this.scrollToError(errorsList);
         }
       });
     });
@@ -89,10 +97,12 @@ Form.propTypes = {
   labelWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   labelSuffix: PropTypes.string,
   inline: PropTypes.bool,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  scrollToError: PropTypes.bool,
 }
 
 Form.defaultProps = {
+  scrollToError: false,
   labelPosition: 'right',
   labelSuffix: ''
 };

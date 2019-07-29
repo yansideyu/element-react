@@ -4,8 +4,19 @@ import React from 'react';
 import { Component, PropTypes } from '../../libs';
 
 export default class DropdownItem extends Component {
-  handleClick(): void {
-    this.context.component.handleMenuItemClick(this.props.command, this);
+  handleClick(e: any): void {
+    const { onClick, command } = this.props;
+    const { component } = this.context;
+    if (!onClick) {
+      component.handleMenuItemClick(command, this);
+    } else {
+      onClick(e, command);
+      if (component.props.hideOnClick) {
+        component.setState({
+          visible: false
+        });
+      }
+    }
   }
 
   render(): React.DOM {
@@ -33,4 +44,5 @@ DropdownItem.propTypes = {
   command: PropTypes.string,
   disabled: PropTypes.bool,
   divided: PropTypes.bool,
+  onClick: PropTypes.func,
 };

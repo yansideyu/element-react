@@ -27,25 +27,23 @@ test('basic usage', () => {
       options={options}
       popperClass="popper-class"
       placeholder="enter"
-      size="large"
     />
   ); // unwrap clickOutSide HOC
 
   // placeholder
   expect(component.find('.el-input__inner').first().prop('placeholder')).toBe('enter');
-  // size为large
-  expect(component.find('.el-cascader--large')).toHaveLength(1);
-  expect(component.find('.el-input').first().hasClass('el-input--large')).toBeTruthy();
 
   // 点击时展开菜单
   expect(component.find('.el-cascader-menus').prop('style').display).toBe('none');
   clickShowPopper(component);
-  expect(component.find('.el-cascader-menus').prop('style').display).toBeUndefined();
-  expect(component.find('.el-cascader-menus').first().hasClass('popper-class')).toBeTruthy();
+  setTimeout(() => {
+    expect(component.find('.el-cascader-menus').prop('style').display).toBeUndefined();
+    expect(component.find('.el-cascader-menus').first().hasClass('popper-class')).toBeTruthy();
 
-  // 菜单元素数量及内容
-  expect(component.find('.el-cascader-menu')).toHaveLength(1);
-  expect(component.find('.el-cascader-menu').childAt(0).text()).toBe('指南');
+    // 菜单元素数量及内容
+    expect(component.find('.el-cascader-menu')).toHaveLength(1);
+    expect(component.find('.el-cascader-menu').childAt(0).text()).toBe('指南');
+  });
 
   // 点击选项时展开子菜单，该选项被选中
   component.find('.el-cascader-menu').childAt(0).simulate('click');

@@ -1,6 +1,6 @@
 {
   "name": "kyligence-ui-react",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "description": "Kyligence UI for React",
   "private": false,
   "main": "dist/npm/es5/index.js",
@@ -14,7 +14,8 @@
     "lint": "eslint src libs site --quiet",
     "build": "cd build/site && webpack --progress",
     "prepubl¡sh": "./build/scripts/prepare.sh",
-    "postpublish": "./build/scripts/release.sh"
+    "postpublish": "./build/scripts/release.sh",
+    "update-theme": "npm run prepubl¡sh && npm run postpublish"
   },
   "repository": {
     "type": "git",
@@ -46,7 +47,6 @@
     "codemirror": "^5.43.0",
     "core-js": "^2.6.3",
     "css-loader": "^2.1.0",
-    "kyligence-theme-default": "^0.0.1",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.0",
     "eslint": "^5.13.0",
@@ -63,6 +63,7 @@
     "mini-css-extract-plugin": "^0.5.0",
     "mock-raf": "^1.0.1",
     "node-sass": "^4.11.0",
+    "postcss-loader": "^3.0.0",
     "prismjs": "^1.15.0",
     "raw-loader": "^1.0.0",
     "react": "*",
@@ -82,7 +83,11 @@
   "dependencies": {
     "async-validator": "^1.10.1",
     "classnames": "^2.2.6",
+    "gulp": "^3.9.1",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-postcss": "^6.1.1",
     "popper.js": "^1.14.7",
+    "postcss-salad": "^1.0.5",
     "prop-types": "^15.6.2",
     "raf": "^3.4.1",
     "react-click-outside": "^3.0.1",

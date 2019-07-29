@@ -93,7 +93,7 @@ render() {
         数据查询
       </Badge>
       <Badge isDot>
-        <Button className="share-button" icon="share" type="primary"></Button>
+        <Button className="share-button" icon="el-icon-share" type="primary"></Button>
       </Badge>
     </div>
   )

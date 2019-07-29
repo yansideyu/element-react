@@ -1,0 +1,33 @@
+@charset "UTF-8";
+@import "./common/var.css";
+
+@component-namespace el {
+  @b card {
+    border: 1px solid var(--card-border-color);
+    border-radius: var(--card-border-radius);
+    background-color: var(--color-white);
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1;
+
+    @e header {
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--card-border-color);
+      box-sizing: border-box;
+      font-weight: var(--font-weight-medium);
+      background-color: var(--card-default-header-color);
+      color: var(--color-base-black);
+    }
+
+    @e body {
+      padding: 10px 15px;
+      color: var(--color-base-black);
+    }
+
+    @m primary {
+      .el-card__header {
+        background-color: var(--card-primary-header-color);
+      }
+    }
+  }
+}

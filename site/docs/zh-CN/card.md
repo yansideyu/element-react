@@ -9,22 +9,30 @@
 ```js
 render() {
   return (
-    <Card
-      className="box-card"
-      header={
-        <div className="clearfix">
-          <span style={{ "lineHeight": "36px" }}>卡片名称</span>
-          <span style={{ "float": "right" }}>
-            <Button type="primary">操作按钮</Button>
-          </span>
-        </div>
-      }
-    >
-      <div className="text item">列表内容 1</div>
-      <div className="text item">列表内容 2</div>
-      <div className="text item">列表内容 3</div>
-      <div className="text item">列表内容 4</div>
-    </Card>
+    <div>
+      <Card
+        className="box-card"
+        style={{ marginBottom: '10px' }}
+        header={
+          <div className="clearfix">
+            <span>默认皮肤卡片</span>
+          </div>
+        }
+      >
+        Description information may cost you very long, but if you can not complete it.
+      </Card>
+      <Card
+        className="box-card"
+        type="primary"
+        header={
+          <div className="clearfix">
+            <span>主要皮肤卡片</span>
+          </div>
+        }
+      >
+        Description information may cost you very long, but if you can not complete it.
+      </Card>
+    </div>
   )
 }
 ```

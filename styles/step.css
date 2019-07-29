@@ -1,0 +1,225 @@
+@charset "UTF-8";
+@import "./common/var.css";
+
+@component-namespace el {
+  @b step {
+    position: relative;
+    vertical-align: top;
+
+    &:last-child .el-step__main {
+      padding-right: 0;
+    }
+
+    @when horizontal {
+      display: inline-block;
+    }
+
+    @when vertical {
+      & .el-step__head,
+      & .el-step__main {
+        display: inline-block;
+      }
+
+      & .el-step__main {
+        padding-left: 10px;
+      }
+    }
+
+    @e line {
+      display: inline-block;
+      position: absolute;
+      border-color: inherit;
+      background-color: var(--steps-line-color);
+
+      @when icon {
+        @when horizontal {
+          right: 4px;
+          + .el-step__icon {
+            width: 38px;
+            height: 30px;
+          }
+        }
+      }
+
+      @when horizontal {
+        top: 15px;
+        height: var(--steps-border-width);
+        left: calc(var(--steps-icon-height) + var(--steps-border-width) * 2);
+        right: 0;
+        .el-step__line-inner {
+          width: 0;
+          height: var(--steps-border-width);
+        }
+      }
+
+      @when vertical {
+        width: var(--steps-border-width);
+        box-sizing: border-box;
+        top: calc(var(--steps-icon-height) + var(--steps-border-width) * 2);
+        bottom: 0;
+        left: 15px;
+        .el-step__line-inner {
+          width: var(--steps-border-width);
+          height: 0;
+        }
+      }
+    }
+
+    @e line-inner {
+      display: block;
+      transition: all 150ms;
+      box-sizing: border-box;
+    }
+
+    @e icon {
+      display: block;
+      line-height: var(--steps-icon-height);
+      position: relative;
+
+      > * {
+        line-height: inherit;
+        vertical-align: middle;
+      }
+    }
+
+    @e head {
+      text-align: center;
+      line-height: var(--steps-icon-height);
+      font-size: var(--steps-icon-height);
+      vertical-align: top;
+      transition: all 150ms;
+
+      @when text {
+        font-size: 14px;
+        font-weight: var(--font-weight-medium);
+        .el-step__icon {
+          width: 26px;
+          height: 26px;
+          border-width: var(--steps-border-width);
+          border-style: solid;
+          border-radius: 50%;
+          box-sizing: content-box;
+        }
+      }
+
+      @when process {
+        .el-step__icon {
+          color: var(--steps-process-color);
+          background-color: var(--steps-process-background);
+          border-color: var(--steps-process-border-color);
+        }
+        .el-step__line-inner {
+          background-color: var(--steps-process-color);
+        }
+      }
+
+      @when wait {
+        .el-step__icon {
+          color: var(--steps-wait-color);
+          background-color: var(--steps-wait-background);
+          border-color: var(--steps-wait-border-color);
+        }
+        .el-step__line-inner {
+          background-color: var(--steps-wait-border-color);
+        }
+      }
+
+      @when success {
+        .el-step__icon {
+          color: var(--color-white);
+          background-color: var(--color-success);
+          border-color: var(--color-success);
+        }
+        .el-step__line-inner {
+          background-color: var(--color-success);
+        }
+      }
+
+      @when error {
+        .el-step__icon {
+          color: var(--color-white);
+          background-color: var(--color-danger);
+          border-color: var(--color-danger);
+        }
+        .el-step__line-inner {
+          background-color: var(--color-danger);
+        }
+      }
+
+      @when finish {
+        .el-step__icon {
+          color: var(--color-white);
+          background-color: var(--color-primary);
+          border-color: var(--color-primary);
+        }
+        .el-step__line-inner {
+          background-color: var(--color-primary);
+        }
+      }
+    }
+
+    @e main {
+      white-space: normal;
+      padding-right: 10px;
+      text-align: left;
+    }
+
+    @e title {
+      font-size: 14px;
+      line-height: 32px;
+      display: inline-block;
+      white-space: nowrap;
+
+      @when process {
+        font-weight: 700;
+        color: var(--steps-process-color);
+      }
+
+      @when wait {
+        font-weight: normal;
+        color: var(--steps-wait-color);
+      }
+
+      @when success {
+        font-weight: 700;
+        color: var(--color-success);
+      }
+
+      @when error {
+        font-weight: 700;
+        color: var(--color-danger);
+      }
+
+      @when finish {
+        font-weight: 700;
+        color: var(--color-primary);
+      }
+    }
+
+    @e description {
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 14px;
+
+      @when process {
+        color: var(--color-base-silver);
+      }
+
+      @when wait {
+        color: var(--color-extra-light-silver);
+      }
+
+      @when success {
+        color: var(--color-success);
+      }
+
+      @when error {
+        color: var(--color-danger);
+      }
+
+      @when finish {
+        color: var(--color-primary);
+      }
+    }
+  }
+}

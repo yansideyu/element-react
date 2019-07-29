@@ -1,0 +1,49 @@
+@import "../common/var.css";
+@import "../common/transition.css";
+
+@component-namespace el {
+  @b date-editor {
+    position: relative;
+    display: inline-block;
+
+    &.el-input {
+      width: 193px;
+
+      input {
+        line-height: 30px;
+      }
+    }
+
+    @m daterange {
+      &.el-input {
+        width: 220px;
+      }
+    }
+
+    @m datetimerange {
+      &.el-input {
+        width: 350px;
+      }
+    }
+
+    .el-picker-panel {
+      position: absolute;
+      min-width: 180px;
+      box-sizing: border-box;
+      box-shadow: 0 2px 6px #ccc;
+      background: var(--color-white);
+      z-index: 10;
+      top: 41px;
+    }
+    .hidden {
+      display: none;
+    }
+    .el-kylin-error_01 {
+      font-size: 12px;
+      color: #CCCCCC;
+    }
+    .el-kylin-type_date, .el-kylin-error_01 {
+      line-height: 30px;
+    }
+  }
+}

@@ -9,7 +9,7 @@ export default class CollapseItem extends Component {
   }
 
   render(): React.DOM {
-    const { title, isActive, onClick, name } = this.props;
+    const { title, isActive, onClick, name, renderIcon } = this.props;
 
     return (
       <div
@@ -19,7 +19,9 @@ export default class CollapseItem extends Component {
         })}
       >
         <div className="el-collapse-item__header" onClick={() => onClick(name)}>
-          <i className="el-collapse-item__header__arrow el-icon-arrow-right" />
+          {renderIcon
+            ? renderIcon(isActive)
+            : <i className="el-collapse-item__header__arrow el-icon-arrow-right" />}
           {title}
         </div>
         <CollapseTransition isShow={isActive}>
@@ -38,5 +40,6 @@ CollapseItem.propTypes = {
   onClick: PropTypes.func,
   isActive: PropTypes.bool,
   title: PropTypes.node,
+  renderIcon: PropTypes.func,
   name: PropTypes.string
 };

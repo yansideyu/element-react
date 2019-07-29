@@ -151,6 +151,7 @@ export default class CascaderMenu extends Component {
             {...events}
           >
             {item.label}
+            {item.children && <i className="el-kylin-more_right"></i>}
           </li>
         );
       });

@@ -87,6 +87,16 @@ export default class Tree extends Component {
     this.store.setChecked(data, checked, deep);
   }
 
+  setCurrentNodeKey(key: string): void {
+    const nodeData: any = Object.values(this.store.nodesMap)
+      .find((node, idx) => this.getNodeKey(node, idx) === key) || {};
+    const nodeEl = nodeData.$el;
+
+    if (nodeEl) {
+      nodeEl.handleClickNode();
+    }
+  }
+
   // used by child nodes, use tree store to store this info?
   getCurrentNode(): ?Object {
     return this.state.currentNode;

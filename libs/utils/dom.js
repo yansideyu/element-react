@@ -67,3 +67,21 @@ export function scrollIntoView(container, selected) {
     container.scrollTop = bottom - container.clientHeight;
   }
 }
+
+export function removeClass(element, ...removeClasses) {
+  if (element.className) {
+    element.className = element.className.split(' ')
+      .filter(classname => !removeClasses.includes(classname))
+      .join(' ');
+  }
+}
+
+export function addClass(element, ...addClasses) {
+  if (element.className) {
+    element.className = element.className.split(' ')
+      .concat(addClasses)
+      .join(' ');
+  } else {
+    element.className = addClasses.join(' ');
+  }
+}

@@ -43,6 +43,7 @@ export default class Node extends Component {
     this.oldChecked = false;
     this.oldIndeterminate = false;
     this.idGen = new IDGenerator();
+    this.handleClickNode = this.handleClick.bind(this);
   }
 
   componentDidMount(): void {
@@ -79,6 +80,7 @@ export default class Node extends Component {
         this.setState({}); //force update view
       });
     }
+    nodeModel.$el = this;
   }
 
   componentWillUnmount(): void {
@@ -192,7 +194,7 @@ export default class Node extends Component {
 
     return (
       <div
-        onClick={this.handleClick.bind(this)}
+        onClick={this.handleClickNode}
         className={this.classNames('el-tree-node', {
           expanded: childNodeRendered && expanded,
           'is-current': treeNode.getCurrentNode() === this,

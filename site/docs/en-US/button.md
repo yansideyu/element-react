@@ -81,10 +81,10 @@ Use icons to add more meaning to Button. You can use icon alone to save some spa
 render() {
   return (
     <div>
-      <Button type="primary" icon="edit"></Button>
-      <Button type="primary" icon="share"></Button>
-      <Button type="primary" icon="delete"></Button>
-      <Button type="primary" icon="search">Search</Button>
+      <Button type="primary" icon="el-icon-edit"></Button>
+      <Button type="primary" icon="el-icon-share"></Button>
+      <Button type="primary" icon="el-icon-delete"></Button>
+      <Button type="primary" icon="el-icon-search">Search</Button>
       <Button type="primary">Upload<i className="el-icon-upload el-icon-right"></i></Button>
     </div>
   )
@@ -103,13 +103,13 @@ render() {
   return (
     <div>
       <Button.Group>
-          <Button type="primary" icon="arrow-left">Previous Page</Button>
+          <Button type="primary" icon="el-icon-arrow-left">Previous Page</Button>
           <Button type="primary">Next Page<i className="el-icon-arrow-right el-icon-right"></i></Button>
       </Button.Group>
       <Button.Group>
-          <Button type="primary" icon="edit"></Button>
-          <Button type="primary" icon="share"></Button>
-          <Button type="primary" icon="delete"></Button>
+          <Button type="primary" icon="el-icon-edit"></Button>
+          <Button type="primary" icon="el-icon-share"></Button>
+          <Button type="primary" icon="el-icon-delete"></Button>
       </Button.Group>
     </div>
   )

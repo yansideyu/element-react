@@ -1014,7 +1014,7 @@ constructor(props) {
   this.state = {
     columns: [
       {
-        type: 'index'
+        type: 'radio'
       },
       {
         label: "日期",
@@ -1470,6 +1470,101 @@ render() {
         border={true}
       />
     </div>
+  )
+}
+```
+:::
+
+### 操作下拉选项
+
+操作项过多时，可选择下拉操作。
+
+:::demo 固定列需要使用`fixed`属性，它接受 `Boolean` 值或者`left` `right`，表示左边固定还是右边固定。
+```js
+constructor(props) {
+  super(props);
+
+  this.state = {
+    columns: [
+      {
+        label: "日期",
+        prop: "date",
+      },
+      {
+        label: "姓名",
+        prop: "name",
+        width: 160
+      },
+      {
+        label: "省份",
+        prop: "province",
+        width: 160
+      },
+      {
+        label: "操作",
+        prop: "zip",
+        width: 100,
+        render: ()=>{
+          return <Dropdown trigger="click" menu={(
+              <Dropdown.Menu>
+                <Dropdown.Item>黄金糕</Dropdown.Item>
+                <Dropdown.Item>狮子头</Dropdown.Item>
+              </Dropdown.Menu>
+            )}>
+              <span className="el-dropdown-link">
+                下拉菜单<i className="el-icon-caret-bottom el-icon--right"></i>
+              </span>
+            </Dropdown>
+        }
+      }
+    ],
+    data: [{
+      date: '2016-05-02',
+      name: '王小虎',
+      province: '上海',
+      city: '普陀区',
+      address: '上海市普陀区金沙江路 1518 弄',
+      zip: 200333
+    },{
+      date: '2016-05-02',
+      name: '王小虎',
+      province: '上海',
+      city: '普陀区',
+      address: '上海市普陀区金沙江路 1518 弄',
+      zip: 200333
+    },{
+      date: '2016-05-02',
+      name: '王小虎',
+      province: '上海',
+      city: '普陀区',
+      address: '上海市普陀区金沙江路 1518 弄',
+      zip: 200333
+    },{
+      date: '2016-05-02',
+      name: '王小虎',
+      province: '上海',
+      city: '普陀区',
+      address: '上海市普陀区金沙江路 1518 弄',
+      zip: 200333
+    },{
+      date: '2016-05-02',
+      name: '王小虎',
+      province: '上海',
+      city: '普陀区',
+      address: '上海市普陀区金沙江路 1518 弄',
+      zip: 200333
+    }]
+  }
+}
+
+render() {
+  return (
+    <Table
+      style={{width: '100%'}}
+      columns={this.state.columns}
+      data={this.state.data}
+      border={true}
+    />
   )
 }
 ```

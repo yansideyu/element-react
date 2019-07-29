@@ -4,19 +4,13 @@ import React from 'react';
 import { Component, PropTypes } from '../../libs';
 
 export default class Card extends Component {
-  static defaultProps = {
-    bodyStyle: {
-      padding: '20px'
-    }
-  }
-
   render(): React.DOM {
-    const { header, bodyStyle, children } = this.props;
+    const { header, bodyStyle, children, type } = this.props;
     return (
-      <div style={this.style()} className={this.className('el-card')}>
-        {
-          header && <div className="el-card__header">{ header }</div>
-        }
+      <div style={this.style()} className={this.className('el-card', type && `el-card--${type}`)}>
+        {header && (
+          <div className="el-card__header">{ header }</div>
+        )}
         <div className="el-card__body" style={ bodyStyle }>
           { children }
         </div>
@@ -27,5 +21,6 @@ export default class Card extends Component {
 
 Card.propTypes = {
   header: PropTypes.node,
+  type: PropTypes.oneOf([null, 'primary']),
   bodyStyle: PropTypes.object
 };

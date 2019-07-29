@@ -11,15 +11,22 @@ export default class Button extends Component {
   }
 
   render(): React.DOM {
+    const hasContent = !!this.props.children;
+    const isReactElement = !!(hasContent && this.props.children.$$typeof);
+    const isReactElements = !!(hasContent && this.props.children.length);
     return (
       <button style={this.style()} className={this.className('el-button', this.props.type && `el-button--${this.props.type}`, this.props.size && `el-button--${this.props.size}`, {
           'is-disabled': this.props.disabled,
           'is-loading': this.props.loading,
-          'is-plain': this.props.plain
+          'is-plain': this.props.plain,
+          'is-circle': this.props.circle,
+          'is-square': this.props.square,
       })} disabled={this.props.disabled} type={this.props.nativeType} onClick={this.onClick.bind(this)}>
         { this.props.loading && <i className="el-icon-loading" /> }
-        { this.props.icon && !this.props.loading && <i className={`el-icon-${this.props.icon}`} /> }
-        <span>{this.props.children}</span>
+        { this.props.icon && !this.props.loading && <i className={this.props.icon} /> }
+        { hasContent || isReactElement || isReactElements ? (
+          <span>{this.props.children}</span>
+        ) : null }
       </button>
     )
   }
@@ -33,7 +40,9 @@ Button.propTypes = {
   nativeType: PropTypes.string,
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
-  plain: PropTypes.bool
+  plain: PropTypes.bool,
+  circle: PropTypes.bool,
+  square: PropTypes.bool,
 }
 
 Button.defaultProps = {
@@ -41,5 +50,7 @@ Button.defaultProps = {
   nativeType: 'button',
   loading: false,
   disabled: false,
-  plain: false
+  plain: false,
+  circle: false,
+  square: false,
 };

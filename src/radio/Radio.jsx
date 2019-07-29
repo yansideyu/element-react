@@ -80,9 +80,11 @@ export default class Radio extends Component {
             onBlur={this.onBlur.bind(this)}
           />
         </span>
-        <span className="el-radio__label">
-          {children || value}
-        </span>
+        {children && (
+          <span className={checked ? "el-radio__label is-checked-label": "el-radio__label"}>
+            {children}
+          </span>
+        )}
       </label>
     )
   }

@@ -205,21 +205,33 @@ constructor(props) {
       children: 'children',
       label: 'label'
     }
-  }
+  };
+  this.handleClick = this.handleClick.bind(this);
+}
+
+handleClick() {
+  this.refs.$tree.setCurrentNodeKey(6);
 }
 
 render() {
   const { data, options } = this.state
 
   return (
-    <Tree
-      data={data}
-      options={options}
-      isShowCheckbox={true}
-      nodeKey="id"
-      defaultExpandedKeys={[2, 3]}
-      defaultCheckedKeys={[5]}
-    />
+    <div>
+      <Tree
+        ref="$tree"
+        data={data}
+        options={options}
+        highlightCurrent={true}
+        isShowCheckbox={true}
+        nodeKey="id"
+        defaultExpandedKeys={[2, 3]}
+        defaultCheckedKeys={[5]}
+      />
+      <div className="buttons">
+        <Button onClick={this.handleClick}>设置 二级 2-2 为高亮</Button>
+      </div>
+    </div>
   )
 }
 ```

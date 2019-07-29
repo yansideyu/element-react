@@ -11,10 +11,11 @@
 render() {
   return (
     <div>
-      <Alert title="成功提示的文案" type="success" />
       <Alert title="消息提示的文案" type="info" />
       <Alert title="警告提示的文案" type="warning" />
+      <Alert title="成功提示的文案" type="success" />
       <Alert title="错误提示的文案" type="error" />
+      <Alert title="注意提示的文案" type="notice" />
     </div>
   )
 }
@@ -50,6 +51,7 @@ render() {
     <div>
       <Alert title="成功提示的文案" type="success" showIcon={true} />
       <Alert title="消息提示的文案" type="info" showIcon={true} />
+      <Alert title="注意提示的文案" type="notice" showIcon={true} />
       <Alert title="警告提示的文案" type="warning" showIcon={true} />
       <Alert title="错误提示的文案" type="error" showIcon={true} />
     </div>
@@ -84,6 +86,7 @@ render() {
     <div>
       <Alert title="成功提示的文案" type="success" description="文字说明文字说明文字说明文字说明文字说明文字说明"  showIcon={true} />
       <Alert title="消息提示的文案" type="info" description="文字说明文字说明文字说明文字说明文字说明文字说明" showIcon={true} />
+      <Alert title="注意提示的文案" type="notice" description="文字说明文字说明文字说明文字说明文字说明文字说明" showIcon={true} />
       <Alert title="警告提示的文案" type="warning" description="文字说明文字说明文字说明文字说明文字说明文字说明" showIcon={true} />
       <Alert title="错误提示的文案" type="error" description="文字说明文字说明文字说明文字说明文字说明文字说明" showIcon={true} />
     </div>

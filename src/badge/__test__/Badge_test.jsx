@@ -79,7 +79,7 @@ describe('Badge Test', () => {
   it('Dot', () => {
     const w1 = shallow(
       <Badge isDot>
-        <Button className="share-button" icon="share" type="primary"></Button>
+        <Button className="share-button" icon="el-icon-share" type="primary"></Button>
       </Badge>
     );
     expect(w1.find('.el-badge sup.el-badge__content').hasClass('is-dot')).toBeTruthy();

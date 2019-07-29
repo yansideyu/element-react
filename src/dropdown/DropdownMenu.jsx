@@ -28,14 +28,19 @@ export default class DropdownMenu extends Component {
 
   onEnter(): void {
     const parent = ReactDOM.findDOMNode(this.parent());
+    const { positionFixed } = this.props;
 
     this.popperJS = new Popper(parent, this.refs.popper, {
       placement: this.placement(),
       modifiers: {
         computeStyle: {
           gpuAcceleration: false
+        },
+        preventOverflow: {
+          boundariesElement: 'window',
         }
-      }
+      },
+      positionFixed,
     });
   }
 

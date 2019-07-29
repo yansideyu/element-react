@@ -1,0 +1,120 @@
+@charset "UTF-8";
+@import "./common/var.css";
+
+@component-namespace el {
+
+  @b message {
+    box-shadow: var(--message-shadow);
+    min-width: var(--message-min-width);
+    padding: var(--message-padding);
+    box-sizing: border-box;
+    border-radius: var(--border-radius-small);
+    position: fixed;
+    left: 50%;
+    top: 20px;
+    transform: translate(-50%, 0);
+    background-color: var(--color-white);
+    overflow: hidden;
+
+    @e group {
+      margin-left: 20px;
+      position: relative;
+      height: 18px;
+      line-height: 18px;
+      display: flex;
+      align-items: center;
+
+      @when with-icon {
+        margin-left: 0;
+      }
+
+      & p {
+        font-size: var(--message-content-font-size);
+        margin: 0 34px 0 0;
+        white-space: nowrap;
+        color: var(--color-base-black);
+        text-align: justify;
+      }
+      
+    }
+
+    @e img {
+      size: 16px;
+      position: absolute;
+      left: 10px;
+      top: 10px;
+    }
+
+    @e icon {
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @e closeBtn {
+      position: absolute 3px 0 * *;
+      cursor: pointer;
+      color: var(--message-close-color);
+      font-size: var(--message-content-font-size);
+
+      &:hover {
+        color: var(--message-close-hover-color);
+      }
+    }
+
+    & .el-icon-circle-check {
+      color: var(--message-success-color);
+    }
+
+    & .el-icon-circle-cross {
+      color: var(--message-danger-color);
+    }
+
+    & .el-icon-information {
+      color: var(--message-info-color);
+    }
+
+    & .el-icon-warning {
+      color: var(--message-warning-color);
+    }
+  }
+
+  .success {
+    background: var(--color-success-background);
+
+    & .el-message__closeBtn {
+      color: var(--color-success);
+    }
+  }
+
+  .warning {
+    background: var(--color-warning-background);
+
+    & .el-message__closeBtn {
+      color: var(--color-warning);
+    }
+  }
+
+  .error {
+    background: var(--color-danger-background);
+
+    & .el-message__closeBtn {
+      color: var(--color-danger);
+    }
+  }
+
+  .info {
+    background: var(--color-info-background);
+
+    & .el-message__closeBtn {
+      color: var(--color-primary);
+    }
+  }
+
+  .normal {
+    background: var(--color-normal-background);
+
+    & .el-message__closeBtn {
+      color: var(--color-info);
+    }
+  }
+}

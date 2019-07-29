@@ -333,15 +333,15 @@ class Cascader extends Component {
             onKeyUp={this.debouncedInputChange.bind(this)}
             size={size}
             disabled={disabled}
-            icon={
+            suffixIcon={
               clearable && inputHover && currentLabels.length ? (
                 <i
-                  className="el-input__icon el-icon-circle-close el-cascader__clearIcon"
+                  className="el-input__icon el-input__suffix el-icon-circle-close el-cascader__clearIcon"
                   onClick={this.clearValue.bind(this)}
                 />
               ) : (
                 <i
-                    className={this.classNames('el-input__icon el-icon-caret-bottom', {
+                    className={this.classNames('el-input__icon el-input__suffix el-kylin-more', {
                       'is-reverse': menuVisible
                     })}
                   />

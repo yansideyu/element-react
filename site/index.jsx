@@ -4,22 +4,12 @@ import { AppContainer } from 'react-hot-loader';
 
 import 'core-js';
 
-import 'kyligence-theme-default';
+import '../styles/index.css';
 
 import './styles/base.scss';
 import './styles/prism.css';
 
 import App from './page';
-
-render(<AppContainer><App /></AppContainer>, document.getElementById('app'));
-
-if (module.hot) {
-  module.hot.accept('./page', () => {
-    const App = require('./page').default;
-
-    render(<AppContainer><App /></AppContainer>, document.getElementById('app'));
-  });
-}
 
 function inChinaConfirm() {
   import('../src/message-box').then(MessageBox => {
@@ -34,11 +24,19 @@ function inChina() {
     fetch('//restapi.amap.com/v3/ip?output=JSON&key=53a87f7c6a6d173be31d4123958ad5c2')
       .then(res => res.json())
       .then(({ city }) => {
-        if (city || typeof city === 'string') {
+        if (city && typeof city === 'string') {
           inChinaConfirm();
         }
       })
   }
 }
 
-setTimeout(() => inChina());
+render(<AppContainer><App /></AppContainer>, document.getElementById('app'), inChina);
+
+if (module.hot) {
+  module.hot.accept('./page', () => {
+    const App = require('./page').default;
+
+    render(<AppContainer><App /></AppContainer>, document.getElementById('app'));
+  });
+}

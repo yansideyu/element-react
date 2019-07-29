@@ -29,17 +29,30 @@ render() {
 
 ::: demo 可以通过 `icon` 属性在 input 组件尾部增加显示图标。
 ```js
-handleIconClick(ev) {
+handlePrefixIconClick(event) {
+  console.log('prefix', event)
+}
 
+handleSuffixIconClick(event) {
+  console.log('suffix', event)
 }
 
 render() {
   return (
-    <Input
-      icon="time"
-      placeholder="请选择日期"
-      onIconClick={this.handleIconClick.bind(this)}
-    />
+    <div>
+      <Input
+        style={{ marginRight: '10px' }}
+        prefixIcon="el-icon-time"
+        placeholder="请选择日期"
+        onPrefixIconClick={this.handlePrefixIconClick.bind(this)}
+      />
+      <Input
+        style={{ marginTop: '0' }}
+        suffixIcon="el-icon-search"
+        placeholder="搜索用户"
+        onSuffixIconClick={this.handleSuffixIconClick.bind(this)}
+      />
+    </div>
   )
 }
 ```
@@ -106,7 +119,7 @@ render() {
             ['餐厅名', '订单号', '用户电话'].map((item, index) => <Select.Option key={index} label={item} value={index} />)
           }
         </Select>
-      } append={<Button type="primary" icon="search">搜索</Button>} />
+      } append={<Button type="primary" icon="el-icon-search">搜索</Button>} />
     </div>
   )
 }
@@ -115,15 +128,13 @@ render() {
 
 ### 尺寸
 
-::: demo 可通过 `size` 属性指定输入框的尺寸，除了默认的大小外，还提供了 large、small 和 mini 三种尺寸。
+::: demo 可通过 `size` 属性指定输入框的尺寸，除了默认的大小外，还提供了 small 这种尺寸。
 ```js
 render() {
   return (
     <div className="inline-input">
-      <Input placeholder="请输入内容" size="large" />
       <Input placeholder="请输入内容" />
       <Input placeholder="请输入内容" size="small" />
-      <Input placeholder="请输入内容" size="mini" />
     </div>
   )
 }
@@ -327,7 +338,7 @@ render() {
   return (
     <AutoComplete
       className="my-autocomplete"
-      icon="edit"
+      suffixIcon="el-icon-edit"
       placeholder="请输入内容"
       value={this.state.value}
       fetchSuggestions={this.querySearch.bind(this)}
@@ -448,7 +459,8 @@ render() {
 | placeholder   | 输入框占位文本    | string          | — | — |
 | disabled      | 禁用            | boolean         | — | false   |
 | size          | 输入框尺寸，只在 `type!="textarea"` 时有效      | string          | large, small, mini  | — |
-| icon          | 输入框尾部图标    | string          | — | — |
+| prefixIcon          | 输入框头部图标    | string          | — | — |
+| suffixIcon          | 输入框尾部图标    | string          | — | — |
 | rows          | 输入框行数，只对 `type="textarea"` 有效  |  number | — |  2   |
 | autosize      | 自适应内容高度，只对 `type="textarea"` 有效，可传入对象，如，{ minRows: 2, maxRows: 6 }  |  boolean/object | — |  false   |
 | autoComplete | 原生属性，自动补全 | string | on, off | off |

@@ -73,16 +73,6 @@ describe('TimePicker test', function () {
     // expect(onChange.calledWith(null)).toBeTruthy()
   })
 
-  it('isShowTrigger should work', () => {
-    let w = mount(
-      <TimeSelect
-        {...minProps}
-        isShowTrigger={false}
-      />
-    )
-    expect(w.find('i.el-input__icon').exists()).toBe(false)
-  })
-
   it('isDisabled should work', ()=>{
     let w = mount(
       <TimeSelect

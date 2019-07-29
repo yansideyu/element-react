@@ -40,13 +40,22 @@ handleInput(value) {
 
 render() {
   return (
-      <Select value={this.state.value} placeholder="请选择" onChange={this.handleInput}>
-        {
-          this.state.options.map(el => {
-            return <Select.Option key={el.value} label={el.label} value={el.value} />
-          })
-        }
-      </Select>
+      <div>
+        <Select style={{ marginRight: '10px' }} value={this.state.value} placeholder="请选择" onChange={this.handleInput}>
+          {
+            this.state.options.map(el => {
+              return <Select.Option key={el.value} label={el.label} value={el.value} />
+            })
+          }
+        </Select>
+        <Select size="small" value={this.state.value} placeholder="请选择" onChange={this.handleInput}> 
+          {
+            this.state.options.map(el => {
+              return <Select.Option key={el.value} label={el.label} value={el.value} />
+            })
+          }
+        </Select>
+      </div>
   )
 }
 ```
@@ -486,6 +495,59 @@ render() {
         })
       }
     </Select>
+  )
+}
+```
+:::
+
+
+### 穿越overflow
+
+防止外层元素的overflow
+
+:::demo 为`Select`添加`filterable`属性即可启用搜索功能。默认情况下，Select 会找出所有`label`属性包含输入值的选项。如果希望使用其他的搜索逻辑，可以通过传入一个`filterMethod`来实现。`filterMethod`为一个`Function`，它会在输入值发生变化时调用，参数为当前输入值。
+```js
+constructor(props) {
+  super(props);
+
+  this.state = {
+    options: [{
+      value: '选项1',
+      label: '黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕'
+    }, {
+      value: '选项2',
+      label: '双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶'
+    }, {
+      value: '选项3',
+      label: '北京烤鸭北京烤鸭北京烤鸭北京烤鸭北京烤鸭北京烤鸭北京烤鸭北京烤鸭'
+    }],
+    value: []
+  };
+  this.handleInput = this.handleInput.bind(this);
+}
+
+handleInput(value) {
+  this.setState({ value });
+  console.log(value);
+}
+
+render() {
+  const style = {
+    width: '300px',
+    height: '200px',
+    overflow: 'auto',
+    border: '1px solid red',
+  }
+  return (
+    <div style={style}>
+    <Select value={this.state.value} positionFixed={true} filterable={true} multiple={true} onChange={this.handleInput}>
+      {
+        this.state.options.map(el => {
+          return <Select.Option key={el.value} label={el.label} value={el.value} />
+        })
+      }
+    </Select>
+    </div>
   )
 }
 ```

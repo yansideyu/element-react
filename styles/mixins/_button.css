@@ -1,0 +1,63 @@
+@define-mixin button-variant $color, $background-color, $border-color {
+  color: $color;
+  background-color: $background-color;
+  border-color: $border-color;
+
+  &:hover,
+  &:focus {
+    background: tint($background-color, var(--button-hover-tint-percent));
+    border-color: tint($border-color, var(--button-hover-tint-percent));
+    color: $color;
+  }
+  
+  &:active {
+    background: shade($background-color, var(--button-active-shade-percent));
+    border-color: shade($border-color, var(--button-active-shade-percent));
+    color: $color;
+    outline: none;
+  }
+
+  &.is-active {
+    background: shade($background-color, var(--button-active-shade-percent));
+    border-color: shade($border-color, var(--button-active-shade-percent));
+    color: $color;
+  }
+
+  &.is-plain {
+    background: var(--button-default-fill);
+    border-color: $border-color;
+    color: $border-color;
+
+    &:focus {
+      background: var(--button-default-fill);
+      border-color: $border-color;
+      color: $border-color;
+    }
+
+    &:hover {
+      background: $background-color;
+      border-color: $border-color;
+      color: var(--color-white);
+    }
+    
+    &:active {
+      background: shade($background-color, var(--button-active-shade-percent));;
+      border-color: shade($border-color, var(--button-active-shade-percent));
+      color: var(--color-white);
+      outline: none;
+    }
+  }
+}
+
+@define-mixin button-size $padding-vertical, $padding-horizontal, $font-size, $border-radius {
+  padding: $padding-vertical $padding-horizontal;
+  font-size: $font-size;
+  border-radius: $border-radius;
+  &.is-square {
+    padding: $padding-vertical;
+  }
+  &.is-circle {
+    padding: $padding-vertical;
+    border-radius: 50%;
+  }
+}

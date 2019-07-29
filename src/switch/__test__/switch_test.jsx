@@ -33,8 +33,10 @@ test('Basic usage', () => {
   expect(switch2.find('label.el-switch').at(0).hasClass('is-checked')).toEqual(true);
   expect(switch2.find('label.el-switch .el-switch__label').at(0).text()).toEqual('ON');
   expect(switch2.find('label.el-switch .el-switch__label').at(1).text()).toEqual('OFF');
-  expect(switch2.find('label.el-switch .el-switch__label').at(0).prop('style').display).toEqual(undefined);
-  expect(switch2.find('label.el-switch .el-switch__label').at(1).prop('style').display).toEqual('none');
+  setTimeout(() => {
+    expect(switch2.find('label.el-switch .el-switch__label').at(0).prop('style').display).toEqual(undefined);
+    expect(switch2.find('label.el-switch .el-switch__label').at(1).prop('style').display).toEqual('none');
+  });
 
   // switch off
   switch2.find('input[type="checkbox"]').simulate('change', {target: {value: false}});
@@ -42,8 +44,10 @@ test('Basic usage', () => {
   expect(switch2.find('label.el-switch').at(0).hasClass('is-checked')).toEqual(false);
   expect(switch2.find('label.el-switch .el-switch__label').at(0).text()).toEqual('ON');
   expect(switch2.find('label.el-switch .el-switch__label').at(1).text()).toEqual('OFF');
-  expect(switch2.find('label.el-switch .el-switch__label').at(0).prop('style').display).toEqual('none');
-  expect(switch2.find('label.el-switch .el-switch__label').at(1).prop('style').display).toEqual(undefined);
+  setTimeout(() => {
+    expect(switch2.find('label.el-switch .el-switch__label').at(0).prop('style').display).toEqual('none');
+    expect(switch2.find('label.el-switch .el-switch__label').at(1).prop('style').display).toEqual(undefined);
+  });
 
 });
 
@@ -77,8 +81,10 @@ test('Extended value types', () => {
   expect(component.find('label.el-switch.el-switch--wide').at(0).hasClass('is-checked')).toEqual(true);
   expect(component.find('div .el-switch__label').at(0).text()).toEqual('ON');
   expect(component.find('div .el-switch__label').at(1).text()).toEqual('OFF');
-  expect(component.find('div .el-switch__label').at(0).prop('style').display).toEqual(undefined);
-  expect(component.find('div .el-switch__label').at(1).prop('style').display).toEqual('none');
+  setTimeout(() => {
+    expect(component.find('div .el-switch__label').at(0).prop('style').display).toEqual(undefined);
+    expect(component.find('div .el-switch__label').at(1).prop('style').display).toEqual('none');
+  });
   expect(state.value).toBe(100);
 
   // switch off
@@ -87,8 +93,10 @@ test('Extended value types', () => {
   expect(component.find('label.el-switch.el-switch--wide').at(0).hasClass('is-checked')).toEqual(false);
   expect(component.find('div .el-switch__label').at(0).text()).toEqual('ON');
   expect(component.find('div .el-switch__label').at(1).text()).toEqual('OFF');
-  expect(component.find('div .el-switch__label').at(0).prop('style').display).toEqual('none');
-  expect(component.find('div .el-switch__label').at(1).prop('style').display).toEqual(undefined);
+  setTimeout(() => {
+    expect(component.find('div .el-switch__label').at(0).prop('style').display).toEqual('none');
+    expect(component.find('div .el-switch__label').at(1).prop('style').display).toEqual(undefined);
+  });
   expect(state.value).toBe(0);
 });
 

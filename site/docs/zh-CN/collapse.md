@@ -4,13 +4,25 @@
 
 :::demo
 ```js
+constructor(props) {
+  super(props);
+  this.state= {};
+  this.renderCollapseIcon = this.renderCollapseIcon.bind(this);
+}
 
+renderCollapseIcon(isActive) {
+  return (
+    <span style={{ marginRight: '10px' }}>
+      {isActive ? '收起' : '展开'}
+    </span>
+  );
+}
 
 render() {
   const activeName = "1";
   return (
     <Collapse value={activeName}>
-      <Collapse.Item title="一致性 Consistency" name="1">
+      <Collapse.Item title="一致性 Consistency" name="1" renderIcon={this.renderCollapseIcon}>
         <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
         <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
       </Collapse.Item>
@@ -127,7 +139,8 @@ render() {
 
 
 ### Collapse Item Attributes
-| 参数      | 说明          | 类型      | 可选值                           | 默认值  |
-|---------- |-------------- |---------- |--------------------------------  |-------- |
-| name | 唯一标志符 | string/number | — | — |
-| title | 面板标题 | string/node | — | — |
+| 参数      | 说明          | 类型      | 可选值                           | 默认值  | 回调参数 |
+|---------- |-------------- |---------- |--------------------------------  |-------- |-------- |
+| name | 唯一标志符 | string/number | — | — | — |
+| title | 面板标题 | string/node | — | — | — |
+| renderIcon | 自定义icon渲染 | function | — | — | (isActive: boolean 展开状态) |

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AsyncValidator from 'async-validator';
-import { Component, PropTypes, Transition } from '../../libs';
+import { Component, PropTypes, Transition, View } from '../../libs';
 
 type State = {
   error: string,
@@ -21,6 +21,7 @@ export default class FormItem extends Component {
       valid: false,
       validating: false
     }
+    this.fieldRef = React.createRef();
   }
 
   getChildContext(): Object {
@@ -197,12 +198,16 @@ export default class FormItem extends Component {
     return temp.length > 1 ? model[temp[0]][temp[1]] : model[this.props.prop];
   }
 
+  getDomNode() {
+    return this.fieldRef.current;
+  }
+
   render(): React.DOM {
     const { error, validating } = this.state;
     const { label, required } = this.props;
 
     return (
-      <div style={this.style()} className={this.className('el-form-item', {
+      <div ref={this.fieldRef} style={this.style()} className={this.className('el-form-item', {
         'is-error': error !== '',
         'is-validating': validating,
         'is-required': this.isRequired() || required
@@ -221,7 +226,9 @@ export default class FormItem extends Component {
         <div className="el-form-item__content" style={this.contentStyle()}>
           {this.props.children}
           <Transition name="el-zoom-in-top">
-            { error && <div className="el-form-item__error">{error}</div> }
+            <View show={error}>
+              <div className="el-form-item__error">{error}</div>
+            </View>
           </Transition>
         </div>
       </div>
@@ -241,6 +248,7 @@ FormItem.propTypes = {
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   labelWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   prop: PropTypes.string,
+  ref: PropTypes.string,
   required: PropTypes.bool,
   rules: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };

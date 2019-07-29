@@ -69,7 +69,7 @@ export default class TransferPanel extends Component {
   handleMouseLeave = () => this.setState({ inputHover: false });
 
   clearQuery = () => {
-    if (this.inputIcon === 'circle-close') {
+    if (this.inputIcon === 'el-icon-circle-close') {
       this.setState({ query: '' });
     }
   };
@@ -142,9 +142,9 @@ export default class TransferPanel extends Component {
     return query.length > 0 && this.filteredData.length === 0;
   }
 
-  get inputIcon(): 'circle-close' | 'search' {
+  get inputIcon(): 'el-icon-circle-close' | 'el-icon-search' {
     const { query, inputHover } = this.state;
-    return query.length > 0 && inputHover ? 'circle-close' : 'search';
+    return query.length > 0 && inputHover ? 'el-icon-circle-close' : 'el-icon-search';
   }
 
   get labelProp(): string {
@@ -174,18 +174,19 @@ export default class TransferPanel extends Component {
         <p className="el-transfer-panel__header">{title}</p>
 
         <div className="el-transfer-panel__body">
-          {filterable &&
+          {filterable && (
             <Input
               className="el-transfer-panel__filter"
               value={query}
               size="small"
               placeholder={placeholder}
-              icon={this.inputIcon}
+              prefixIcon={this.inputIcon}
               onMouseEnter={this.handleMouseEnter}
               onMouseLeave={this.handleMouseLeave}
-              onIconClick={this.clearQuery}
+              onSuffixIconClick={this.clearQuery}
               onChange={this.handleInputChange}
-            />}
+            />
+          )}
           <View show={!this.hasNoMatch && data.length > 0}>
             <Checkbox.Group
               value={checked}
@@ -198,7 +199,7 @@ export default class TransferPanel extends Component {
             >
               {this.filteredData.map((item, index) => (
                 <Checkbox
-                  className="el-transfer-panel__item"
+                  className={['el-transfer-panel__item', item[this.disabledProp] && 'is-disabled']}
                   label={item[this.labelProp]}
                   disabled={item[this.disabledProp]}
                   value={item[this.keyProp]}

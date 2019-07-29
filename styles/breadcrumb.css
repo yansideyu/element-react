@@ -1,0 +1,44 @@
+@charset "UTF-8";
+@import "./common/var.css";
+
+@component-namespace el {
+
+  @b breadcrumb {
+    font-size:13px;
+    line-height: 1;
+    @utils-clearfix;
+
+    @e separator {
+      margin: 0 8px;
+      color: var(--disabled-color-base);
+    }
+    @e item {
+      float: left;
+
+      @e inner {
+        &, & a {
+          transition: color .15s linear;
+          color: var(--disabled-color-base);
+          &:hover {
+            color: var(--color-primary);
+            cursor: pointer;
+          }
+        }
+      }
+
+      &:last-child {
+        .el-breadcrumb__item__inner,
+        .el-breadcrumb__item__inner a {
+          &, &:hover {
+            color: var(--color-base-black);
+            cursor: text;
+          }
+        }
+
+        .el-breadcrumb__separator {
+          display: none;
+        }
+      }
+    }
+  }
+}

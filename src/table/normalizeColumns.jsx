@@ -15,20 +15,26 @@ const defaults = {
     order: ''
   },
   selection: {
-    width: 48,
-    minWidth: 48,
-    realWidth: 48,
+    width: 30,
+    minWidth: 30,
+    realWidth: 30,
     className: 'el-table-column--selection',
   },
+  radio: {
+    width: 30,
+    minWidth: 30,
+    realWidth: 30,
+    className: 'el-table-column--radio',
+  },
   expand: {
-    width: 48,
-    minWidth: 48,
-    realWidth: 48,
+    width: 30,
+    minWidth: 30,
+    realWidth: 30,
   },
   index: {
-    width: 48,
-    minWidth: 48,
-    realWidth: 48,
+    width: 30,
+    minWidth: 30,
+    realWidth: 30,
   }
 };
 

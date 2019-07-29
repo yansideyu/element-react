@@ -11,9 +11,30 @@
 render() {
   return (
     <div>
-      <Button>默认按钮</Button>
-      <Button type="primary">主要按钮</Button>
-      <Button type="text">文字按钮</Button>
+      <div style={{ marginBottom: '10px' }}>
+        <Button>默认按钮</Button>
+        <Button type="primary">主要按钮</Button>
+        <Button type="success">成功按钮</Button>
+        <Button type="info">信息按钮</Button>
+        <Button type="warning">警告按钮</Button>
+        <Button type="danger">危险按钮</Button>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <Button plain>朴素按钮</Button>
+        <Button plain type="primary">主要按钮</Button>
+        <Button plain type="success">成功按钮</Button>
+        <Button plain type="info">信息按钮</Button>
+        <Button plain type="warning">警告按钮</Button>
+        <Button plain type="danger">危险按钮</Button>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <Button square type="danger" icon="el-icon-delete"></Button>
+        <Button circle icon="el-icon-edit"></Button>
+        <Button plain square type="danger" icon="el-icon-delete"></Button>
+        <Button plain circle type="primary" icon="el-icon-edit"></Button>
+        <Button plain circle size="small" type="primary" icon="el-icon-edit"></Button>
+        <Button type="text">文字按钮</Button>
+      </div>
     </div>
   )
 }
@@ -83,10 +104,10 @@ render() {
 render() {
   return (
     <div>
-      <Button type="primary" icon="edit"></Button>
-      <Button type="primary" icon="share"></Button>
-      <Button type="primary" icon="delete"></Button>
-      <Button type="primary" icon="search">搜索</Button>
+      <Button type="primary" icon="el-icon-edit"></Button>
+      <Button type="primary" icon="el-icon-share"></Button>
+      <Button type="primary" icon="el-icon-delete"></Button>
+      <Button type="primary" icon="el-icon-search">搜索</Button>
       <Button type="primary">上传<i className="el-icon-upload el-icon-right"></i></Button>
     </div>
   )
@@ -105,13 +126,18 @@ render() {
   return (
     <div>
       <Button.Group>
-          <Button type="primary" icon="arrow-left">上一页</Button>
+          <Button type="primary" icon="el-icon-arrow-left">上一页</Button>
           <Button type="primary">下一页<i className="el-icon-arrow-right el-icon-right"></i></Button>
       </Button.Group>
       <Button.Group>
-          <Button type="primary" icon="edit"></Button>
-          <Button type="primary" icon="share"></Button>
-          <Button type="primary" icon="delete"></Button>
+          <Button type="primary" icon="el-icon-edit"></Button>
+          <Button type="primary" icon="el-icon-share"></Button>
+          <Button type="primary" icon="el-icon-delete"></Button>
+      </Button.Group>
+      <Button.Group>
+          <Button plain type="primary" icon="el-icon-edit"></Button>
+          <Button plain type="primary" icon="el-icon-share"></Button>
+          <Button plain type="primary" icon="el-icon-delete"></Button>
       </Button.Group>
     </div>
   )
@@ -134,18 +160,16 @@ render() {
 
 ### 不同尺寸
 
-Button 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。
+Button 组件提供除了默认值以外的一种尺寸，可以在不同场景下选择合适的按钮尺寸。
 
-:::demo 额外的尺寸：`large`、`small`、`mini`，通过设置`size`属性来配置它们。
+:::demo 额外的尺寸：`small`，通过设置`size`属性来配置它们。
 
 ```js
 render() {
   return (
     <div>
-      <Button type="primary" size="large">大型按钮</Button>
       <Button type="primary">正常按钮</Button>
       <Button type="primary" size="small">小型按钮</Button>
-      <Button type="primary" size="mini">超小按钮</Button>
     </div>
   )
 }
@@ -155,10 +179,12 @@ render() {
 ### Attributes
 | 参数      | 说明    | 类型      | 可选值       | 默认值   |
 |---------- |-------- |---------- |-------------  |-------- |
-| size     | 尺寸   | string  |   large,small,mini            |    —     |
+| size     | 尺寸   | string  |   small            |    —     |
 | type     | 类型   | string    |   primary,success,warning,danger,info,text |     —    |
 | plain     | 是否朴素按钮   | Boolean    | true,false | false   |
 | loading     | 是否加载中状态   | Boolean    | — | false   |
 | disabled  | 禁用    | boolean   | true, false   | false   |
 | icon  | 图标，已有的图标库中的图标名 | string   |  —  |  —  |
 | nativeType | 原生 type 属性 | string | button,submit,reset | button |
+| circle | 圆形形状 | Boolean | true,false | false |
+| square | 方形形状 | Boolean | true,false | false |

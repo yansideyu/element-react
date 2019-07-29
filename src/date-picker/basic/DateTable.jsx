@@ -215,11 +215,10 @@ export default class DateTable extends Component {
   }
 
   getMarkedRangeRows(): any[] {
-    const { showWeekNumber, minDate, selectionMode, rangeState } = this.props
+    const { showWeekNumber, minDate, maxDate, selectionMode, rangeState } = this.props
     const rows = this.getRows();
     if (!(selectionMode === SELECTION_MODES.RANGE && rangeState.selecting && rangeState.endDate instanceof Date)) return rows;
 
-    const maxDate = rangeState.endDate
     for (var i = 0, k = rows.length; i < k; i++) {
       const row = rows[i];
       for (var j = 0, l = row.length; j < l; j++) {
@@ -261,7 +260,7 @@ export default class DateTable extends Component {
   }
 
 
-  handleMouseMove(event: SyntheticMouseEvent<any>) {
+  handleMouseMove(event: any) {
     const { showWeekNumber, onChangeRange, rangeState, selectionMode } = this.props
 
     const getDateOfCell = (row, column, showWeekNumber) => {
@@ -270,9 +269,14 @@ export default class DateTable extends Component {
     }
 
     if (!(selectionMode === SELECTION_MODES.RANGE && rangeState.selecting)) return;
-
-    const target: any = event.target;
-    if (target.tagName !== 'TD') return;
+    let target: any = event.target;
+    if (target.tagName === 'DIV' && target.parentNode.tagName === 'TD') {
+      target = event.target.parentNode;
+    } else if (target.tagName === 'SPAN' && target.className === 'pick-cell-text') {
+      target = event.target.parentNode.parentNode;
+    } else if (target.tagName !== 'TD') {
+      return;
+    }
 
     const column = target.cellIndex;
     const row = target.parentNode.rowIndex - 1;
@@ -281,13 +285,18 @@ export default class DateTable extends Component {
     onChangeRange(rangeState)
   }
 
-  handleClick(event: SyntheticEvent<any>) {
+  handleClick(event: any) {
     let target: any = event.target;
-
-    if (target.tagName !== 'TD') return;
+    if (target.tagName === 'DIV' && target.parentNode.tagName === 'TD') {
+      target = event.target.parentNode;
+    } else if (target.tagName === 'SPAN' && target.className === 'pick-cell-text') {
+      target = event.target.parentNode.parentNode;
+    } else if (target.tagName !== 'TD') {
+      return;
+    }
     if (hasClass(target, 'disabled') || hasClass(target, 'week')) return;
 
-    const { selectionMode, date, onPick, minDate, maxDate, rangeState, } = this.props
+    const { selectionMode, date, onPick, onChangeRange, minDate, maxDate, rangeState, } = this.props
     const { year, month } = deconstructDate(date)
 
     if (selectionMode === 'week') {
@@ -322,23 +331,13 @@ export default class DateTable extends Component {
     newDate.setDate(parseInt(text, 10));
     if (selectionMode === SELECTION_MODES.RANGE) {
       if (rangeState.selecting) {
-        if (newDate < minDate) {
-          rangeState.selecting = true;
-          onPick({ minDate: toDate(newDate), maxDate: null }, false)
-        } else if (newDate >= minDate) {
-          rangeState.selecting = false;
-          onPick({ minDate, maxDate: toDate(newDate) }, true)
-        }
+        rangeState.selecting = false;
+        rangeState.endDate = newDate;
+        onChangeRange(rangeState);
+        onPick({ minDate: this.props.minDate, maxDate: this.props.maxDate }, true)
       } else {
-        if (minDate && maxDate || !minDate) {
-          // be careful about the rangeState & onPick order
-          // since rangeState is a object, mutate it will make child DateTable see the
-          // changes, but wont trigger a DateTable re-render. but onPick would trigger it.
-          // so a reversed order may cause a bug.
-          rangeState.selecting = true;
-          onPick({ minDate: toDate(newDate), maxDate: null }, false)
-        }
-
+        rangeState.selecting = true;
+        rangeState.startDate = newDate;
       }
     } else if (selectionMode === SELECTION_MODES.DAY || selectionMode === SELECTION_MODES.WEEK) {
       onPick({ date: newDate })
@@ -374,7 +373,11 @@ export default class DateTable extends Component {
                 {
                   row.map((cell, idx) => (
                     <td className={this.getCellClasses(cell)} key={idx}>
-                      {cell.type === 'today' ? $t('el.datepicker.today') : cell.text}
+                      <div>
+                        <span className="pick-cell-text">
+                          {cell.text}
+                        </span>
+                      </div>
                     </td>
                   ))
                 }

@@ -1,11 +1,14 @@
 /* @flow */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Component, View, Transition, PropTypes } from '../../libs';
+import { MountBody } from './MountBody';
 import { cleanScrollBar } from '../table/utils';
+import { notifyDialogClose, notifyDialogOpen } from '../../libs/utils/cloud';
 
 type State = {
   bodyOverflow: string,
+  isShowBody: boolean,
 }
 
 export default class Dialog extends Component {
@@ -20,15 +23,18 @@ export default class Dialog extends Component {
     lockScroll: true,
     closeOnClickModal: true,
     closeOnPressEscape: true,
-    showClose: true
+    showClose: true,
+    appendToBody: false,
   }
 
   constructor(props: Object) {
     super(props);
     this.wrap = React.createRef();
     this.state = {
-      bodyOverflow: ''
+      bodyOverflow: '',
+      isShowBody: props.visible,
     }
+    this.toggleBodyVisiable(props.visible);
   }
 
   componentWillReceiveProps(nextProps: Object): void {
@@ -36,6 +42,7 @@ export default class Dialog extends Component {
     const { lockScroll, modal } = this.props;
     if (this.willOpen(this.props, nextProps)) {
       cleanScrollBar();
+      notifyDialogOpen();
       if (lockScroll && document.body && document.body.style) {
         if (!bodyOverflow) {
           this.setState({
@@ -44,12 +51,15 @@ export default class Dialog extends Component {
         }
         document.body.style.overflow = 'hidden';
       }
+      this.toggleBodyVisiable(true);
     }
 
     if (this.willClose(this.props, nextProps) && lockScroll) {
+      notifyDialogClose();
       if (modal && bodyOverflow !== 'hidden' && document.body && document.body.style) {
         document.body.style.overflow = bodyOverflow;
       }
+      this.toggleBodyVisiable(false);
     }
 
   }
@@ -83,6 +93,12 @@ export default class Dialog extends Component {
     }
   }
 
+  toggleBodyVisiable(isShowBody: boolean) {
+    setTimeout(() => {
+      this.setState({ isShowBody });
+    }, !isShowBody ? 200 : 0);
+  }
+
   close(e: any): void {
     this.props.onCancel(e);
   }
@@ -95,11 +111,11 @@ export default class Dialog extends Component {
     return (prevProps.visible && !nextProps.visible);
   }
 
-  render(): React.DOM {
+  renderDialog() {
     const { visible, title, size, top, modal, customClass, showClose, children } = this.props;
-
+    const { isShowBody } = this.state;
     return (
-      <div>
+      <Fragment>
         <Transition name="dialog-fade">
           <View show={visible}>
             <div
@@ -124,26 +140,35 @@ export default class Dialog extends Component {
                     )
                   }
                 </div>
-                {children}
+                {isShowBody && children}
               </div>
             </div>
           </View>
         </Transition>
         {
           modal && (
-            <View show={visible}>
-              <div className="v-modal" style={{ zIndex: 1012 }} />
-            </View>
+            <Transition name="fade-in-linear">
+              <View show={visible}>
+                <div className="v-modal" style={{ zIndex: 1012 }} />
+              </View>
+            </Transition>
           )
         }
-      </div>
+      </Fragment>
     );
+  }
+
+  render(): React.DOM {
+    const { appendToBody } = this.props;
+    return appendToBody
+      ? <MountBody>{this.renderDialog()}</MountBody>
+      : <div>{this.renderDialog()}</div>;
   }
 }
 
 Dialog.propTypes = {
   // 控制对话框是否可见
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   // 标题
   title: PropTypes.string,
   // 大小 (tiny/small/large/full)
@@ -162,5 +187,8 @@ Dialog.propTypes = {
   closeOnPressEscape: PropTypes.bool,
   // 点击遮罩层或右上角叉或取消按钮的回调
   onCancel: PropTypes.func.isRequired,
-  showClose: PropTypes.bool
+  showClose: PropTypes.bool,
+  appendToBody: PropTypes.bool,
+  beforeOpen: PropTypes.func,
+  beforeClose: PropTypes.func
 };

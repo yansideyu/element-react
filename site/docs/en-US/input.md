@@ -110,7 +110,7 @@ render() {
             ['Restaurant', 'Order No.', 'Tel'].map((item, index) => <Select.Option key={index} label={item} value={index} />)
           }
         </Select>
-      } append={<Button type="primary" icon="search">Search</Button>} />
+      } append={<Button type="primary" icon="el-icon-search">Search</Button>} />
     </div>
   )
 }

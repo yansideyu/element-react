@@ -30,6 +30,7 @@ const mapPropsToState = (props) => {
   const { value } = props
   let state = {
     rangeState: {
+      startDate: null,
       endDate: null,
       selecting: false,
     }
@@ -146,14 +147,20 @@ export default class DateRangePanel extends PopperBase {
   }
 
   //todo: wired way to do sth like this? try to come up with a better option
-  handleChangeRange({ endDate }) {
-    const { rangeState, minDate } = this.state
-    if (endDate <= minDate) endDate = null
-
-    rangeState.endDate = endDate
-    this.setState({
-      maxDate: endDate,
-    })
+  handleChangeRange(rangeState) {
+    const { endDate, startDate }= rangeState
+    // rangeState.endDate = endDate;
+    if (endDate < startDate) {
+      this.setState({
+        minDate: endDate,
+        maxDate: startDate,
+      })
+    } else {
+      this.setState({
+        minDate: startDate,
+        maxDate: endDate,
+      })
+    }
   }
 
   handleShortcutClick(shortcut) {

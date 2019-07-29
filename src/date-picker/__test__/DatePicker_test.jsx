@@ -65,7 +65,7 @@ describe('DatePicker tests', function () {
 
       w.find('input').simulate('focus');
 
-      let condition = Array.from(document.querySelectorAll('.el-date-table td.normal.disabled')).map(node => node.innerHTML).some(t=>t==1)
+      let condition = Array.from(document.querySelectorAll('.el-date-table td.normal.disabled div span')).map(node => node.innerHTML).some(t=>t==1)
       expect(condition).toBeTruthy()
     })
 

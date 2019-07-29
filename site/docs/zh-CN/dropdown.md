@@ -13,11 +13,11 @@ render() {
   return (
     <Dropdown menu={(
       <Dropdown.Menu>
-        <Dropdown.Item>黄金糕</Dropdown.Item>
-        <Dropdown.Item>狮子头</Dropdown.Item>
-        <Dropdown.Item>螺蛳粉</Dropdown.Item>
-        <Dropdown.Item disabled>双皮奶</Dropdown.Item>
-        <Dropdown.Item divided>蚵仔煎</Dropdown.Item>
+        <Dropdown.Item onClick={() => console.log('黄金糕')}>黄金糕</Dropdown.Item>
+        <Dropdown.Item onClick={() => console.log('狮子头')}>狮子头</Dropdown.Item>
+        <Dropdown.Item onClick={() => console.log('螺蛳粉')}>螺蛳粉</Dropdown.Item>
+        <Dropdown.Item onClick={() => console.log('双皮奶')} disabled>双皮奶</Dropdown.Item>
+        <Dropdown.Item onClick={() => console.log('蚵仔煎')} divided>蚵仔煎</Dropdown.Item>
       </Dropdown.Menu>
       )}
     >
@@ -198,3 +198,4 @@ render() {
 | command       | 指令     | string          | — | — |
 | disabled      | 禁用     | boolean          | — | false |
 | divided       | 显示分割线     | boolean          | — | false |
+| positionFixed       | 是否fixed定位     | boolean          | — | false |

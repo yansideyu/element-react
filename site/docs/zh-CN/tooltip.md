@@ -142,3 +142,5 @@ render() {
 |  visibleArrow   |  是否显示 Tooltip 箭头 | Boolean | — | true |
 | openDelay | 延迟出现，单位毫秒 | Number | — | 0 |
 | manual | 手动控制模式，设置为 true 后，mouseenter 和 mouseleave 事件将不会生效 | Boolean | true,false| false |
+| positionFixed       | 是否fixed定位     | boolean          | — | false |
+| popperClass       | tooltip的popper样式类名     | string          | — | undefined |

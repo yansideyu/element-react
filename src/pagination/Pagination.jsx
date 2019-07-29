@@ -79,6 +79,7 @@ class Jumper extends Component {
           className="el-pagination__editor"
           type="number"
           min={1}
+          size="small"
           max={this.props.internalPageCount}
           defaultValue={this.props.internalCurrentPage}
           onBlur={this.handleChange.bind(this)}

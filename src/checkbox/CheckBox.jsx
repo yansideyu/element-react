@@ -7,6 +7,7 @@ type State = {
   checked: boolean,
   focus: boolean,
   label: string,
+  hasSelection: boolean,
 }
 
 export default class Checkbox extends Component {
@@ -20,13 +21,17 @@ export default class Checkbox extends Component {
     this.state = {
       checked: props.checked,
       focus: props.focus,
-      label: this.getLabel(props)
+      label: this.getLabel(props),
+      hasSelection: props.hasSelection
     };
   }
 
   componentWillReceiveProps(nextProps: Object): void {
     this.setState({
-      checked: nextProps.checked, focus: nextProps.focus, label: this.getLabel(nextProps)
+      checked: nextProps.checked,
+      focus: nextProps.focus,
+      label: this.getLabel(nextProps),
+      hasSelection: nextProps.hasSelection,
     })
   }
 
@@ -94,7 +99,8 @@ export default class Checkbox extends Component {
           'is-disabled': this.props.disabled,
           'is-checked': this.state.checked,
           'is-indeterminate': this.props.indeterminate,
-          'is-focus': this.state.focus
+          'is-focus': this.state.focus,
+          'has-selection': !this.state.checked && this.state.hasSelection
         })}>
           <span className="el-checkbox__inner"></span>
           <input
@@ -107,7 +113,7 @@ export default class Checkbox extends Component {
             onChange={this.onChange.bind(this)}
           />
         </span>
-        <span className="el-checkbox__label">
+        <span className={ this.state.checked ? "el-checkbox__label is-checked-label": "el-checkbox__label"}>
           {this.props.children || this.state.label}
         </span>
       </label>
@@ -127,10 +133,12 @@ Checkbox.propTypes = {
   checked: PropTypes.bool,
   indeterminate: PropTypes.bool,
   focus: PropTypes.bool,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  hasSelection: PropTypes.bool,
 };
 
 Checkbox.defaultProps = {
   checked: false,
-  focus: false
+  focus: false,
+  hasSelection: false,
 };

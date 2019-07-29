@@ -15,11 +15,11 @@ import Tag from '../tag';
 import Input from '../input';
 import i18n from '../locale';
 
-StyleSheet.reset(`
-  .el-select-dropdown {
-    position: absolute !important;
-  }
-`)
+// StyleSheet.reset(`
+//   .el-select-dropdown {
+//     position: fixed !important;
+//   }
+// `)
 
 type State = {
   options: Array<Object>,
@@ -41,12 +41,14 @@ type State = {
   voidRemoteQuery: boolean,
   valueChangeBySelected: boolean,
   selectedInit: boolean,
+  positionFixed: boolean,
   dropdownUl?: HTMLElement
 };
 
 const sizeMap: { [size: string]: number } = {
   'large': 42,
-  'small': 30,
+  'normal': 30,
+  'small': 24,
   'mini': 22
 };
 
@@ -76,7 +78,8 @@ class Select extends Component {
       value: props.value,
       valueChangeBySelected: false,
       voidRemoteQuery: false,
-      query: ''
+      positionFixed: false,
+      query: '',
     };
 
     if (props.multiple) {
@@ -415,12 +418,15 @@ class Select extends Component {
   }
 
   onEnter(): void {
+    const { positionFixed } = this.props;
     this.popperJS = new Popper(this.reference, this.popper, {
       modifiers: {
         computeStyle: {
           gpuAcceleration: false
-        }
-      }
+        },
+        preventOverflow: { enabled: true }
+      },
+      positionFixed,
     });
   }
 
@@ -429,7 +435,7 @@ class Select extends Component {
   }
 
   iconClass(): string {
-    return this.showCloseIcon() ? 'circle-close' : (this.props.remote && this.props.filterable ? '' : `caret-top ${this.state.visible ? 'is-reverse' : ''}`);
+    return this.showCloseIcon() ? 'el-icon-circle-close' : (this.props.remote && this.props.filterable ? '' : `el-kylin-more ${this.state.visible ? 'is-reverse' : ''}`);
   }
 
   showCloseIcon(): boolean {
@@ -562,7 +568,7 @@ class Select extends Component {
     let inputChildNodes = this.reference.childNodes;
     let input = [].filter.call(inputChildNodes, item => item.tagName === 'INPUT')[0];
 
-    input.style.height = Math.max(this.refs.tags.clientHeight + 6, sizeMap[this.props.size] || 36) + 'px';
+    input.style.height = Math.max(this.refs.tags.clientHeight + 6, sizeMap[this.props.size] || sizeMap.normal) + 'px';
 
     if (this.popperJS) {
       this.popperJS.update();
@@ -821,7 +827,7 @@ class Select extends Component {
     const { selected, inputWidth, inputLength, query, selectedLabel, visible, options, filteredOptionsCount, currentPlaceholder } = this.state;
 
     return (
-      <div ref="root" style={this.style()} className={this.className('el-select')}>
+      <div ref="root" style={this.style()} className={this.className('el-select', visible && 'is-open')}>
         {
           multiple && (
             <div ref="tags" className="el-select__tags" onClick={this.toggleMenu.bind(this)} style={{
@@ -906,9 +912,9 @@ class Select extends Component {
           size={size}
           disabled={disabled}
           readOnly={!filterable || multiple}
-          icon={this.iconClass() || undefined}
+          suffixIcon={this.iconClass() || undefined}
           onChange={value => this.setState({ selectedLabel: value })}
-          onIconClick={this.handleIconClick.bind(this)}
+          onSuffixIconClick={this.handleIconClick.bind(this)}
           onMouseDown={this.onMouseDown.bind(this)}
           onMouseEnter={this.onMouseEnter.bind(this)}
           onMouseLeave={this.onMouseLeave.bind(this)}

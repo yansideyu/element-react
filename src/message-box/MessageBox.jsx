@@ -6,6 +6,7 @@ import { cleanScrollBar } from '../table/utils';
 import Button from '../button';
 import Input from '../input';
 import i18n from '../locale';
+import { notifyDialogClose, notifyDialogOpen } from '../../libs/utils/cloud';
 
 const typeMap = {
   success: 'circle-check',
@@ -34,6 +35,7 @@ export default class MessageBox extends Component {
 
   componentDidMount() {
     cleanScrollBar()
+    notifyDialogOpen();
     this.setState({ visible: true });
     document.activeElement && document.activeElement.blur()
   }
@@ -119,6 +121,7 @@ export default class MessageBox extends Component {
     this.setState({
       visible: false
     });
+    notifyDialogClose();
   }
 
   render(): React.DOM {
@@ -157,7 +160,7 @@ export default class MessageBox extends Component {
                       <div className="el-message-box__content">
                         <div className={this.classNames('el-message-box__status', this.typeClass())} />
                         <div className="el-message-box__message"
-                             style={{ marginLeft: this.typeClass() ? '50px' : '0' }}>
+                             style={{ marginLeft: this.typeClass() ? '20px' : '0' }}>
                           <div>{message}</div>
                         </div>
                         <View show={showInput}>
@@ -185,7 +188,7 @@ export default class MessageBox extends Component {
                               onClick={this.handleAction.bind(this, 'cancel')}>{this.cancelButtonText()}</Button>
                     </View>
                     <View show={showConfirmButton}>
-                      <Button className={this.classNames('el-button--primary', confirmButtonClass)}
+                      <Button plain type="primary" className={this.classNames(confirmButtonClass)}
                               onClick={this.handleAction.bind(this, 'confirm')}>{this.confirmButtonText()}</Button>
                     </View>
                   </div>

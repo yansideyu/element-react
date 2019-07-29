@@ -14,7 +14,7 @@ describe('Button test', () => {
   });
   it('icon', () => {
     const w = shallow(
-      <Button icon="search">TEST</Button>
+      <Button icon="el-icon-search">TEST</Button>
     );
     expect(w.childAt(0).hasClass('el-icon-search')).toBeTruthy();
   });

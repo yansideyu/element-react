@@ -12,7 +12,10 @@ export default class Tag extends Component {
     };
   }
 
-  handleClose() {
+  handleClose(event?: SyntheticEvent<any>): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.setState({
       visible: false
     }, () => {

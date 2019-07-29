@@ -1,74 +1,47 @@
 /* eslint-disable */
-import React, { Component } from 'react';
+import React, { Component, isValidElement, Children } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import requestAnimationFrame from 'raf';
+import { addClass, removeClass } from '../utils/dom';
 
-/**
- * @deprecated
- */
 export default class Transition extends Component {
   constructor(props) {
     super(props);
 
-    const { children } = props;
+    this.isShow = this.isChildrenShow(props.children);
 
     this.state = {
-      children: children && this.enhanceChildren(children)
-    }
-
+      children: this.getEnhanceChildren(props.children),
+    };
     this.didEnter = this.didEnter.bind(this);
     this.didLeave = this.didLeave.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const children = React.isValidElement(this.props.children) && React.Children.only(this.props.children);
-    const nextChildren = React.isValidElement(nextProps.children) && React.Children.only(nextProps.children);
-
-    if (!nextProps.name) {
-      this.setState({
-        children: nextChildren
-      });
-      return;
-    }
-
-    if (this.isViewComponent(nextChildren)) {
-      this.setState({
-        children: this.enhanceChildren(nextChildren, { show: children ? children.props.show : true })
-      })
-    } else {
-      if (nextChildren) {
-        this.setState({
-          children: this.enhanceChildren(nextChildren)
-        })
-      }
-    }
+    const children = this.getEnhanceChildren(nextProps.children);
+    this.setState({ children });
   }
 
   componentDidUpdate(preProps) {
-    if (!this.props.name) return;
+    const children = isValidElement(this.props.children) && Children.only(this.props.children);
+    const preChildren = isValidElement(preProps.children) && Children.only(preProps.children);
+    // 用销毁组件的方式，来展示动画
+    const isCreateChildren = !preChildren && children;
+    const isDestroyChildren = preChildren && !children;
+    // 配合View组件的show属性变化，来展示动画
+    const isViewComponent = this.isViewComponent(children);
+    const isViewShow = isViewComponent && (!preChildren || !preChildren.props.show) && children.props.show;
+    const isViewHide = isViewComponent && preChildren && preChildren.props.show && !children.props.show;
 
-    const children = React.isValidElement(this.props.children) && React.Children.only(this.props.children);
-    const preChildren = React.isValidElement(preProps.children) && React.Children.only(preProps.children);
+    const isActiveChildren = isCreateChildren || isViewShow;
+    const isDisableChildren = isDestroyChildren || isViewHide;
 
-    if (this.isViewComponent(children)) {
-      if ((!preChildren || !preChildren.props.show) && children.props.show) {
-        this.toggleVisible();
-      } else if (preChildren && preChildren.props.show && !children.props.show) {
-        this.toggleHidden();
-      }
-    } else {
-      if (!preChildren && children) {
-        this.toggleVisible();
-      } else if (preChildren && !children) {
-        this.toggleHidden();
-      }
+    if (isActiveChildren) {
+      this.toggleVisible();
+    } else if (isDisableChildren) {
+      this.toggleHidden();
     }
-
-  }
-
-  enhanceChildren(children, props) {
-    return React.cloneElement(children, Object.assign({ ref: (el) => { this.el = el } }, props))
   }
 
   get transitionClass() {
@@ -84,105 +57,108 @@ export default class Transition extends Component {
     }
   }
 
+  getEnhanceChildren(children) {
+    if (children) {
+      const isViewComponent = this.isViewComponent(children);
+      const props = isViewComponent ? { show: this.isShow } : {};
+      return this.enhanceChildren(children, props);
+    }
+    return null;
+  }
+
+  enhanceChildren(children, props) {
+    return React.cloneElement(children, Object.assign({ ref: (el) => { this.el = el } }, props))
+  }
+
+  isChildrenShow(children) {
+    if (children) {
+      const childrenOnly = isValidElement(children) && Children.only(children);
+      return childrenOnly.props.show;
+    }
+    return false;
+  }
+
   isViewComponent(element) {
     return element && element.type._typeName === 'View';
   }
 
-  /* css animation fix when animation applyied to .{action} instanceof .{action}-active */
-
-  animateElement(element, action, active, fn) {
-    element.classList.add(active);
-
-    const styles = getComputedStyle(element);
-    const duration = parseFloat(styles['animationDuration']) || parseFloat(styles['transitionDuration']);
-
-    element.classList.add(action);
-
-    if (duration === 0) {
-      const styles = getComputedStyle(element);
-      const duration = parseFloat(styles['animationDuration']) || parseFloat(styles['transitionDuration']);
-
-      clearTimeout(this.timeout);
-
-      this.timeout = setTimeout(() => {
-        fn();
-      }, duration * 1000)
-    }
-
-    element.classList.remove(action, active);
-  }
-
-  didEnter(e) {
-    const childDOM = ReactDOM.findDOMNode(this.el);
-
-    if (!e || e.target !== childDOM) return;
-
-    const { onAfterEnter } = this.props;
+  didEnter(e: SyntheticKeyboardEvent<any>) {
+    const { onAfterEnter, children } = this.props;
     const { enterActive, enterTo } = this.transitionClass;
+    const childDOM = ReactDOM.findDOMNode(this.el);
 
-    childDOM.classList.remove(enterActive, enterTo);
+    if (e && e.target === childDOM) {
+      addClass(childDOM, enterTo);
+      removeClass(childDOM, enterActive);
 
-    childDOM.removeEventListener('transitionend', this.didEnter);
-    childDOM.removeEventListener('animationend', this.didEnter);
+      childDOM.removeEventListener('transitionend', this.didEnter);
+      childDOM.removeEventListener('animationend', this.didEnter);
 
-    onAfterEnter && onAfterEnter();
+      onAfterEnter && onAfterEnter();
+
+      requestAnimationFrame(() => {
+        removeClass(childDOM, enterTo);
+      });
+    }
   }
 
-  didLeave(e) {
-    const childDOM = ReactDOM.findDOMNode(this.el);
-    if (!e || e.target !== childDOM) return;
-
+  didLeave(e: SyntheticKeyboardEvent<any>) {
     const { onAfterLeave, children } = this.props;
     const { leaveActive, leaveTo } = this.transitionClass;
+    const childDOM = ReactDOM.findDOMNode(this.el);
 
-    new Promise((resolve) => {
+    if (e && e.target === childDOM) {
+      addClass(childDOM, leaveTo);
+      removeClass(childDOM, leaveActive);
+
       if (this.isViewComponent(children)) {
-        childDOM.removeEventListener('transitionend', this.didLeave);
-        childDOM.removeEventListener('animationend', this.didLeave);
-
-        requestAnimationFrame(() => {
-          childDOM.style.display = 'none';
-          childDOM.classList.remove(leaveActive, leaveTo);
-
-          requestAnimationFrame(resolve);
-        })
-      } else {
-        this.setState({ children: null }, resolve);
+        childDOM.style.display = 'none';
       }
-    }).then(() => {
-      onAfterLeave && onAfterLeave()
-    })
+
+      childDOM.removeEventListener('transitionend', this.didLeave);
+      childDOM.removeEventListener('animationend', this.didLeave);
+
+      onAfterLeave && onAfterLeave();
+
+      requestAnimationFrame(() => {
+        removeClass(childDOM, leaveTo);
+      });
+    }
   }
 
   toggleVisible() {
-    const { onEnter } = this.props;
-    const { enter, enterActive, enterTo, leaveActive, leaveTo } = this.transitionClass;
+    const { onEnter, children } = this.props;
+    const { enter, enterActive, leaveActive, leaveTo } = this.transitionClass;
     const childDOM = ReactDOM.findDOMNode(this.el);
+    const isViewComponent = this.isViewComponent(children);
 
-    childDOM.addEventListener('transitionend', this.didEnter);
-    childDOM.addEventListener('animationend', this.didEnter);
+    const isLeaveAnimation = childDOM.classList.contains(leaveActive) ||
+      childDOM.classList.contains(leaveTo);
 
-    // this.animateElement(childDOM, enter, enterActive, this.didEnter);
+    // when leave transition not end
+    if (isLeaveAnimation) {
+      removeClass(childDOM, leaveActive, leaveTo);
 
-    requestAnimationFrame(() => {
-      // when hidden transition not end
-      if (childDOM.classList.contains(leaveActive)) {
-        childDOM.classList.remove(leaveActive, leaveTo);
+      childDOM.removeEventListener('transitionend', this.didLeave);
+      childDOM.removeEventListener('animationend', this.didLeave);
+    }
 
-        childDOM.removeEventListener('transitionend', this.didLeave);
-        childDOM.removeEventListener('animationend', this.didLeave);
-      }
-
+    if (isViewComponent) {
       childDOM.style.display = '';
-      childDOM.classList.add(enter, enterActive);
+    }
+    // 防止display样式造成enter过渡样式的冲突
+    requestAnimationFrame(() => {
+      childDOM.addEventListener('transitionend', this.didEnter);
+      childDOM.addEventListener('animationend', this.didEnter);
 
+      addClass(childDOM, enter);
       onEnter && onEnter();
 
       requestAnimationFrame(() => {
-        childDOM.classList.remove(enter);
-        childDOM.classList.add(enterTo);
-      })
-    })
+        removeClass(childDOM, enter);
+        addClass(childDOM, enterActive);
+      });
+    });
   }
 
   toggleHidden() {
@@ -190,29 +166,27 @@ export default class Transition extends Component {
     const { leave, leaveActive, leaveTo, enterActive, enterTo } = this.transitionClass;
     const childDOM = ReactDOM.findDOMNode(this.el);
 
-    childDOM.addEventListener('transitionend', this.didLeave);
-    childDOM.addEventListener('animationend', this.didLeave);
+    const isEnterAnimation = childDOM.classList.contains(enterActive) ||
+      childDOM.classList.contains(enterTo);
 
-    // this.animateElement(childDOM, leave, leaveActive, this.didLeave);
+    // when enter transition not end
+    if (isEnterAnimation) {
+      removeClass(childDOM, enterActive, enterTo);
+
+      childDOM.removeEventListener('transitionend', this.didEnter);
+      childDOM.removeEventListener('animationend', this.didEnter);
+    }
+
+    addClass(childDOM, leave);
+    onLeave && onLeave();
 
     requestAnimationFrame(() => {
-      // when enter transition not end
-      if (childDOM.classList.contains(enterActive)) {
-        childDOM.classList.remove(enterActive, enterTo);
+      childDOM.addEventListener('transitionend', this.didLeave);
+      childDOM.addEventListener('animationend', this.didLeave);
 
-        childDOM.removeEventListener('transitionend', this.didEnter);
-        childDOM.removeEventListener('animationend', this.didEnter);
-      }
-
-      childDOM.classList.add(leave, leaveActive);
-
-      onLeave && onLeave();
-
-      requestAnimationFrame(() => {
-        childDOM.classList.remove(leave);
-        childDOM.classList.add(leaveTo);
-      })
-    })
+      removeClass(childDOM, leave);
+      addClass(childDOM, leaveActive);
+    });
   }
 
   render() {

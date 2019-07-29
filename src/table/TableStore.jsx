@@ -57,7 +57,8 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     summaryMethod: PropTypes.func,
     onSelect: PropTypes.func,
     onSelectAll: PropTypes.func,
-    onSelectChange: PropTypes.func
+    onSelectChange: PropTypes.func,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -70,15 +71,16 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     highlightCurrentRow: false,
     showSummary: false,
     sumText: local.t('el.table.sumText'),
+    disabled: false,
   };
 
   static childContextTypes = {
-    store: PropTypes.any,
+    tableStore: PropTypes.any,
   };
 
   getChildContext(): Object {
     return {
-      store: this,
+      tableStore: this,
     }
   }
 
@@ -448,7 +450,7 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
       <TableLayout
         {...this.props}
         renderExpanded={renderExpanded}
-        store={this.state}
+        tableStoreState={this.state}
       />
     )
   }

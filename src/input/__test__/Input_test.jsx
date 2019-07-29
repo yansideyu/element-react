@@ -26,9 +26,9 @@ describe('Input test', () => {
     const cb = sinon.spy();
     const w = shallow(
       <Input
-        icon="time"
+        suffixIcon="el-icon-time"
         placeholder="请选择日期"
-        onIconClick={cb}
+        onSuffixIconClick={cb}
       />
     );
     expect(w.find('.el-icon-time').exists()).toBeTruthy();
@@ -37,11 +37,11 @@ describe('Input test', () => {
     expect(cb.callCount).toBe(1);
   });
 
-  it('size', () => {
+  it('small', () => {
     const w = shallow(
-      <Input size="large" />
+      <Input size="small" />
     );
-    expect(w.hasClass('el-input--large')).toBeTruthy();
+    expect(w.hasClass('el-input--small')).toBeTruthy();
   });
 
   it('type', () => {

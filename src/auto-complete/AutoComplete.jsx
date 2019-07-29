@@ -26,8 +26,10 @@ type Props = {
   fetchSuggestions: Function,
   onSelect: Function,
   onChange: Function,
-  onIconClick: Function,
-  icon: Element | string,
+  onPrefixIconClick: Function,
+  onSuffixIconClick: Function,
+  prefixIcon: Element | string,
+  suffixIcon: Element | string,
   append: Element,
   prepend: Element,
   onFocus: Function,
@@ -80,9 +82,10 @@ class AutoComplete extends Component {
   }
 
   getData(queryString: string): void {
+    const { fetchSuggestions } = this.props;
     this.setState({ loading: true });
 
-    this.props.fetchSuggestions(queryString, (suggestions: Array<any>) => {
+    fetchSuggestions(queryString, (suggestions: Array<any>) => {
       this.setState({ loading: false });
 
       if (Array.isArray(suggestions)) {
@@ -92,54 +95,58 @@ class AutoComplete extends Component {
   }
 
   handleChange(value: string): void {
+    const { triggerOnFocus, onChange } = this.props;
+
     this.setState({ inputValue: value });
 
-    if (!this.props.triggerOnFocus && !value) {
+    if (!triggerOnFocus && !value) {
       this.setState({ suggestions: [] }); return;
     }
 
-    if (this.props.onChange) {
-      this.props.onChange(value);
-    }
+    onChange && onChange(value);
 
     this.getData(value);
   }
 
   handleFocus(e): void {
+    const { onFocus, triggerOnFocus } = this.props;
+    const { inputValue } = this.state;
+
     this.setState({ isFocus: true });
-    if (this.props.onFocus) this.props.onFocus(e);
-    if (this.props.triggerOnFocus) {
-      this.getData(this.state.inputValue);
-    }
+    onFocus && onFocus(e);
+    triggerOnFocus && this.getData(inputValue);
   }
 
   handleKeyEnter(highlightedIndex: number): void {
-    if (this.suggestionVisible() && highlightedIndex >= 0 && highlightedIndex < this.state.suggestions.length) {
-      this.select(this.state.suggestions[highlightedIndex]);
+    const { suggestions } = this.state;
+
+    if (this.suggestionVisible() && highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
+      this.select(suggestions[highlightedIndex]);
     }
   }
 
   handleClickOutside(): void {
-    if (this.state.isFocus) {
-      this.setState({ isFocus: false });
-    }
+    const { isFocus } = this.state;
+
+    isFocus && this.setState({ isFocus: false });
   }
 
   select(item: Object): void {
+    const { onSelect } = this.props;
     this.setState({ inputValue: item.value }, () => {
       this.setState({ suggestions: [] });
     });
 
-    if (this.props.onSelect) {
-      this.props.onSelect(item);
-    }
+    onSelect && onSelect(item);
   }
 
   highlight(index: number): void {
-    if (!this.suggestionVisible() || this.state.loading) return;
+    const { loading, suggestions } = this.state;
+
+    if (!this.suggestionVisible() || loading) return;
     if (index < 0) index = 0;
-    if (index >= this.state.suggestions.length) {
-      index = this.state.suggestions.length - 1;
+    if (index >= suggestions.length) {
+      index = suggestions.length - 1;
     }
     const reference = ReactDOM.findDOMNode(this.suggestionsNode);
     if (reference instanceof HTMLElement) {
@@ -166,10 +173,10 @@ class AutoComplete extends Component {
   /* Computed Methods */
 
   suggestionVisible(): boolean {
-    const suggestions = this.state.suggestions;
+    const { suggestions, loading, isFocus } = this.state;
     const isValidData = Array.isArray(suggestions) && suggestions.length > 0;
 
-    return (isValidData || this.state.loading) && this.state.isFocus;
+    return (isValidData || loading) && isFocus;
   }
 
   onKeyDown(e: SyntheticKeyboardEvent<any>): void {
@@ -191,7 +198,7 @@ class AutoComplete extends Component {
   }
 
   render(): React.DOM {
-    const { disabled, placeholder, name, size, icon, append, prepend, onIconClick, popperClass } = this.props;
+    const { disabled, placeholder, name, size, prefixIcon, suffixIcon, append, prepend, onPrefixIconClick, onSuffixIconClick, popperClass, onBlur } = this.props;
     const { inputValue, suggestions } = this.state;
 
     return (
@@ -203,13 +210,15 @@ class AutoComplete extends Component {
           placeholder={placeholder}
           name={name}
           size={size}
-          icon={icon}
+          prefixIcon={prefixIcon}
+          suffixIcon={suffixIcon}
           prepend={prepend}
           append={append}
-          onIconClick={onIconClick}
+          onPrefixIconClick={onPrefixIconClick}
+          onSuffixIconClick={onSuffixIconClick}
           onChange={this.handleChange.bind(this)}
           onFocus={this.handleFocus.bind(this)}
-          onBlur={this.props.onBlur}
+          onBlur={onBlur}
           onKeyDown={this.onKeyDown.bind(this)}
         />
         <Suggestions

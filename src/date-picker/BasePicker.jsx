@@ -174,7 +174,7 @@ export default class BasePicker extends Component {
   }
 
   triggerClass(): string {
-    return this.type.includes('time') ? 'el-icon-time' : 'el-icon-date';
+    return this.type.includes('time') ? 'el-icon-time' : 'el-kylin-type_date';
   }
 
   calcIsShowTrigger() {
@@ -269,29 +269,16 @@ export default class BasePicker extends Component {
     const { isReadOnly, placeholder, isDisabled, className } = this.props;
     const { pickerVisible, value, text, isShowClose } = this.state;
 
-    const createIconSlot = () => {
-      if (this.calcIsShowTrigger()) {
-        const cls = isShowClose ? 'el-icon-close' : this.triggerClass()
-        return (
-          <i
-            className={this.classNames('el-input__icon', cls)}
-            onClick={this.handleClickIcon.bind(this)}
-            onMouseEnter={() => {
-              if (isReadOnly || isDisabled) return
-              if (text) {
-                this.setState({ isShowClose: true })
-              }
-            }}
-            onMouseLeave={() => {
-              this.setState({ isShowClose: false })
-            }}
-          ></i>
-        )
-      } else {
-        return null
-      }
+    const suffixIcon = () => {
+      const cls = isShowClose ? '': 'hidden';
+      return (
+        <i
+          className={this.classNames('el-input__suffix','el-input__icon','el-kylin-error_01', cls)}
+          onClick={this.handleClickIcon.bind(this)}
+        />
+      )
     }
-
+ 
     const createPickerPanel = () => {
       if (pickerVisible) {
         /* eslint-disable */
@@ -327,8 +314,16 @@ export default class BasePicker extends Component {
           'is-active': pickerVisible,
           'is-filled': !!value
         })}
-
         ref={v => this.domRoot = v}
+        onMouseEnter={() => {
+          if (isReadOnly || isDisabled) return
+          if (text) {
+            this.setState({ isShowClose: true })
+          }
+        }}
+        onMouseLeave={() => {
+          this.setState({ isShowClose: false })
+        }}
       >
 
         <EventRegister
@@ -360,7 +355,8 @@ export default class BasePicker extends Component {
           }}
           ref="inputRoot"
           value={text}
-          icon={createIconSlot()}
+          prefixIcon={this.triggerClass()}
+          suffixIcon={suffixIcon()}
         />
 
         {createPickerPanel()}
