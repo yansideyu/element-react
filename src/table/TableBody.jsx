@@ -145,12 +145,12 @@ export default class TableBody extends Component<TableBodyProps> {
     if (type === 'radio') {
       const isSelected = this.props.highlightCurrentRow
         && (this.props.currentRowKey === rowKey
-        || this.context.tableStore.currentRow === row);
+        || this.context.tableStore.state.currentRow === row);
       return (
         <Radio
           disabled={this.props.disabled}
           checked={isSelected}
-          value=''
+          value=""
         />
       )
     }
