@@ -5,8 +5,7 @@ import { Component, PropTypes, View } from '../../libs';
 
 type State = {
   index: number,
-  visible: boolean,
-  hitState: boolean
+  visible: boolean
 };
 
 export default class Option extends Component {
@@ -17,9 +16,8 @@ export default class Option extends Component {
 
     this.state = {
       index: -1,
-      visible: true,
-      hitState: false
-    }
+      visible: true
+    };
   }
 
   componentWillMount() {
@@ -38,40 +36,51 @@ export default class Option extends Component {
     this.parent().onOptionDestroy(this);
   }
 
+  get clickEvent(): string {
+    const isMobileTouch = 'ontouchend' in (document.documentElement || {});
+    return isMobileTouch ? 'onTouchEnd' : 'onClick';
+  }
+
   parent(): Object {
-    return this.context.component;
+    const { component } = this.context;
+    return component;
   }
 
   currentSelected(): boolean {
-    return this.props.selected || (this.parent().props.multiple ?
-      this.parent().state.value.indexOf(this.props.value) > -1 :
-      this.parent().state.value === this.props.value);
+    const { selected, value } = this.props;
+    return selected || (this.parent().props.multiple ?
+      this.parent().state.value.indexOf(value) > -1 :
+      this.parent().state.value === value);
   }
 
   currentLabel(): string {
-    return this.props.label || ((typeof this.props.value === 'string' || typeof this.props.value === 'number') ? this.props.value : '');
+    const { label, value } = this.props;
+    return label || ((typeof value === 'string' || typeof value === 'number') ? value : '');
   }
 
   itemSelected(): boolean {
+    const { value } = this.props;
     if (Object.prototype.toString.call(this.parent().state.selected) === '[object Object]') {
       return this === this.parent().state.selected;
     } else if (Array.isArray(this.parent().state.selected)) {
-      return this.parent().state.selected.map(el => el.props.value).indexOf(this.props.value) > -1;
+      return this.parent().state.selected.map(el => el.props.value).indexOf(value) > -1;
     }
 
     return false;
   }
 
-  hoverItem() {
-    if (!this.props.disabled && !this.parent().props.disabled) {
+  hoverItem = () => {
+    const { disabled } = this.props;
+    if (!disabled && !this.parent().props.disabled) {
       this.parent().setState({
         hoverIndex: this.parent().state.options.indexOf(this)
       });
     }
   }
 
-  selectOptionClick() {
-    if (this.props.disabled !== true && this.parent().props.disabled !== true) {
+  selectOptionClick = () => {
+    const { disabled } = this.props;
+    if (disabled !== true && this.parent().props.disabled !== true) {
       this.parent().onOptionClick(this);
     }
   }
@@ -98,6 +107,12 @@ export default class Option extends Component {
 
   render() {
     const { visible, index } = this.state;
+    const { disabled, children } = this.props;
+
+    const events = {
+      onMouseEnter: this.hoverItem,
+      [this.clickEvent]: this.selectOptionClick,
+    };
 
     return (
       <View show={visible}>
@@ -105,13 +120,12 @@ export default class Option extends Component {
           style={this.style()}
           className={this.className('el-select-dropdown__item', {
             'selected': this.itemSelected(),
-            'is-disabled': this.props.disabled || this.parent().props.disabled,
+            'is-disabled': disabled || this.parent().props.disabled,
             'hover': this.parent().state.hoverIndex === index
           })}
-          onMouseEnter={this.hoverItem.bind(this)}
-          onClick={this.selectOptionClick.bind(this)}
+          {...events}
         >
-          { this.props.children || <span>{this.currentLabel()}</span> }
+          { children || <span>{this.currentLabel()}</span> }
         </li>
       </View>
     )

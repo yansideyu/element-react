@@ -1,6 +1,6 @@
 build
 tests
 site
-src
-styles
+./src
+./styles
 .*
