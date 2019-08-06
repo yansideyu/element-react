@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import ClickOutside from 'kyligence-react-click-outside';
 import { debounce } from 'throttle-debounce';
 import Popper from 'popper.js';
+import { isEqual } from 'lodash';
 import StyleSheet from '../../libs/utils/style';
 import { Component, PropTypes, Transition, View } from '../../libs';
 import { addResizeListener, removeResizeListener } from '../../libs/utils/resize-event';
@@ -193,7 +194,8 @@ class Select extends Component {
       });
     } else {
       const selected = options.filter(option => {
-        return option.props.value === value
+        // use lodash isEqual function in case of value type is object or array
+        return isEqual(option.props.value , value)
       })[0];
 
       if (selected && !filterMethod) {
