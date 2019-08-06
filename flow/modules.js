@@ -20,3 +20,7 @@ declare module 'throttle-debounce' {
 declare module 'async-validator' {
   declare export default any;
 }
+
+declare module 'lodash' {
+  declare var isEqual: any;
+}
