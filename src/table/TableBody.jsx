@@ -199,7 +199,7 @@ export default class TableBody extends Component<TableBodyProps> {
                 {tableStoreState.columns.map((column, cellIndex) => (
                   <td
                     key={cellIndex}
-                    className={this.classNames(column.className, column.align, column.columnKey, {
+                    className={this.classNames(column.className, column.bodyClassName, column.align, column.columnKey, {
                       'is-hidden': columnsHidden[cellIndex]
                     })}
                     onMouseEnter={this.handleCellMouseEnter.bind(this, row, column)}
