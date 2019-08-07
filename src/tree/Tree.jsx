@@ -154,7 +154,7 @@ export default class Tree extends Component {
           'el-tree--highlight-current': highlightCurrent
         })}
       >
-        {this.root.childNodes.map((e, idx) => {
+        {this.root.childNodes.filter(shouldNodeRender).map((e, idx) => {
           return (
             <Node
               ref="cnode"
