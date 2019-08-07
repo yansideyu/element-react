@@ -133,26 +133,37 @@ export default class TableBody extends Component<TableBodyProps> {
 
     if (type === 'selection') {
       const isSelected = this.context.tableStore.isRowSelected(row, rowKey);
-      return (
+      const isDisabled = (selectable && !selectable(row, index)) || this.props.disabled;
+      const handleToggleRowSelection = () => this.context.tableStore.toggleRowSelection(row, !isSelected);
+
+      const renderData = { isSelected, handleToggleRowSelection, isDisabled };
+      const rendered = column.render(row, column, index, renderData);
+
+      return !rendered ? (
         <Checkbox
           checked={isSelected}
-          disabled={(selectable && !selectable(row, index)) || this.props.disabled}
-          onChange={() => { this.context.tableStore.toggleRowSelection(row, !isSelected); }}
+          disabled={isDisabled}
+          onChange={handleToggleRowSelection}
         />
-      )
+      ) : rendered;
     }
 
     if (type === 'radio') {
       const isSelected = this.props.highlightCurrentRow
         && (this.props.currentRowKey === rowKey
         || this.context.tableStore.state.currentRow === row);
-      return (
+      const isDisabled = this.props.disabled;
+
+      const renderData = { isSelected, isDisabled };
+      const rendered = column.render(row, column, index, renderData);
+
+      return !rendered ? (
         <Radio
-          disabled={this.props.disabled}
+          disabled={isDisabled}
           checked={isSelected}
           value=""
         />
-      )
+      ) : rendered;
     }
 
     return column.render(row, column, index);
