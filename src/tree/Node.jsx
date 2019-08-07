@@ -188,9 +188,10 @@ export default class Node extends Component {
 
   render(): React.DOM {
     const { childNodeRendered } = this.state;
-    const { treeNode, nodeModel, renderContent, isShowCheckbox } = this.props;
+    const { treeNode, nodeModel, renderContent, isShowCheckbox, shouldNodeRender } = this.props;
 
     let expanded = nodeModel.expanded;
+    const childNodes = nodeModel.childNodes.filter((...args) => shouldNodeRender(...args))
 
     return (
       <div
@@ -208,7 +209,7 @@ export default class Node extends Component {
         >
           <span
             className={this.classNames('el-tree-node__expand-icon', {
-              'is-leaf': nodeModel.isLeaf,
+              'is-leaf': nodeModel.isLeaf || !childNodes.length,
               expanded: !nodeModel.isLeaf && expanded
             })}
             onClick={this.handleExpandIconClick.bind(this)}
@@ -230,7 +231,7 @@ export default class Node extends Component {
         </div>
         <CollapseTransition isShow={expanded} ref="collapse">
           <div className="el-tree-node__children">
-            {nodeModel.childNodes.map((e, idx) => {
+            {childNodes.map((e, idx) => {
               let props = Object.assign({}, this.props, { nodeModel: e, parent: this });
               return <Node {...props} key={this.getNodeKey(e, idx)} />;
             })}
@@ -247,10 +248,12 @@ Node.propTypes = {
   treeNode: PropTypes.object.isRequired,
   isShowCheckbox: PropTypes.bool,
   onCheckChange: PropTypes.func,
+  shouldNodeRender: PropTypes.func,
 };
 
 Node.defaultProps = {
   nodeModel: {},
   options: {},
   onCheckChange() {},
+  shouldNodeRender: () => true,
 };

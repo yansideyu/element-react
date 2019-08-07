@@ -613,6 +613,7 @@ render() {
 | checkedKeyStrictly        | 在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false   | boolean                     | —    | false |
 | defaultCheckedKeys  | 默认勾选的节点的 key 的数组                         | array                       | —    | —     |
 | filterNodeMethod    | 对树节点进行筛选时执行的方法，返回 true 表示这个节点可以显示，返回 false 则表示这个节点会被隐藏 | Function(value, data, node) | —    | —     |
+|shouldNodeRender   | 过滤节点是否在树中需要被展示，用法同filterNodeMethod，区别在于每次tree更新都会执行shouldNodeRender。如果当前节点下所有children都被过滤，父节点的展开标记将会被隐藏。 | Function(node)                     |  -   | () => true |
 | accordion             | 是否每次只打开一个同级树节点展开                         | boolean                     | —    | false |
 | indent                | 相邻级节点间的水平缩进，单位为像素                        | number                     | —    | 16 |
 

@@ -133,7 +133,8 @@ export default class Tree extends Component {
       isShowCheckbox,
       onCheckChange,
       onNodeClicked,
-      emptyText
+      emptyText,
+      shouldNodeRender
     } = this.props;
 
     const renderEmptyText = ()=>{
@@ -165,6 +166,7 @@ export default class Tree extends Component {
               parent={this}
               isShowCheckbox={isShowCheckbox}
               onCheckChange={onCheckChange}
+              shouldNodeRender={shouldNodeRender}
             />
           );
         })}
@@ -200,6 +202,7 @@ Tree.propTypes = {
   // (f:(resolve, reject)=>Unit)=>Unit
   load: PropTypes.func,
   //
+  shouldNodeRender: PropTypes.func,
   onCheckChange: PropTypes.func,
   // todo: 这个地方需要改下， 现在是current和nodeclick一起被设置上了
   // (nodeModel.data, node)=>Unit
@@ -220,6 +223,7 @@ Tree.defaultProps = {
   emptyText: Locale.t('el.tree.emptyText'),
   indent: 16,
   options: { children: 'children', label: 'label', icon: 'icon' },
+  shouldNodeRender: () => true,
   onCheckChange() {},
   onNodeClicked() {},
   onCurrentChange(){},
