@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Component, PropTypes } from '../../libs';
+import { Component, PropTypes, getKeyOfRow } from '../../libs';
 import local from '../locale';
 
 import TableLayout from './TableLayout';
@@ -307,7 +307,11 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
 
     this.setState(state => {
       const selectedRows = state.selectedRows.slice();
-      const rowIndex = selectedRows.indexOf(row);
+      const rowIndex = rowKey
+        ? selectedRows.findIndex(selectedRow => (
+          getRowIdentity(selectedRow, rowKey) === getRowIdentity(row, rowKey)
+        ))
+        : selectedRows.indexOf(row);
 
       if (isSelected !== undefined) {
         if (isSelected) {
@@ -369,6 +373,11 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
 
     if (Array.isArray(currentRowKey)) {
       return currentRowKey.includes(rowKey);
+    }
+    if (this.props.rowKey) {
+      return selectedRows.some(selectedRow => (
+        getRowIdentity(selectedRow, this.props.rowKey) === rowKey
+      ));
     }
     return selectedRows.includes(row);
   }
