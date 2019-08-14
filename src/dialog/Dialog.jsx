@@ -170,7 +170,10 @@ Dialog.propTypes = {
   // 控制对话框是否可见
   visible: PropTypes.bool,
   // 标题
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+  ]),
   // 大小 (tiny/small/large/full)
   size: PropTypes.string,
   // top 值（仅在 size 不为 full 时有效）
