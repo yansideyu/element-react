@@ -76,7 +76,9 @@ class AutoComplete extends Component {
 
     if (reference instanceof HTMLElement) {
       setTimeout(() => {
-        this.suggestionsNode.onVisibleChange(visible, reference.offsetWidth);
+        if (this.suggestionsNode) {
+          this.suggestionsNode.onVisibleChange(visible, reference.offsetWidth);
+        }
       })
     }
   }
