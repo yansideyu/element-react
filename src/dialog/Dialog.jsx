@@ -11,6 +11,8 @@ type State = {
   isShowBody: boolean,
 }
 
+notifyDialogClose();
+
 export default class Dialog extends Component {
   state: State;
 
