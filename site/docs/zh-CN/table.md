@@ -1014,7 +1014,10 @@ constructor(props) {
   this.state = {
     columns: [
       {
-        type: 'radio'
+        type: 'radio',
+        selectable(row, rowIndex) {
+          return rowIndex !== 1;
+        }
       },
       {
         label: "日期",
@@ -1113,6 +1116,9 @@ constructor(props) {
     columns: [
       {
         type: 'selection',
+        selectable(row, rowIndex) {
+          return rowIndex !== 1;
+        },
         renderHeader: (column, renderData) => (
           <Checkbox
             checked={renderData.isChecked}

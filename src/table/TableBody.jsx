@@ -104,12 +104,29 @@ export default class TableBody extends Component<TableBodyProps> {
     return this.props.tableStoreState.rightFixedColumns.length;
   }
 
+  isSelectableRow(row: Object, index: number) {
+    const { tableStoreState } = this.props;
+    const selectableColumn = tableStoreState.columns.find(column => ['radio', 'selection'].includes(column.type));
+
+    return selectableColumn ? selectableColumn.selectable && selectableColumn.selectable(row, index) : true;
+  }
+
   handleExpandClick(row: Object, rowKey: string | number) {
     this.context.tableStore.toggleRowExpanded(row, rowKey);
   }
 
-  handleClick(row: Object) {
-    this.context.tableStore.setCurrentRow(row);
+  handleClick(row: Object, index: number) {
+    const { tableStoreState } = this.props;
+    const { tableStore } = this.context;
+    const radioColumn = tableStoreState.columns.find(column => column.type === 'radio');
+
+    if (radioColumn && radioColumn.selectable) {
+      if (radioColumn.selectable(row, index)) {
+        tableStore.setCurrentRow(row);
+      }
+    } else {
+      tableStore.setCurrentRow(row);
+    }
   }
 
   renderCell(row: Object, column: _Column, index: number, rowKey: string | number): React.DOM {
@@ -152,7 +169,7 @@ export default class TableBody extends Component<TableBodyProps> {
       const isSelected = this.props.highlightCurrentRow
         && (this.props.currentRowKey === rowKey
         || this.context.tableStore.state.currentRow === row);
-      const isDisabled = this.props.disabled;
+      const isDisabled = (selectable && !selectable(row, index)) || this.props.disabled;
 
       const renderData = { isSelected, isDisabled };
       const rendered = column.render(row, column, index, renderData);
@@ -197,14 +214,15 @@ export default class TableBody extends Component<TableBodyProps> {
                 className={this.className('el-table__row', {
                   'el-table__row--striped': props.stripe && rowIndex % 2 === 1,
                   'hover-row': tableStoreState.hoverRow === rowIndex,
-                  'current-row': props.highlightCurrentRow && (props.currentRowKey === rowKey || tableStoreState.currentRow === row)
+                  'current-row': props.highlightCurrentRow && (props.currentRowKey === rowKey || tableStoreState.currentRow === row),
+                  'not-selectable': !this.isSelectableRow(row, rowIndex)
                 }, typeof props.rowClassName === 'string'
                   ? props.rowClassName
                   : typeof props.rowClassName === 'function'
                   && props.rowClassName(row, rowIndex))}
                 onMouseEnter={this.handleMouseEnter.bind(this, rowIndex)}
                 onMouseLeave={this.handleMouseLeave}
-                onClick={this.handleClick.bind(this, row)}
+                onClick={this.handleClick.bind(this, row, rowIndex)}
                 onContextMenu={this.handleRowContextMenu.bind(this, row)}
               >
                 {tableStoreState.columns.map((column, cellIndex) => (
