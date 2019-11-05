@@ -13,7 +13,7 @@ constructor(props) {
 
 get data() {
   const data = [];
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 2000; i++) {
     data.push({
       key: i,
       label: `备选项 ${ i }`,
@@ -29,7 +29,7 @@ handleChange(value) {
 
 render() {
   const { value } = this.state;
-  return <Transfer value={value} data={this.data} onChange={this._handleChange}></Transfer>
+  return <Transfer isLazy value={value} data={this.data} onChange={this._handleChange}></Transfer>
 }
 
 ```
@@ -224,6 +224,7 @@ render() {
 ### Attributes
 | 参数      | 说明    | 类型      | 可选值       | 默认值   |
 |---------- |-------- |---------- |-------------  |-------- |
+| isLazy | 是否开启懒渲染模式 | boolean | — | false |
 | data | Transfer 的数据源 | array[{ key, label, disabled }] | — | [ ] |
 | filterable | 是否可搜索 | boolean | — | false |
 | filterPlaceholder | 搜索框占位符 | string | — | 请输入搜索内容 |

@@ -10,3 +10,4 @@ export { default as PureComponent } from './pureComponent';
 export { default as PropTypes } from './props';
 export { default as View } from './view';
 export { default as Animate } from './animate';
+export { default as LazyList } from './lazyList';

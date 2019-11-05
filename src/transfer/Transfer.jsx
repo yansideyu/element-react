@@ -19,6 +19,7 @@ type Props = {
   value: Array<Object>,
   footerFormat?: Object,
   filterable?: boolean,
+  isLazy?: boolean,
   propsAlias: {
     label: string,
     key: string,
@@ -46,6 +47,7 @@ export default class Transfer extends Component {
     leftDefaultChecked: PropTypes.array,
     rightDefaultChecked: PropTypes.array,
     renderContent: PropTypes.func,
+    isLazy: PropTypes.bool,
     value: PropTypes.array,
     footerFormat: PropTypes.object,
     filterable: PropTypes.bool,
@@ -64,6 +66,7 @@ export default class Transfer extends Component {
     rightDefaultChecked: [],
     value: [],
     footerFormat: {},
+    isLazy: false,
     propsAlias: {
       label: 'label',
       key: 'key',
@@ -139,6 +142,7 @@ export default class Transfer extends Component {
     const {
       filterPlaceholder,
       titles,
+      isLazy,
       buttonTexts,
       propsAlias,
       filterable,
@@ -153,6 +157,7 @@ export default class Transfer extends Component {
     return (
       <div className="el-transfer">
         <TransferPanel
+          isLazy={isLazy}
           propsAlias={propsAlias}
           data={this.sourceData}
           title={titles[0] || i18n.t('el.transfer.titles.0')}
@@ -189,6 +194,7 @@ export default class Transfer extends Component {
           </Button>
         </div>
         <TransferPanel
+          isLazy={isLazy}
           propsAlias={propsAlias}
           data={this.targetData}
           title={titles[1] || i18n.t('el.transfer.titles.1')}

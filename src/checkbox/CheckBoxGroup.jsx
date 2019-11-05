@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from "react";
-import { Component, PropTypes } from "../../libs";
+import { Component, PropTypes, LazyList } from "../../libs";
 
 type State = {
   options: Array<string | number>
@@ -33,60 +33,75 @@ export default class CheckboxGroup extends Component {
   }
 
   onChange(value: string | number, checked: boolean): void {
-    const index = this.state.options.indexOf(value);
+    const { onChange } = this.props;
+    const { options: oldOptions } = this.state;
+    const index = oldOptions.indexOf(value);
+    let newOption = [...oldOptions];
 
     if (checked) {
       if (index === -1) {
-        this.state.options.push(value);
+        newOption = [...newOption, value];
       }
     } else {
-      this.state.options.splice(index, 1);
+      newOption.splice(index, 1);
     }
 
-    this.forceUpdate();
+    this.setState({ options: newOption });
 
-    if (this.props.onChange) {
-      this.props.onChange(this.state.options);
+    if (onChange) {
+      onChange(newOption);
     }
   }
 
-  render(): React.DOM {
+  renderCheckboxes() {
+    const { children } = this.props;
     const { options } = this.state;
 
-    const children = React.Children.map(this.props.children, (child, index) => {
-      if (!child) {
-        return null;
+    return React.Children.map(children, (child) => {
+      const isCheckbox = ['Checkbox', 'CheckboxButton'].includes(child.type.elementType);
+      let renderOption = null;
+
+      if (isCheckbox) {
+        renderOption = React.cloneElement(
+          child,
+          {
+            ...child.props,
+            checked:
+              child.props.checked ||
+              options.indexOf(child.props.value) >= 0 ||
+              options.indexOf(child.props.label) >= 0,
+            onChange: this.onChange.bind(
+              this,
+              child.props.value
+                ? child.props.value
+                : child.props.value === 0
+                ? 0
+                : child.props.label
+            )
+          },
+        );
       }
 
-      const { elementType } = child.type;
-      // 过滤非Checkbox和CheckboxButton的子组件
-      if (elementType !== "Checkbox" && elementType !== "CheckboxButton") {
-        return null;
-      }
-
-      return React.cloneElement(
-        child,
-        Object.assign({}, child.props, {
-          key: index,
-          checked:
-            child.props.checked ||
-            options.indexOf(child.props.value) >= 0 ||
-            options.indexOf(child.props.label) >= 0,
-          onChange: this.onChange.bind(
-            this,
-            child.props.value
-              ? child.props.value
-              : child.props.value === 0
-              ? 0
-              : child.props.label
-          )
-        })
-      );
+      return renderOption;
     });
+  }
 
+  renderLazyList() {
+    const { children } = this.props;
+    return (
+      <LazyList renderItemSize={30} key={React.Children.toArray(children).length}>
+        {this.renderCheckboxes()}
+      </LazyList>
+    );
+  }
+
+  render(): React.DOM {
+    const { isLazy } = this.props;
     return (
       <div style={this.style()} className={this.className("el-checkbox-group")}>
-        {children}
+        {!isLazy
+          ? this.renderCheckboxes()
+          : this.renderLazyList()}
       </div>
     );
   }
@@ -103,5 +118,6 @@ CheckboxGroup.propTypes = {
   fill: PropTypes.string,
   textColor: PropTypes.string,
   value: PropTypes.any,
+  isLazy: PropTypes.bool,
   onChange: PropTypes.func
 };
