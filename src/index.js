@@ -40,3 +40,4 @@ export { default as Collapse } from './collapse';
 export { default as ColorPicker } from './color-picker';
 export { default as Cascader } from './cascader';
 export { default as Transfer } from './transfer';
+export { default as LazyList } from '../libs/lazyList';
