@@ -108,7 +108,9 @@ export default class TableBody extends Component<TableBodyProps> {
     const { tableStoreState } = this.props;
     const selectableColumn = tableStoreState.columns.find(column => ['radio', 'selection'].includes(column.type));
 
-    return selectableColumn ? selectableColumn.selectable && selectableColumn.selectable(row, index) : true;
+    return selectableColumn
+      ? selectableColumn.selectable ? selectableColumn.selectable(row, index) : true
+      : true;
   }
 
   handleExpandClick(row: Object, rowKey: string | number) {
