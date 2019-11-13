@@ -169,8 +169,7 @@ export default class TableBody extends Component<TableBodyProps> {
 
     if (type === 'radio') {
       const isSelected = this.props.highlightCurrentRow
-        && (this.props.currentRowKey === rowKey
-        || this.context.tableStore.state.currentRow === row);
+        && this.context.tableStore.isCurrentRow(row, rowKey);
       const isDisabled = (selectable && !selectable(row, index)) || this.props.disabled;
 
       const renderData = { isSelected, isDisabled };
@@ -209,6 +208,7 @@ export default class TableBody extends Component<TableBodyProps> {
         <tbody>
           {tableStoreState.data.map((row, rowIndex) => {
             const rowKey = this.getKeyOfRow(row, rowIndex);
+            const isCurrentRow = this.context.tableStore.isCurrentRow(row, rowKey);
             return [(
               <tr
                 key={rowKey}
@@ -216,7 +216,7 @@ export default class TableBody extends Component<TableBodyProps> {
                 className={this.className('el-table__row', {
                   'el-table__row--striped': props.stripe && rowIndex % 2 === 1,
                   'hover-row': tableStoreState.hoverRow === rowIndex,
-                  'current-row': props.highlightCurrentRow && (props.currentRowKey === rowKey || tableStoreState.currentRow === row),
+                  'current-row': props.highlightCurrentRow && isCurrentRow,
                   'not-selectable': !this.isSelectableRow(row, rowIndex)
                 }, typeof props.rowClassName === 'string'
                   ? props.rowClassName

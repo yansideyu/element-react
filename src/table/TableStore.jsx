@@ -367,6 +367,20 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     });
   }
 
+  isCurrentRow(row: Object, rowKey: string | number) {
+    const { currentRowKey } = this.props;
+
+    let isCurrentRow = false;
+
+    if (this.props.rowKey) {
+      isCurrentRow = getRowIdentity(this.state.currentRow, this.props.rowKey) === rowKey;
+    } else {
+      isCurrentRow = currentRowKey === rowKey || this.state.currentRow === row;
+    }
+
+    return isCurrentRow;
+  }
+
   isRowSelected(row: Object, rowKey: string | number): boolean {
     const { currentRowKey } = this.props;
     const { selectedRows } = this.state;
