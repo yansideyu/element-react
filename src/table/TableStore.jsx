@@ -370,12 +370,12 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
   isCurrentRow(row: Object, rowKey: string | number) {
     const { currentRowKey } = this.props;
 
-    let isCurrentRow = false;
+    let isCurrentRow = currentRowKey === rowKey;
 
     if (this.props.rowKey) {
-      isCurrentRow = getRowIdentity(this.state.currentRow, this.props.rowKey) === rowKey;
+      isCurrentRow = isCurrentRow || getRowIdentity(this.state.currentRow, this.props.rowKey) === rowKey;
     } else {
-      isCurrentRow = currentRowKey === rowKey || this.state.currentRow === row;
+      isCurrentRow = isCurrentRow || this.state.currentRow === row;
     }
 
     return isCurrentRow;
