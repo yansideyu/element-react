@@ -28,7 +28,7 @@
     &:focus {
       color: var(--color-primary);
       border-color: @color;
-      &.el-button--default:not(.el-button--text):not(.is-disabled) {
+      &.el-button--default:not(.el-button--text):not(.is-plain):not(.is-disabled) {
         background: var(--color-light-blue);
       }
     }
