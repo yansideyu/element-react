@@ -17,7 +17,9 @@ export default class CollapseTransition extends Component<Props, {}> {
   enterTimer: any;
 
   componentDidMount(): void {
-    this.beforeEnter();
+    if (!this.props.isShow) {
+      this.beforeEnter();
+    }
     if (this.props.isShow) {
       this.enter();
     }

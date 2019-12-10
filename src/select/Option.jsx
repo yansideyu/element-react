@@ -137,7 +137,7 @@ Option.contextTypes = {
 };
 
 Option.propTypes = {
-  value: PropTypes.any.isRequired,
+  value: PropTypes.any,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selected: PropTypes.bool,
   disabled: PropTypes.bool
