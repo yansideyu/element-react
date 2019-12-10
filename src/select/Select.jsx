@@ -600,10 +600,6 @@ class Select extends Component {
     const { filterable, disabled } = this.props;
     const { query, visible } = this.state;
 
-    if (filterable && query === '' && visible) {
-      return;
-    }
-
     if (!disabled) {
       this.setState({
         visible: !visible
