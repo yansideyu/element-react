@@ -29,6 +29,7 @@ export default class LazyList extends PureComponent {
     super(props);
     this.state = {
       scrollTop: 0,
+      parentHeight: 0,
       parentScroll: null,
     };
     this.handleScroll = this.handleScroll.bind(this);
@@ -44,13 +45,15 @@ export default class LazyList extends PureComponent {
   }
 
   componentDidUpdate() {
-    const { parentScroll: oldParentScroll } = this.state;
+    const { parentScroll: oldParentScroll, parentHeight: oldParentHeight } = this.state;
     const parentScroll = getParentScroll(this.refs.$list);
+    const isParentScrollChange = parentScroll && oldParentScroll !== parentScroll;
+    const isParentHeightChange = oldParentHeight !== parentScroll.clientHeight;
 
-    if (oldParentScroll !== parentScroll) {
+    if (isParentScrollChange || isParentHeightChange) {
       this.removeEvents();
+      this.bindEvents();
     }
-    this.bindEvents();
   }
 
   componentWillUnmount() {
@@ -73,13 +76,10 @@ export default class LazyList extends PureComponent {
 
   bindEvents() {
     const parentScroll = getParentScroll(this.refs.$list);
-    const { parentScroll: oldParentScroll } = this.state;
 
-    if (parentScroll && oldParentScroll !== parentScroll) {
-      this.setState({ parentScroll: parentScroll });
-      parentScroll.addEventListener('scroll', this.handleScroll);
-      this.handleScroll({ target: parentScroll });
-    }
+    this.setState({ parentScroll: parentScroll });
+    parentScroll.addEventListener('scroll', this.handleScroll);
+    this.handleScroll({ target: parentScroll });
   }
 
   removeEvents() {
@@ -95,8 +95,8 @@ export default class LazyList extends PureComponent {
     clearTimeout(this.timer);
 
     this.timer = setTimeout(() => {
-      const { scrollTop } = event.target;
-      this.setState({ scrollTop });
+      const { scrollTop, clientHeight: parentHeight } = event.target;
+      this.setState({ scrollTop, parentHeight });
     }, debounceMs);
   }
 
