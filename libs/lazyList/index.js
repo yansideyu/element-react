@@ -25,6 +25,8 @@ export default class LazyList extends PureComponent {
     delayMs: 0,
   };
 
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,10 +40,15 @@ export default class LazyList extends PureComponent {
 
   componentDidMount() {
     const { delayMs } = this.props;
+
     setTimeout(() => {
-      this.bindEvents();
-      window.addEventListener('resize', this.handleResize);
+      if (this._isMounted) {
+        this.bindEvents();
+        window.addEventListener('resize', this.handleResize);
+      }
     }, delayMs);
+
+    this.toggleMounted(true);
   }
 
   componentDidUpdate() {
@@ -59,6 +66,8 @@ export default class LazyList extends PureComponent {
   componentWillUnmount() {
     this.removeEvents();
     window.removeEventListener('resize', this.handleResize);
+
+    this.toggleMounted(false);
   }
 
   get listStyle() {
@@ -72,6 +81,10 @@ export default class LazyList extends PureComponent {
     const width = isHorizontal ? `${value}${scale}` : null;
 
     return { height, width, position: 'relative' };
+  }
+
+  toggleMounted(isMounted) {
+    this._isMounted = isMounted;
   }
 
   bindEvents() {
