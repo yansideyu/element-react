@@ -383,9 +383,12 @@ class Select extends Component {
     }
   }
 
-  onQueryChange(query: string) {
+  onQueryChange(inputQuery: string) {
     const { multiple, filterable, remote, remoteMethod, filterMethod } = this.props;
     let { voidRemoteQuery, hoverIndex, options, optionsCount } = this.state;
+
+    const isShowAll = options.some(option => inputQuery.toLowerCase() === option.currentLabel().toLowerCase());
+    const query = isShowAll ? '' : inputQuery;
 
     if (this.popperJS) {
       this.popperJS.update();
