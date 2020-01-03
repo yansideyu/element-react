@@ -47,9 +47,9 @@ export default class Tree extends Component {
   }
 
 
-  filter(value: any) {
+  filter(value: any, isEnableByChildren?: boolean) {
     if (!this.props.filterNodeMethod) throw new Error('[Tree] filterNodeMethod is required when filter');
-    this.store.filter(value);
+    this.store.filter(value, isEnableByChildren);
     this.refresh();
   }
 
