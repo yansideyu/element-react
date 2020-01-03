@@ -566,6 +566,7 @@ render() {
 | remote | 是否为远程搜索 | boolean | — | false |
 | remoteMethod | 远程搜索方法 | function | — | — |
 | loading | 是否正在从远程获取数据 | boolean | — | false |
+| prefixIcon | 前缀图表 | string | — | - |
 
 ### Select Events
 | 事件名称 | 说明 | 回调参数 |
