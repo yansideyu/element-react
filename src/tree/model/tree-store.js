@@ -30,7 +30,7 @@ export default class TreeStore {
     }
   }
 
-  filter(value) {
+  filter(value, isEnableByChildren = true) {
     const filterNodeMethod = this.filterNodeMethod;
     const traverse = function(node) {
       const childNodes = node.root ? node.root.childNodes : node.childNodes;
@@ -41,7 +41,7 @@ export default class TreeStore {
         traverse(child);
       });
 
-      if (!node.visible && childNodes.length) {
+      if (!node.visible && childNodes.length && isEnableByChildren) {
         let allHidden = true;
 
         childNodes.forEach((child) => {

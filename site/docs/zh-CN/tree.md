@@ -630,7 +630,7 @@ render() {
 
 | 方法名 | 说明 | 参数 |
 |------|--------|------|
-| filter          | 对树节点进行筛选操作                               | 接收一个任意类型的参数，该参数会在 filterNodeMethod 中作为第一个参数 |
+| filter          | 对树节点进行筛选操作                               | 接收一个任意类型的参数，该参数会在 filterNodeMethod 中作为第一个参数。第二个参数`isEnableByChildren`为是否筛选叶子节点，默认开启，关闭之后可筛选父节点，叶子节点就算通过筛选，只要父节点不展示，叶子节点也不会展示 |
 | getCheckedNodes | 若节点可被选择（即 `isShowCheckbox` 为 `true`），则返回目前被选中的节点所组成的数组 | (leafOnly) 接收一个 boolean 类型的参数，若为 `true` 则仅返回被选中的叶子节点，默认值为 `false` |
 | setCheckedNodes | 设置目前勾选的节点，使用此方法必须设置 nodeKey 属性          | (nodes) 接收勾选节点数据的数组                      |
 | getCheckedKeys  | 若节点可被选择（即 `isShowCheckbox` 为 `true`），则返回目前被选中的节点所组成的数组 | (leafOnly) 接收一个 boolean 类型的参数，若为 `true` 则仅返回被选中的叶子节点的 keys，默认值为 `false` |
