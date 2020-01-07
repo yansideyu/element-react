@@ -1,6 +1,6 @@
 {
   "name": "kyligence-ui-react",
-  "version": "0.1.42",
+  "version": "0.1.43",
   "description": "Kyligence UI for React",
   "private": false,
   "main": "dist/npm/es5/index.js",
@@ -13,7 +13,7 @@
     "jest": "jest",
     "lint": "eslint src libs site --quiet",
     "build": "cd build/site && webpack --progress",
-    "prepubl¡sh": "./build/scripts/prepare.sh",
+    "prepublish": "./build/scripts/prepare.sh",
     "postpublish": "./build/scripts/release.sh",
     "update-theme": "npm run prepubl¡sh && npm run postpublish"
   },

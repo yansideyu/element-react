@@ -205,7 +205,7 @@ export default class TableHeader extends Component<TableHeaderProps> {
 
   renderHeader(column: _Column): ?React.Node {
     const { type } = column;
-    const hasSelection = !!this.context.tableStore.state.selectedRows.length;
+    const hasSelection = !!this.context.tableStore.isHasSelection;
     if (type === 'expand') {
       return column.label || '';
     }

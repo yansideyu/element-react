@@ -59,6 +59,7 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     onSelectAll: PropTypes.func,
     onSelectChange: PropTypes.func,
     disabled: PropTypes.bool,
+    reserveSelection: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -72,6 +73,7 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     showSummary: false,
     sumText: local.t('el.table.sumText'),
     disabled: false,
+    reserveSelection: false,
   };
 
   static childContextTypes = {
@@ -132,20 +134,48 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     }
   }
 
-  get isAllSelected(): boolean {
+  get isHasSelection(): boolean {
     const { currentRowKey, rowKey } = this.props;
-    const { selectedRows, data, selectable } = this.state;
-    const selectableData = selectable ? data.filter((row, index) => selectable(row, index)) : data;
-
-    if (!selectableData.length) {
-      return false;
-    }
+    const { selectedRows: allSelectedRows = [], data, selectable } = this.state;
+    const selectableData = selectable ? data.filter(selectable) : data;
 
     if (Array.isArray(currentRowKey)) {
+      if (!selectableData.length) {
+        return false;
+      }
+      return selectableData.some(data => currentRowKey.includes(getRowIdentity(data, rowKey)));
+    }
+
+    const tableRowKeys = data.map(tableRow => getRowIdentity(tableRow, rowKey));
+
+    const tableSelectedRows = allSelectedRows.filter(selectedRow => {
+      const selectedRowKey = getRowIdentity(selectedRow, rowKey);
+      return tableRowKeys.includes(selectedRowKey);
+    });
+
+    return !!tableSelectedRows.length;
+  }
+
+  get isAllSelected(): boolean {
+    const { currentRowKey, rowKey } = this.props;
+    const { selectedRows: allSelectedRows = [], data, selectable } = this.state;
+    const selectableData = selectable ? data.filter(selectable) : data;
+
+    if (Array.isArray(currentRowKey)) {
+      if (!selectableData.length) {
+        return false;
+      }
       return selectableData.every(data => currentRowKey.includes(getRowIdentity(data, rowKey)));
     }
 
-    return selectedRows && selectedRows.length === selectableData.length;
+    const tableRowKeys = data.map(tableRow => getRowIdentity(tableRow, rowKey));
+
+    const tableSelectedRows = allSelectedRows.filter(selectedRow => {
+      const selectedRowKey = getRowIdentity(selectedRow, rowKey);
+      return tableRowKeys.includes(selectedRowKey);
+    });
+
+    return tableSelectedRows.length === selectableData.length;
   }
 
   // shouldComponentUpdate(nextProps) {
@@ -190,16 +220,40 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     }));
   }
 
+  getIsTableDataChanged(props: TableStoreProps) {
+    const { data: newTableData = [], rowKey } = props;
+    const { data: oldTableData = [] } = this.props;
+
+    if (rowKey) {
+      const newTableRowKeys = newTableData.map(row => getRowIdentity(row, rowKey)).sort();
+      const oldTableRowKeys = oldTableData.map(row => getRowIdentity(row, rowKey)).sort();
+
+      if (newTableRowKeys.length !== oldTableRowKeys.length) {
+        return true;
+      } else {
+        for (let i = 0; i < newTableRowKeys.length; i+=1) {
+          if (newTableRowKeys[i] !== oldTableRowKeys[i]) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+    return newTableData !== oldTableData;
+  }
+
   updateData(props: TableStoreProps) {
-    const { data = [], defaultExpandAll, defaultSort } = props;
+    const { data = [], defaultExpandAll, defaultSort, reserveSelection } = props;
     const { columns } = this.state;
     const filteredData = filterData(data.slice(), columns);
 
     let { hoverRow, currentRow, selectedRows, expandingRows } = this.state;
     hoverRow = hoverRow && data.includes(hoverRow) ? hoverRow : null;
     currentRow = currentRow && data.includes(currentRow) ? currentRow : null;
-    const [firstColumn = {}] = columns;
-    if ((this._isMounted && data !== this.props.data && !firstColumn.reserveSelection) || !selectedRows) {
+
+    const isTableDataChanged = this.getIsTableDataChanged(props);
+
+    if ((this._isMounted && isTableDataChanged && !reserveSelection) || !selectedRows) {
       selectedRows = [];
     }
 
@@ -217,7 +271,7 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
       expandingRows,
       selectedRows,
     }));
-    if ((!this._isMounted || data !== this.props.data) && defaultSort) {
+    if ((!this._isMounted || isTableDataChanged) && defaultSort) {
       const { prop, order = 'ascending' } = defaultSort;
       const sortColumn = columns.find(column => column.property === prop);
       this.changeSortCondition(sortColumn, order, false);
@@ -331,39 +385,71 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
   }
 
   toggleAllSelection() {
-    const { currentRowKey, rowKey } = this.props;
-    let { data, selectedRows, selectable } = this.state;
+    const { currentRowKey, rowKey, reserveSelection } = this.props;
+    const { data: tableRows, selectedRows: allSelectedRows, selectable } = this.state;
 
-    const allSelectableRows = selectable ? data.filter((data, index) => selectable(data, index)) : data.slice();
+    const selectableRows = selectable ? tableRows.filter(selectable) : tableRows.slice();
+    const tableRowKeys = tableRows.map(tableRow => getRowIdentity(tableRow, rowKey));
 
+    // 使用currentRowKey来控制table的逻辑
     if (Array.isArray(currentRowKey)) {
-      const newCurrentRowKey = this.isAllSelected ? [] : allSelectableRows.map(row => getRowIdentity(row, rowKey));
+      const currentRowKeyWithoutTable = currentRowKey.filter(currentKey => {
+        return !tableRowKeys.includes(currentKey);
+      });
+      const selectableRowKeys = selectableRows.map(row => getRowIdentity(row, rowKey));
+
+      const newCurrentRowKey = this.isAllSelected
+        ? (reserveSelection ? currentRowKeyWithoutTable : [])
+        : (reserveSelection ? [...currentRowKeyWithoutTable, ...selectableRowKeys] : selectableRowKeys);
+
       this.dispatchEvent('onSelectAll', newCurrentRowKey);
       this.dispatchEvent('onSelectChange', newCurrentRowKey);
       return;
     }
 
+    // 非currentRowKey控制table的逻辑
+    const selectedRowsWithoutTable = allSelectedRows.filter(selectedRow => {
+      const selectedRowKey = getRowIdentity(selectedRow, rowKey);
+      return !tableRowKeys.includes(selectedRowKey);
+    });
 
-    if (this.isAllSelected) {
-      selectedRows = [];
-    } else {
-      selectedRows = allSelectableRows;
-    }
+    const selectedRows = this.isAllSelected
+      ? (reserveSelection ? selectedRowsWithoutTable : [])
+      : (reserveSelection ? [...selectedRowsWithoutTable, ...selectableRows] : selectableRows);
 
-    this.setState({
-      selectedRows,
-    }, () => {
+    this.setState({ selectedRows }, () => {
       this.dispatchEvent('onSelectAll', selectedRows);
       this.dispatchEvent('onSelectChange', selectedRows);
     })
   }
 
   clearSelection() {
-    const { currentRowKey } = this.props;
-    if (Array.isArray(currentRowKey)) return;
+    const { currentRowKey, reserveSelection, rowKey } = this.props;
+    const { data: tableRows, selectedRows: allSelectedRows } = this.state;
+    const tableRowKeys = tableRows.map(tableRow => getRowIdentity(tableRow, rowKey));
 
-    this.setState({
-      selectedRows: [],
+    if (Array.isArray(currentRowKey)) {
+      const currentRowKeyWithoutTable = currentRowKey.filter(currentKey => {
+        return !tableRowKeys.includes(currentKey);
+      });
+
+      const newCurrentRowKey =  reserveSelection ? currentRowKeyWithoutTable : [];
+
+      this.dispatchEvent('onSelectAll', newCurrentRowKey);
+      this.dispatchEvent('onSelectChange', newCurrentRowKey);
+      return;
+    }
+
+    const selectedRowsWithoutTable = allSelectedRows.filter(selectedRow => {
+      const selectedRowKey = getRowIdentity(selectedRow, rowKey);
+      return !tableRowKeys.includes(selectedRowKey);
+    });
+
+    const selectedRows = reserveSelection ? selectedRowsWithoutTable : [];
+
+    this.setState({ selectedRows }, () => {
+      this.dispatchEvent('onSelectAll', selectedRows);
+      this.dispatchEvent('onSelectChange', selectedRows);
     });
   }
 
