@@ -153,8 +153,11 @@ class Select extends Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(props: Object) {
     this.state.inputWidth = this.reference.getBoundingClientRect().width;
+    if (this.popperJS && this.props.loading !== props.loading) {
+      this.popperJS.update()
+    }
   }
 
   componentWillUnmount() {
@@ -390,10 +393,6 @@ class Select extends Component {
     const isShowAll = options.some(option => inputQuery.toLowerCase() === option.currentLabel().toLowerCase());
     const query = isShowAll ? '' : inputQuery;
 
-    if (this.popperJS) {
-      this.popperJS.update();
-    }
-
     if (multiple && filterable) {
       this.resetInputHeight();
     }
@@ -473,7 +472,7 @@ class Select extends Component {
       if (voidRemoteQuery) {
         this.state.voidRemoteQuery = false;
 
-        return false;
+        return i18n.t('el.select.noMatch');
       }
 
       if (filterable && filteredOptionsCount === 0) {
