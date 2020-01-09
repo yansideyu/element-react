@@ -823,7 +823,7 @@ class Select extends Component {
   }
 
   render() {
-    const { multiple, size, disabled, filterable, loading, prefixIcon } = this.props;
+    const { multiple, size, disabled, filterable, loading, prefixIcon, warningMsg } = this.props;
     const { selected, inputWidth, inputLength, query, selectedLabel, visible, options, filteredOptionsCount, currentPlaceholder } = this.state;
 
     return (
@@ -957,9 +957,11 @@ class Select extends Component {
                   wrapClass="el-select-dropdown__wrap"
                   viewClass="el-select-dropdown__list"
                 >
-                  <div className="el-select-dropdown__warning">
-                    <span>Up to 200 values returned, please search for all.</span>
-                  </div>
+                  { warningMsg &&
+                    <div className="el-select-dropdown__warning">
+                      <span>{warningMsg}</span>
+                    </div>
+                  }
                   {this.props.children}
                 </Scrollbar>
               </View>
@@ -997,6 +999,7 @@ Select.propTypes = {
   onRemoveTag: PropTypes.func,
   onClear: PropTypes.func,
   prefixIcon: PropTypes.string,
+  warningMsg: PropTypes.string,
 }
 
 export default ClickOutside(Select);
