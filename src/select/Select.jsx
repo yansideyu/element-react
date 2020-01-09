@@ -957,6 +957,9 @@ class Select extends Component {
                   wrapClass="el-select-dropdown__wrap"
                   viewClass="el-select-dropdown__list"
                 >
+                  <div className="el-select-dropdown__warning">
+                    <span>Up to 200 values returned, please search for all.</span>
+                  </div>
                   {this.props.children}
                 </Scrollbar>
               </View>

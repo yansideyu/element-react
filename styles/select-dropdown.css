@@ -49,6 +49,12 @@
 
   @b select-dropdown__wrap {
     max-height: var(--select-dropdown-max-height);
+
+    .el-select-dropdown__warning {
+      font-size: 14px;
+      color: var(--input-icon-color);
+      padding: 6px;
+    }
   }
 
   @b select-dropdown__list {
