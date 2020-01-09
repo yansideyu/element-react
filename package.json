@@ -13,9 +13,10 @@
     "jest": "jest",
     "lint": "eslint src libs site --quiet",
     "build": "cd build/site && webpack --progress",
-    "prepublish": "./build/scripts/prepare.sh",
+    "prepubl¡sh": "./build/scripts/prepare.sh",
     "postpublish": "./build/scripts/release.sh",
-    "update-theme": "npm run prepubl¡sh && npm run postpublish"
+    "update-theme": "npm run prepubl¡sh && npm run postpublish",
+    "gulp": "gulp build"
   },
   "repository": {
     "type": "git",
