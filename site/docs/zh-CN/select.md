@@ -553,6 +553,69 @@ render() {
 ```
 :::
 
+
+### WarningMsg 显示提示信息
+
+输入a进行搜索
+
+:::demo 为`Select`添加`WarningMsg`属性即可启用提示信息功能。
+
+```js
+constructor(props) {
+  super(props);
+
+  this.state = {
+    value: [],
+    options: [],
+    states: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",   "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
+    "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+  };
+  this.handleInput = this.handleInput.bind(this);
+}
+
+handleInput(value) {
+  this.setState({ value });
+  console.log(value);
+}
+
+onSearch(query) {
+  if (query !== '') {
+    this.setState({
+      loading: true
+    });
+
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+        options: this.state.states.map(item => {
+          return { value: item, label: item };
+        }).filter(item => {
+          return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        })
+      });
+    }, 200);
+  } else {
+    this.setState({
+      options: []
+    });
+  }
+}
+
+render() {
+  return (
+    <Select value={this.state.value} multiple={true} filterable={true} remote={true} remoteMethod={this.onSearch.bind(this)} loading={this.state.loading} onChange={this.handleInput} warningMsg="Up to 200 values returned, please search for all.">
+      {
+        this.state.options.map(el => {
+          return <Select.Option key={el.value} label={el.label} value={el.value} />
+        })
+      }
+    </Select>
+  )
+}
+```
+:::
+
+
 ### Select Attributes
 | 参数      | 说明          | 类型      | 可选值                           | 默认值  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
