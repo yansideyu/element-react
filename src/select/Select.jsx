@@ -428,7 +428,7 @@ class Select extends Component {
         computeStyle: {
           gpuAcceleration: false
         },
-        preventOverflow: { enabled: true }
+        preventOverflow: { enabled: false }
       },
       positionFixed,
     });
@@ -957,10 +957,8 @@ class Select extends Component {
                   wrapClass="el-select-dropdown__wrap"
                   viewClass="el-select-dropdown__list"
                 >
-                  { warningMsg &&
-                    <div className="el-select-dropdown__warning">
-                      <span>{warningMsg}</span>
-                    </div>
+                  { warningMsg && filteredOptionsCount > 0 &&
+                    <div className="el-select-dropdown__warning"><span>{warningMsg}</span></div>
                   }
                   {this.props.children}
                 </Scrollbar>

@@ -603,7 +603,7 @@ onSearch(query) {
 
 render() {
   return (
-    <Select value={this.state.value} multiple={true} filterable={true} remote={true} remoteMethod={this.onSearch.bind(this)} loading={this.state.loading} onChange={this.handleInput} warningMsg="Up to 200 values returned, please search for all.">
+    <Select value={this.state.value} multiple={true} positionFixed={true} filterable={true} remote={true} remoteMethod={this.onSearch.bind(this)} loading={this.state.loading} onChange={this.handleInput} warningMsg="Up to 200 values returned, please search for all.">
       {
         this.state.options.map(el => {
           return <Select.Option key={el.value} label={el.label} value={el.value} />
