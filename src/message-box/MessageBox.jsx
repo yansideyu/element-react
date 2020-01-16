@@ -21,6 +21,8 @@ type State = {
   editorErrorMessage?: string
 };
 
+notifyDialogClose();
+
 export default class MessageBox extends Component {
   state: State;
 

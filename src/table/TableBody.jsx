@@ -104,12 +104,31 @@ export default class TableBody extends Component<TableBodyProps> {
     return this.props.tableStoreState.rightFixedColumns.length;
   }
 
+  isSelectableRow(row: Object, index: number) {
+    const { tableStoreState } = this.props;
+    const selectableColumn = tableStoreState.columns.find(column => ['radio', 'selection'].includes(column.type));
+
+    return selectableColumn
+      ? selectableColumn.selectable ? selectableColumn.selectable(row, index) : true
+      : true;
+  }
+
   handleExpandClick(row: Object, rowKey: string | number) {
     this.context.tableStore.toggleRowExpanded(row, rowKey);
   }
 
-  handleClick(row: Object) {
-    this.context.tableStore.setCurrentRow(row);
+  handleClick(row: Object, index: number) {
+    const { tableStoreState } = this.props;
+    const { tableStore } = this.context;
+    const radioColumn = tableStoreState.columns.find(column => column.type === 'radio');
+
+    if (radioColumn && radioColumn.selectable) {
+      if (radioColumn.selectable(row, index)) {
+        tableStore.setCurrentRow(row);
+      }
+    } else {
+      tableStore.setCurrentRow(row);
+    }
   }
 
   renderCell(row: Object, column: _Column, index: number, rowKey: string | number): React.DOM {
@@ -133,26 +152,36 @@ export default class TableBody extends Component<TableBodyProps> {
 
     if (type === 'selection') {
       const isSelected = this.context.tableStore.isRowSelected(row, rowKey);
-      return (
+      const isDisabled = (selectable && !selectable(row, index)) || this.props.disabled;
+      const handleToggleRowSelection = () => this.context.tableStore.toggleRowSelection(row, !isSelected);
+
+      const renderData = { isSelected, handleToggleRowSelection, isDisabled };
+      const rendered = column.render(row, column, index, renderData);
+
+      return !rendered ? (
         <Checkbox
           checked={isSelected}
-          disabled={(selectable && !selectable(row, index)) || this.props.disabled}
-          onChange={() => { this.context.tableStore.toggleRowSelection(row, !isSelected); }}
+          disabled={isDisabled}
+          onChange={handleToggleRowSelection}
         />
-      )
+      ) : rendered;
     }
 
     if (type === 'radio') {
       const isSelected = this.props.highlightCurrentRow
-        && (this.props.currentRowKey === rowKey
-        || this.context.tableStore.currentRow === row);
-      return (
+        && this.context.tableStore.isCurrentRow(row, rowKey);
+      const isDisabled = (selectable && !selectable(row, index)) || this.props.disabled;
+
+      const renderData = { isSelected, isDisabled };
+      const rendered = column.render(row, column, index, renderData);
+
+      return !rendered ? (
         <Radio
-          disabled={this.props.disabled}
+          disabled={isDisabled}
           checked={isSelected}
-          value=''
+          value=""
         />
-      )
+      ) : rendered;
     }
 
     return column.render(row, column, index);
@@ -179,6 +208,7 @@ export default class TableBody extends Component<TableBodyProps> {
         <tbody>
           {tableStoreState.data.map((row, rowIndex) => {
             const rowKey = this.getKeyOfRow(row, rowIndex);
+            const isCurrentRow = this.context.tableStore.isCurrentRow(row, rowKey);
             return [(
               <tr
                 key={rowKey}
@@ -186,20 +216,21 @@ export default class TableBody extends Component<TableBodyProps> {
                 className={this.className('el-table__row', {
                   'el-table__row--striped': props.stripe && rowIndex % 2 === 1,
                   'hover-row': tableStoreState.hoverRow === rowIndex,
-                  'current-row': props.highlightCurrentRow && (props.currentRowKey === rowKey || tableStoreState.currentRow === row)
+                  'current-row': props.highlightCurrentRow && isCurrentRow,
+                  'not-selectable': !this.isSelectableRow(row, rowIndex)
                 }, typeof props.rowClassName === 'string'
                   ? props.rowClassName
                   : typeof props.rowClassName === 'function'
                   && props.rowClassName(row, rowIndex))}
                 onMouseEnter={this.handleMouseEnter.bind(this, rowIndex)}
                 onMouseLeave={this.handleMouseLeave}
-                onClick={this.handleClick.bind(this, row)}
+                onClick={this.handleClick.bind(this, row, rowIndex)}
                 onContextMenu={this.handleRowContextMenu.bind(this, row)}
               >
                 {tableStoreState.columns.map((column, cellIndex) => (
                   <td
                     key={cellIndex}
-                    className={this.classNames(column.className, column.align, column.columnKey, {
+                    className={this.classNames(column.className, column.bodyClassName, column.align, column.columnKey, {
                       'is-hidden': columnsHidden[cellIndex]
                     })}
                     onMouseEnter={this.handleCellMouseEnter.bind(this, row, column)}

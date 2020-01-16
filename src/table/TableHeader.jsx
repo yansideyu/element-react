@@ -205,7 +205,7 @@ export default class TableHeader extends Component<TableHeaderProps> {
 
   renderHeader(column: _Column): ?React.Node {
     const { type } = column;
-    const hasSelection = !!this.context.tableStore.state.selectedRows.length;
+    const hasSelection = !!this.context.tableStore.isHasSelection;
     if (type === 'expand') {
       return column.label || '';
     }
@@ -215,14 +215,21 @@ export default class TableHeader extends Component<TableHeaderProps> {
     }
 
     if (type === 'selection') {
-      return (
+      const handleSelection = hasSelection ? this.context.tableStore.clearSelection: this.context.tableStore.toggleAllSelection;
+      const isChecked = this.context.tableStore.isAllSelected;
+      const isDisabled = this.props.disabled;
+
+      const renderData = { isChecked, isDisabled, hasSelection, handleSelection };
+      const rendered = column.renderHeader && column.renderHeader(column, renderData);
+
+      return !rendered ? (
         <Checkbox
-          checked={this.context.tableStore.isAllSelected}
-          onChange={hasSelection ? this.context.tableStore.clearSelection: this.context.tableStore.toggleAllSelection}
-          disabled={this.props.disabled}
+          checked={isChecked}
+          onChange={handleSelection}
+          disabled={isDisabled}
           hasSelection={hasSelection}
         />
-      );
+      ) : rendered;
     }
 
     return column.renderHeader ? column.renderHeader(column) : column.label;

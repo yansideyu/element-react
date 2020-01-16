@@ -2,9 +2,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ClickOutside from 'react-click-outside';
+import ClickOutside from 'kyligence-react-click-outside';
 import { debounce } from 'throttle-debounce';
 import Popper from 'popper.js';
+import { isEqual } from 'lodash';
 import StyleSheet from '../../libs/utils/style';
 import { Component, PropTypes, Transition, View } from '../../libs';
 import { addResizeListener, removeResizeListener } from '../../libs/utils/resize-event';
@@ -152,8 +153,11 @@ class Select extends Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(props: Object) {
     this.state.inputWidth = this.reference.getBoundingClientRect().width;
+    if (this.popperJS && this.props.loading !== props.loading) {
+      this.popperJS.update()
+    }
   }
 
   componentWillUnmount() {
@@ -193,7 +197,8 @@ class Select extends Component {
       });
     } else {
       const selected = options.filter(option => {
-        return option.props.value === value
+        // use lodash isEqual function in case of value type is object or array
+        return isEqual(option.props.value , value)
       })[0];
 
       if (selected && !filterMethod) {
@@ -381,13 +386,12 @@ class Select extends Component {
     }
   }
 
-  onQueryChange(query: string) {
+  onQueryChange(inputQuery: string) {
     const { multiple, filterable, remote, remoteMethod, filterMethod } = this.props;
     let { voidRemoteQuery, hoverIndex, options, optionsCount } = this.state;
 
-    if (this.popperJS) {
-      this.popperJS.update();
-    }
+    const isShowAll = options.some(option => inputQuery.toLowerCase() === option.currentLabel().toLowerCase());
+    const query = isShowAll ? '' : inputQuery;
 
     if (multiple && filterable) {
       this.resetInputHeight();
@@ -424,7 +428,7 @@ class Select extends Component {
         computeStyle: {
           gpuAcceleration: false
         },
-        preventOverflow: { enabled: true }
+        preventOverflow: { enabled: false }
       },
       positionFixed,
     });
@@ -468,7 +472,7 @@ class Select extends Component {
       if (voidRemoteQuery) {
         this.state.voidRemoteQuery = false;
 
-        return false;
+        return i18n.t('el.select.noMatch');
       }
 
       if (filterable && filteredOptionsCount === 0) {
@@ -597,10 +601,6 @@ class Select extends Component {
   toggleMenu() {
     const { filterable, disabled } = this.props;
     const { query, visible } = this.state;
-
-    if (filterable && query === '' && visible) {
-      return;
-    }
 
     if (!disabled) {
       this.setState({
@@ -823,7 +823,7 @@ class Select extends Component {
   }
 
   render() {
-    const { multiple, size, disabled, filterable, loading } = this.props;
+    const { multiple, size, disabled, filterable, loading, prefixIcon, warningMsg } = this.props;
     const { selected, inputWidth, inputLength, query, selectedLabel, visible, options, filteredOptionsCount, currentPlaceholder } = this.state;
 
     return (
@@ -912,6 +912,7 @@ class Select extends Component {
           size={size}
           disabled={disabled}
           readOnly={!filterable || multiple}
+          prefixIcon={prefixIcon}
           suffixIcon={this.iconClass() || undefined}
           onChange={value => this.setState({ selectedLabel: value })}
           onSuffixIconClick={this.handleIconClick.bind(this)}
@@ -956,6 +957,9 @@ class Select extends Component {
                   wrapClass="el-select-dropdown__wrap"
                   viewClass="el-select-dropdown__list"
                 >
+                  { warningMsg && filteredOptionsCount > 0 &&
+                    <div className="el-select-dropdown__warning"><span>{warningMsg}</span></div>
+                  }
                   {this.props.children}
                 </Scrollbar>
               </View>
@@ -991,7 +995,9 @@ Select.propTypes = {
   onChange: PropTypes.func,
   onVisibleChange: PropTypes.func,
   onRemoveTag: PropTypes.func,
-  onClear: PropTypes.func
+  onClear: PropTypes.func,
+  prefixIcon: PropTypes.string,
+  warningMsg: PropTypes.string,
 }
 
 export default ClickOutside(Select);

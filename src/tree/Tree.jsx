@@ -47,9 +47,9 @@ export default class Tree extends Component {
   }
 
 
-  filter(value: any) {
+  filter(value: any, isEnableByChildren?: boolean) {
     if (!this.props.filterNodeMethod) throw new Error('[Tree] filterNodeMethod is required when filter');
-    this.store.filter(value);
+    this.store.filter(value, isEnableByChildren);
     this.refresh();
   }
 
@@ -133,7 +133,8 @@ export default class Tree extends Component {
       isShowCheckbox,
       onCheckChange,
       onNodeClicked,
-      emptyText
+      emptyText,
+      shouldNodeRender
     } = this.props;
 
     const renderEmptyText = ()=>{
@@ -153,7 +154,7 @@ export default class Tree extends Component {
           'el-tree--highlight-current': highlightCurrent
         })}
       >
-        {this.root.childNodes.map((e, idx) => {
+        {this.root.childNodes.filter(shouldNodeRender).map((e, idx) => {
           return (
             <Node
               ref="cnode"
@@ -165,6 +166,7 @@ export default class Tree extends Component {
               parent={this}
               isShowCheckbox={isShowCheckbox}
               onCheckChange={onCheckChange}
+              shouldNodeRender={shouldNodeRender}
             />
           );
         })}
@@ -200,6 +202,7 @@ Tree.propTypes = {
   // (f:(resolve, reject)=>Unit)=>Unit
   load: PropTypes.func,
   //
+  shouldNodeRender: PropTypes.func,
   onCheckChange: PropTypes.func,
   // todo: 这个地方需要改下， 现在是current和nodeclick一起被设置上了
   // (nodeModel.data, node)=>Unit
@@ -220,6 +223,7 @@ Tree.defaultProps = {
   emptyText: Locale.t('el.tree.emptyText'),
   indent: 16,
   options: { children: 'children', label: 'label', icon: 'icon' },
+  shouldNodeRender: () => true,
   onCheckChange() {},
   onNodeClicked() {},
   onCurrentChange(){},

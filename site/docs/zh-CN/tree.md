@@ -613,6 +613,7 @@ render() {
 | checkedKeyStrictly        | 在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false   | boolean                     | —    | false |
 | defaultCheckedKeys  | 默认勾选的节点的 key 的数组                         | array                       | —    | —     |
 | filterNodeMethod    | 对树节点进行筛选时执行的方法，返回 true 表示这个节点可以显示，返回 false 则表示这个节点会被隐藏 | Function(value, data, node) | —    | —     |
+|shouldNodeRender   | 过滤节点是否在树中需要被展示，用法同filterNodeMethod，区别在于每次tree更新都会执行shouldNodeRender。如果当前节点下所有children都被过滤，父节点的展开标记将会被隐藏。 | Function(node)                     |  -   | () => true |
 | accordion             | 是否每次只打开一个同级树节点展开                         | boolean                     | —    | false |
 | indent                | 相邻级节点间的水平缩进，单位为像素                        | number                     | —    | 16 |
 
@@ -629,7 +630,7 @@ render() {
 
 | 方法名 | 说明 | 参数 |
 |------|--------|------|
-| filter          | 对树节点进行筛选操作                               | 接收一个任意类型的参数，该参数会在 filterNodeMethod 中作为第一个参数 |
+| filter          | 对树节点进行筛选操作                               | 接收一个任意类型的参数，该参数会在 filterNodeMethod 中作为第一个参数。第二个参数`isEnableByChildren`为是否筛选叶子节点，默认开启，关闭之后可筛选父节点，叶子节点就算通过筛选，只要父节点不展示，叶子节点也不会展示 |
 | getCheckedNodes | 若节点可被选择（即 `isShowCheckbox` 为 `true`），则返回目前被选中的节点所组成的数组 | (leafOnly) 接收一个 boolean 类型的参数，若为 `true` 则仅返回被选中的叶子节点，默认值为 `false` |
 | setCheckedNodes | 设置目前勾选的节点，使用此方法必须设置 nodeKey 属性          | (nodes) 接收勾选节点数据的数组                      |
 | getCheckedKeys  | 若节点可被选择（即 `isShowCheckbox` 为 `true`），则返回目前被选中的节点所组成的数组 | (leafOnly) 接收一个 boolean 类型的参数，若为 `true` 则仅返回被选中的叶子节点的 keys，默认值为 `false` |

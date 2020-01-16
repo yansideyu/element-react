@@ -47,7 +47,7 @@ export default class Form extends Component {
     }
   }
 
-  validate(callback: Function): void {
+  validate(callback: Function, options: Object = {}): void {
     let valid = true;
     let count = 0;
     const errorsList = [];
@@ -65,16 +65,16 @@ export default class Form extends Component {
           callback(valid);
           this.scrollToError(errorsList);
         }
-      });
+      }, options);
     });
   }
 
-  validateField(prop: string, cb: Function): void {
+  validateField(prop: string, cb: Function, options: Object = {}): void {
     const field = this.state.fields.filter(field => field.props.prop === prop)[0];
 
     if (!field) { throw new Error('must call validateField with valid prop string!'); }
 
-    field.validate('', cb);
+    field.validate('', cb, options);
   }
 
   render(): React.DOM {

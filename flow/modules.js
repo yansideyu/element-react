@@ -8,7 +8,7 @@ declare module 'classnames' {
   }
 }
 
-declare module 'react-click-outside' {
+declare module 'kyligence-react-click-outside' {
   declare module.exports: any;
 }
 
@@ -19,4 +19,8 @@ declare module 'throttle-debounce' {
 
 declare module 'async-validator' {
   declare export default any;
+}
+
+declare module 'lodash' {
+  declare var isEqual: any;
 }

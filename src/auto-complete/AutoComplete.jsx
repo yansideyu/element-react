@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ClickOutside from 'react-click-outside';
+import ClickOutside from 'kyligence-react-click-outside';
 import { Component, PropTypes } from '../../libs';
 import Input from '../input';
 import Suggestions from './Suggestions';
@@ -76,7 +76,9 @@ class AutoComplete extends Component {
 
     if (reference instanceof HTMLElement) {
       setTimeout(() => {
-        this.suggestionsNode.onVisibleChange(visible, reference.offsetWidth);
+        if (this.suggestionsNode) {
+          this.suggestionsNode.onVisibleChange(visible, reference.offsetWidth);
+        }
       })
     }
   }

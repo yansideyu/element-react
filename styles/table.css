@@ -401,6 +401,14 @@
         }
       }
 
+      tr.not-selectable {
+        background-color: var(--color-normal-background);
+        cursor: not-allowed;
+        &:hover > td {
+          background-color: var(--color-normal-background) !important;
+        }
+      }
+
       tr.current-row > td {
         background: color(var(--color-primary) tint(92%));
       }

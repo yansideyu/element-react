@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import ClickOutside from 'react-click-outside';
+import ClickOutside from 'kyligence-react-click-outside';
 import { Component, PropTypes } from '../../libs';
 import PickerDropdown from './components/PickerDropdown';
 import Color from './color';

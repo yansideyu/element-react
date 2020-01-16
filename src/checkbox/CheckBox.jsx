@@ -27,12 +27,24 @@ export default class Checkbox extends Component {
   }
 
   componentWillReceiveProps(nextProps: Object): void {
-    this.setState({
-      checked: nextProps.checked,
-      focus: nextProps.focus,
-      label: this.getLabel(nextProps),
-      hasSelection: nextProps.hasSelection,
-    })
+    const { checked: oldChecked, focus: oldFocus, hasSelection: oldHasSelection } = this.props;
+    const { checked: newChecked, focus: newFocus, hasSelection: newHasSelection } = nextProps;
+    const newLabel = this.getLabel(nextProps);
+    const oldLabel = this.getLabel(this.props);
+
+    if (
+      oldChecked !== newChecked ||
+      oldFocus !== newFocus ||
+      oldHasSelection !== newHasSelection ||
+      newLabel !== oldLabel
+    ) {
+      this.setState({
+        checked: newChecked,
+        focus: newFocus,
+        label: newLabel,
+        hasSelection: newHasSelection,
+      })
+    }
   }
 
   onFocus(): void {

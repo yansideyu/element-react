@@ -83,7 +83,7 @@ export default class FormItem extends Component {
     });
   }
 
-  validate(trigger: string, cb?: Function): boolean | void {
+  validate(trigger: string, cb?: Function, options: Object = {}): boolean | void {
     const rules = this.getFilteredRule(trigger);
 
     if (!rules || rules.length === 0) {
@@ -100,7 +100,7 @@ export default class FormItem extends Component {
     const validator = new AsyncValidator(descriptor);
     const model = { [this.props.prop]: this.fieldValue() };
 
-    validator.validate(model, { firstFields: true }, errors => {
+    validator.validate(model, { ...options, firstFields: true }, errors => {
       this.setState({
         error: errors ? errors[0].message : '',
         validating: false,

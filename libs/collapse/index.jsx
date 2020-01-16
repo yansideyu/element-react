@@ -17,7 +17,9 @@ export default class CollapseTransition extends Component<Props, {}> {
   enterTimer: any;
 
   componentDidMount(): void {
-    this.beforeEnter();
+    if (!this.props.isShow) {
+      this.beforeEnter();
+    }
     if (this.props.isShow) {
       this.enter();
     }
@@ -76,6 +78,8 @@ export default class CollapseTransition extends Component<Props, {}> {
 
   afterEnter(): void {
     const el = this.selfRef;
+    if (!el) return;
+
     el.style.display = 'block';
     el.style.height = '';
     el.style.overflow = el.dataset.oldOverflow;

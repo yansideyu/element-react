@@ -118,6 +118,7 @@ render() {
 | size     | 计数器尺寸           | string   | large, small | — |
 | disabled | 是否禁用计数器        | boolean | — | false |
 | controls | 是否使用控制按钮        | boolean | — | true |
+| inputDisabled | 是否禁用输入框        | boolean | — | false |
 
 ### Events
 | 事件名称 | 说明 | 回调参数 |

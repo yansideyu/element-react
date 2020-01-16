@@ -18,13 +18,15 @@ type Props = {
   checked: Array<Object>,
   hasChecked?: boolean,
   noChecked?: boolean,
-  children: React.DOM
+  children: React.DOM,
+  isLazy?: boolean,
 };
 
 type defaultProps = {
   data: Array<Object>,
   footerFormat: Object,
   onChange: Function,
+  isLazy: false,
 }
 
 type State = {
@@ -53,7 +55,8 @@ export default class TransferPanel extends Component {
     data: [],
     footerFormat: {},
     propsAlias: {},
-    onChange() {}
+    isLazy: false,
+    onChange() {},
   };
 
   constructor(props: Props) {
@@ -159,16 +162,36 @@ export default class TransferPanel extends Component {
     return this.props.propsAlias.disabled;
   }
 
+  renderCheckbox(item: Object) {
+    const { renderContent } = this.props;
+    return (
+      <Checkbox
+        key={item[this.keyProp]}
+        className={['el-transfer-panel__item', item[this.disabledProp] && 'is-disabled']}
+        label={item[this.labelProp]}
+        disabled={item[this.disabledProp]}
+        value={item[this.keyProp]}
+      >
+        {!renderContent
+          ? item[this.labelProp] || item[this.keyProp]
+          : renderContent(item)}
+      </Checkbox>
+    );
+  }
+
   render(): React.DOM {
     const {
       filterable,
       title,
       data,
-      renderContent,
       checked,
-      placeholder
+      placeholder,
+      isLazy,
     } = this.props;
     const { query } = this.state;
+
+    const checkboxes = this.filteredData.map(item => this.renderCheckbox(item))
+
     return (
       <div className="el-transfer-panel">
         <p className="el-transfer-panel__header">{title}</p>
@@ -189,30 +212,15 @@ export default class TransferPanel extends Component {
           )}
           <View show={!this.hasNoMatch && data.length > 0}>
             <Checkbox.Group
+              isLazy={isLazy}
               value={checked}
-              v-show=""
               className={this.classNames({
                 'is-filterable': filterable,
                 'el-transfer-panel__list': true
               })}
               onChange={this.handleCheckedChange}
             >
-              {this.filteredData.map((item, index) => (
-                <Checkbox
-                  className={['el-transfer-panel__item', item[this.disabledProp] && 'is-disabled']}
-                  label={item[this.labelProp]}
-                  disabled={item[this.disabledProp]}
-                  value={item[this.keyProp]}
-                  key={index}
-                >
-                  <OptionContent
-                    option={item}
-                    renderContent={renderContent}
-                    labelProp={this.labelProp}
-                    keyProp={this.keyProp}
-                  />
-                </Checkbox>
-              ))}
+              {checkboxes}
             </Checkbox.Group>
           </View>
 
@@ -241,9 +249,3 @@ export default class TransferPanel extends Component {
     );
   }
 }
-
-const OptionContent = ({ option, renderContent, labelProp, keyProp }) => {
-  return renderContent
-    ? renderContent(option)
-    : <span>{option[labelProp] || option[keyProp]}</span>;
-};

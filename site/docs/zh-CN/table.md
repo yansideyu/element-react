@@ -1014,7 +1014,10 @@ constructor(props) {
   this.state = {
     columns: [
       {
-        type: 'radio'
+        type: 'radio',
+        selectable(row, rowIndex) {
+          return rowIndex !== 1;
+        }
       },
       {
         label: "日期",
@@ -1112,7 +1115,25 @@ constructor(props) {
   this.state = {
     columns: [
       {
-        type: 'selection'
+        type: 'selection',
+        selectable(row, rowIndex) {
+          return rowIndex !== 1;
+        },
+        renderHeader: (column, renderData) => (
+          <Checkbox
+            checked={renderData.isChecked}
+            onChange={renderData.handleSelection}
+            disabled={renderData.isDisabled}
+            hasSelection={renderData.hasSelection}
+          />
+        ),
+        render: (row, column, index, renderData) => (
+          <Checkbox
+            checked={renderData.isSelected}
+            disabled={renderData.isDisabled}
+            onChange={renderData.handleToggleRowSelection}
+          />
+        )
       },
       {
         label: "日期",
@@ -1131,49 +1152,49 @@ constructor(props) {
     ],
     data: [{
       date: '2016-05-02',
-      name: '王小虎',
+      name: '王小虎1',
       province: '上海',
       city: '普陀区',
       address: '上海市普陀区金沙江路 1518 弄',
       zip: 200333
      }, {
       date: '2016-05-02',
-      name: '王小虎',
+      name: '王小虎2',
       province: '上海',
       city: '普陀区',
       address: '上海市普陀区金沙江路 1518 弄',
       zip: 200333
      }, {
       date: '2016-05-02',
-      name: '王小虎',
+      name: '王小虎3',
       province: '上海',
       city: '普陀区',
       address: '上海市普陀区金沙江路 1518 弄',
       zip: 200333
      }, {
       date: '2016-05-02',
-      name: '王小虎',
+      name: '王小虎4',
       province: '上海',
       city: '普陀区',
       address: '上海市普陀区金沙江路 1518 弄',
       zip: 200333
      }, {
       date: '2016-05-02',
-      name: '王小虎',
+      name: '王小虎5',
       province: '上海',
       city: '普陀区',
       address: '上海市普陀区金沙江路 1518 弄',
       zip: 200333
      }, {
       date: '2016-05-02',
-      name: '王小虎',
+      name: '王小虎6',
       province: '上海',
       city: '普陀区',
       address: '上海市普陀区金沙江路 1518 弄',
       zip: 200333
      }, {
       date: '2016-05-02',
-      name: '王小虎',
+      name: '王小虎7',
       province: '上海',
       city: '普陀区',
       address: '上海市普陀区金沙江路 1518 弄',
@@ -1570,6 +1591,183 @@ render() {
 ```
 :::
 
+### 高阶用法：分页多选
+
+对表格进行分页多选，实现分页逻辑需要搭配分页组件共同实现。
+
+:::demo
+此处有 `使用currentRowKey` 和 `不使用currentRowKey` 两种方法。
+
+`使用currentRowKey`是用currentRowKey变量来控制目前选中了哪些表格中的列。
+`不使用currentRowKey`是通过调用table的api `toggleRowSelection` 去手动初始化表格选中了哪些表格中的列。
+
+很明显，`使用currentRowKey`会造成性能损耗，当数据量庞大的时候，表格会表现卡顿。
+但`使用currentRowKey`返回的数据则是rowKey的普通值。输入为rowObject，输出为rowKey，但性能得以提升。
+
+```js
+constructor(props) {
+  super(props);
+
+  this.state = {
+    columns: [
+      {
+        type: 'selection',
+        selectable(row, rowIndex) {
+          return rowIndex !== 1;
+        },
+        renderHeader: (column, renderData) => (
+          <Checkbox
+            checked={renderData.isChecked}
+            onChange={renderData.handleSelection}
+            disabled={renderData.isDisabled}
+            hasSelection={renderData.hasSelection}
+          />
+        ),
+        render: (row, column, index, renderData) => (
+          <Checkbox
+            checked={renderData.isSelected}
+            disabled={renderData.isDisabled}
+            onChange={renderData.handleToggleRowSelection}
+          />
+        )
+      },
+      {
+        label: "日期",
+        prop: "date",
+        width: 150
+      },
+      {
+        label: "姓名",
+        prop: "name",
+        width: 160
+      },
+      {
+        label: "地址",
+        prop: "address"
+      }
+    ],
+    selection: ['王小虎_3'],
+    pageOffset: 0,
+    pageSize: 10,
+    isReserveSelection: true,
+    isCurrentRowKey: false,
+  }
+}
+
+get totalData() {
+  const data = [];
+
+  for (let i = 0; i < 100; i++) {
+    data.push({
+      date: '2016-05-02',
+      name: `王小虎_${i}`,
+      province: '上海',
+      city: '普陀区',
+      address: '上海市普陀区金沙江路 1518 弄',
+      zip: 200333
+    });
+  }
+
+  return data;
+}
+
+get tableData() {
+  const { pageOffset, pageSize } = this.state;
+  const startIdx = pageOffset * pageSize;
+  const endIdx = (pageOffset + 1) * pageSize;
+  return this.totalData.slice(startIdx, endIdx);
+}
+
+handlePagination({ pageOffset, pageSize }) {
+  this.setState({ pageOffset, pageSize });
+}
+
+handleSelect(selection) {
+  console.log(selection);
+}
+
+handleRowKeySelect(selection) {
+  console.log(selection);
+  this.setState({ selection });
+}
+
+render() {
+  const { columns, pageOffset, pageSize, selection, isReserveSelection, isCurrentRowKey } = this.state;
+  const { tableData, totalData } = this;
+
+  return (
+    <div>
+      <Checkbox
+        checked={isReserveSelection}
+        onChange={value => this.setState({ isReserveSelection: value })}
+        style={{ marginBottom: '10px' }}
+      >
+        切换分页是否保留数据
+      </Checkbox>
+      <Checkbox
+        checked={isCurrentRowKey}
+        onChange={value => this.setState({ isCurrentRowKey: value })}
+        style={{ marginBottom: '10px' }}
+      >
+        使用CurrentRowKey控制
+      </Checkbox>
+      {!isCurrentRowKey && (
+        <div>
+          <Table
+            ref="mpTable"
+            border
+            reserveSelection={isReserveSelection}
+            rowKey="name"
+            style={{width: '100%'}}
+            columns={columns}
+            data={tableData}
+            onSelectChange={selection => this.handleSelect(selection)}
+            onSelectAll={selection => this.handleSelect(selection)}
+          />
+          <Pagination
+            style={{ marginTop: '10px', textAlign: 'center' }}
+            layout="total,sizes,prev,pager,next,jumper"
+            total={totalData.length}
+            pageSizes={[10, 20, 30, 40]}
+            pageSize={pageSize}
+            currentPage={pageOffset + 1}
+            onSizeChange={e => this.handlePagination({ pageSize: e, pageOffset: pageOffset })}
+            onCurrentChange={e => this.handlePagination({ pageSize, pageOffset: e - 1 })}
+          />
+        </div>
+      )}
+      {isCurrentRowKey && (
+        <div>
+          <Table
+            ref="mpTable"
+            border
+            currentRowKey={selection}
+            reserveSelection={isReserveSelection}
+            rowKey="name"
+            style={{width: '100%'}}
+            columns={columns}
+            data={tableData}
+            onSelectChange={selection => this.handleRowKeySelect(selection)}
+            onSelectAll={selection => this.handleRowKeySelect(selection)}
+          />
+          <Pagination
+            style={{ marginTop: '10px', textAlign: 'center' }}
+            layout="total,sizes,prev,pager,next,jumper"
+            total={totalData.length}
+            pageSizes={[10, 20, 30, 40]}
+            pageSize={pageSize}
+            currentPage={pageOffset + 1}
+            onSizeChange={e => this.handlePagination({ pageSize: e, pageOffset: pageOffset })}
+            onCurrentChange={e => this.handlePagination({ pageSize, pageOffset: e - 1 })}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+```
+:::
+
 ### Table Attributes
 | 参数      | 说明          | 类型      | 可选值                           | 默认值  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
@@ -1592,7 +1790,7 @@ render() {
 | showSummary | 是否在表尾显示合计行 | boolean | - | false |
 | sumText | 合计行第一列的文本 | string | - | 合计 |
 | summeryMethod | 自定义的合计计算方法 | Function({ columns, data }) | - | - |
-
+| reserveSelection | 仅对 type=selection 的列有效，类型为 Boolean，为 true 则代表会保留之前数据的选项，需要配合 Table 的 clearSelection 方法使用。 | Boolean | — | false |
 
 
 ### Table Events
@@ -1632,8 +1830,8 @@ render() {
 | width | 对应列的宽度 | string | — | — |
 | minWidth | 对应列的最小宽度，与 width 的区别是 width 是固定的，min-width 会把剩余宽度按比例分配给设置了 min-width 的列 | string | — | — |
 | fixed | 列是否固定在左侧或者右侧，true 表示固定在左侧 | string, boolean | true, left, right | - |
-| render | 自定义渲染使用的 Function | Function(row, column, index) | — | — |
-| renderHeader | 列标题 Label 区域渲染使用的 Function | Function(column) | — | — |
+| render | 自定义渲染使用的 Function | Function(row, column, index, renderData) | — | — |
+| renderHeader | 列标题 Label 区域渲染使用的 Function | Function(column, renderData) | — | — |
 | sortable | 对应列是否可以排序，如果设置为 'custom'，则代表用户希望远程排序，需要监听 Table 的 sort-change 事件 | boolean, string | true, false, 'custom' | false |
 | sortMethod | 对数据进行排序的时候使用的方法，仅当 sortable 设置为 true 的时候有效 | Function(a, b) | - | - |
 | resizable | 对应列是否可以通过拖动改变宽度（如果需要在 el-table 上设置 border 属性为真） | boolean | — | true |
@@ -1641,8 +1839,8 @@ render() {
 | headerAlign | 表头对齐方式，若不设置该项，则使用表格的对齐方式 | string | left/center/right | — |
 | className | 列的 className | string | — | — |
 | labelClassName | 当前列标题的自定义类名 | string | — | — |
+| bodyClassName | 当前列除标题外每一行的自定义类名 | string | — | — |
 | selectable | 仅对 type=selection 的列有效，类型为 Function，Function 的返回值用来决定这一行的 CheckBox 是否可以勾选 | Function(row, index) | — | — |
-| reserveSelection | 仅对 type=selection 的列有效，类型为 Boolean，为 true 则代表会保留之前数据的选项，需要配合 Table 的 clearSelection 方法使用。 | Boolean | — | false |
 | filters | 数据过滤的选项，数组格式，数组中的元素需要有 text 和 value 属性。 | Array[{ text, value }] | — | — |
 | filterPlacement | 过滤弹出框的定位 | string | 与 Tooltip 的 `placement` 属性相同 | — |
 | filterMultiple | 数据过滤的选项是否多选 | Boolean | — | true |

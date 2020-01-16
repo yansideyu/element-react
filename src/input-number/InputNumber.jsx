@@ -138,7 +138,7 @@ export default class InputNumber extends Component {
   }
 
   render(): React.DOM {
-    const { controls, disabled, size } = this.props;
+    const { controls, disabled, size, inputDisabled } = this.props;
     const { value, inputActive } = this.state;
 
     return (
@@ -177,6 +177,7 @@ export default class InputNumber extends Component {
           })}
           value={value}
           disabled={disabled}
+          readOnly={inputDisabled}
           size={size}
           onChange={this.onInput.bind(this)}
           onKeyDown={this.onKeyDown.bind(this)}
@@ -195,12 +196,14 @@ InputNumber.propTypes = {
   disabled: PropTypes.bool,
   controls: PropTypes.bool,
   size: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  inputDisabled: PropTypes.bool,
 }
 
 InputNumber.defaultProps = {
   step: 1,
   controls: true,
   max: Infinity,
-  min: 0
+  min: 0,
+  inputDisabled: false,
 }
