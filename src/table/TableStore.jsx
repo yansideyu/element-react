@@ -162,10 +162,9 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
     const selectableData = selectable ? data.filter(selectable) : data;
 
     if (Array.isArray(currentRowKey)) {
-      if (!selectableData.length) {
-        return false;
-      }
-      return selectableData.every(data => currentRowKey.includes(getRowIdentity(data, rowKey)));
+      return !!selectableData.length && (
+        selectableData.every(data => currentRowKey.includes(getRowIdentity(data, rowKey)))
+      );
     }
 
     const tableRowKeys = data.map(tableRow => getRowIdentity(tableRow, rowKey));
@@ -175,7 +174,9 @@ export default class TableStore extends Component<TableStoreProps, TableStoreSta
       return tableRowKeys.includes(selectedRowKey);
     });
 
-    return tableSelectedRows.length === selectableData.length;
+    return !!selectableData.length && (
+      tableSelectedRows.length === selectableData.length
+    );
   }
 
   // shouldComponentUpdate(nextProps) {
