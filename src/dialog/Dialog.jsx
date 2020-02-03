@@ -97,7 +97,15 @@ export default class Dialog extends Component {
 
   toggleBodyVisiable(isShowBody: boolean) {
     setTimeout(() => {
-      this.setState({ isShowBody });
+      const { visible } = this.props;
+      const { isShowBody: currentShowBody } = this.state;
+
+      // 由于有延时，防止toggleBodyVisiable(false)之后200ms内
+      // 调用toggleBodyVisiable(true)，导致 false => true => false
+      // 判断如果visible 和 isShowBody不相等，再刷新state
+      if (visible !== currentShowBody) {
+        this.setState({ isShowBody });
+      }
     }, !isShowBody ? 200 : 0);
   }
 
