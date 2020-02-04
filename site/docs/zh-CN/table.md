@@ -1591,6 +1591,85 @@ render() {
 ```
 :::
 
+### 树形折叠表格
+当表格行下又有很多子行，需要展开展示内容时，可以使用树形折叠表格。
+
+:::demo 通过设置 isTreeMode=true 可以开启树形折叠表格。推荐使用rowKey，rowKey会作为tableRow的id，优化渲染。
+```js
+constructor(props) {
+  super(props);
+
+  this.state = {
+    columns: [
+      {
+        label: "代号",
+        prop: "key"
+      },
+      {
+        label: "名称",
+        prop: "name"
+      },
+      {
+        label: "描述",
+        prop: "desc"
+      }
+    ],
+    data: this.countries,
+  }
+}
+
+get shAreas() {
+  return [
+    { key: 'PD', name: '浦东', desc: '这是一个浦东', children: [] },
+    { key: 'HP', name: '黄浦', desc: '这是一个黄浦', children: [] },
+  ];
+}
+
+get enCities() {
+  return [
+    { key: 'LON', name: '伦敦', desc: '这是一个伦敦', children: [] },
+    { key: 'BG', name: '伯明翰', desc: '这是一个伯明翰', children: [] },
+  ];
+}
+
+get usCities() {
+  return [
+    { key: 'WDC', name: '华盛顿', desc: '这是一个华盛顿', children: [] },
+    { key: 'NYC', name: '纽约', desc: '这是一个纽约', children: [] },
+  ];
+}
+
+get cnCities() {
+  return [
+    { key: 'SH', name: '上海', desc: '这是一个上海', children: this.shAreas },
+    { key: 'BJ', name: '北京', desc: '这是一个北京', children: [] },
+  ];
+}
+
+get countries() {
+  return [
+    { key: 'CN', name: '中国', desc: '这是一个中国', children: this.cnCities },
+    { key: 'US', name: '美国', desc: '这是一个美国', children: this.usCities },
+    { key: 'EN', name: '英国', desc: '这是一个英国', children: this.enCities },
+  ];
+}
+
+render() {
+  return (
+    <TreeTable
+      border
+      isExpandAll
+      rowKey="key"
+      style={{width: '100%'}}
+      columns={this.state.columns}
+      data={this.state.data}
+    />
+  )
+}
+```
+:::
+
+
 ### 高阶用法：分页多选
 
 对表格进行分页多选，实现分页逻辑需要搭配分页组件共同实现。
