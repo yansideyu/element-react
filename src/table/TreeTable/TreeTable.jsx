@@ -36,11 +36,6 @@ export default class TreeTable extends PureComponent {
     const allData = this.getData(data, treeProps, rowKey);
     const { expandedRows, hiddenRows } = getInitState(allData, isExpandAll, rowKey);
 
-    window.data1 = data;
-    window.treeProps1 = treeProps;
-    window.rowKey1 = rowKey;
-    window.allData1 = allData;
-
     this.state.expandedRows = expandedRows;
     this.state.hiddenRows = hiddenRows;
     this.renderExpandColumn = this.renderExpandColumn.bind(this);
@@ -132,12 +127,6 @@ export default class TreeTable extends PureComponent {
     const { hiddenRows } = this.state;
     const allData = this.getData(data, treeProps, rowKey);
     const tableData = this.getDataWithoutHidden(allData, hiddenRows, rowKey);
-
-    window.data2 = data;
-    window.treeProps2 = treeProps;
-    window.rowKey2 = rowKey;
-    window.allData2 = allData;
-    window.getAllData = () => this.getData(data, treeProps, rowKey);
 
     return (
       <Table
