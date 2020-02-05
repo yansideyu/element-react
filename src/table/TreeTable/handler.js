@@ -12,7 +12,7 @@ export function getInitState(data = [], isExpandAll, rowKey) {
 export function getTreeTableRows(datas, treeProps, rowKey, level = 0) {
   return datas.reduce((rows, data) => {
     const children = getRowChildren(data, treeProps);
-    const childrenDatas = getTreeTableRows(children, treeProps, rowKey, level + 1);
+    const childrenDatas = children ? getTreeTableRows(children, treeProps, rowKey, level + 1) : [];
     data.__level__ = level;
     return [...rows, data, ...childrenDatas];
   }, []);

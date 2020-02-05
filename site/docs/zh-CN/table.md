@@ -1620,7 +1620,7 @@ constructor(props) {
 
 get shAreas() {
   return [
-    { key: 'PD', name: '浦东', desc: '这是一个浦东', children: [] },
+    { key: 'PD', name: '浦东', desc: '这是一个浦东' },
     { key: 'HP', name: '黄浦', desc: '这是一个黄浦', children: [] },
   ];
 }
