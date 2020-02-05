@@ -29,12 +29,27 @@ export function getRowId(row, rowKey) {
   return row;
 }
 
-export function getNestChildren(row, treeProps) {
+export function checkRowExpanded(row, rowKey, expandedRows) {
+  const rowId = getRowId(row, rowKey);
+  return expandedRows.includes(rowId);
+}
+
+export function getExpandedNestChildren(row, rowKey, treeProps, expandedRows, isRoot) {
+  const { children } = treeProps;
+  const newExpandedRows = isRoot ? [...expandedRows, getRowId(row, rowKey)] : [...expandedRows];
+  const isRowExpanded = checkRowExpanded(row, rowKey, newExpandedRows);
+
+  return row[children] && isRowExpanded ? row[children].reduce((results, child) => {
+    return [...results, child, ...getExpandedNestChildren(child, rowKey, treeProps, expandedRows)];
+  }, []) : [];
+}
+
+export function getAllNestChildren(row, treeProps) {
   const { children } = treeProps;
 
-  return row[children].reduce((results, child) => {
-    return [...results, child, ...getNestChildren(child, treeProps)];
-  }, []);
+  return row[children] ? row[children].reduce((results, child) => {
+    return [...results, child, ...getAllNestChildren(child, treeProps)];
+  }, []) : [];
 }
 
 export function getRowChildren(row, treeProps) {

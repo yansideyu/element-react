@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import Table from '../TableStore';
-import { getTreeTableRows, getRowId, getRowChildren, filterHiddenRows, getInitState } from './handler';
+import { getTreeTableRows, getRowId, getExpandedNestChildren, getAllNestChildren, filterHiddenRows, getInitState, checkRowExpanded } from './handler';
 
 export default class TreeTable extends PureComponent {
   static propTypes = {
@@ -57,26 +57,26 @@ export default class TreeTable extends PureComponent {
 
   toggleExpandedRows(rows, isExpand) {
     const { rowKey, treeProps } = this.props;
-    let { expandedRows, hiddenRows } = this.state;
+    const { expandedRows: oldExpandedRows, hiddenRows: oldHiddenRows } = this.state;
     // 生成新数组
-    expandedRows = [...expandedRows];
-    hiddenRows = [...hiddenRows];
+    let expandedRows = [...oldExpandedRows];
+    let hiddenRows = [...oldHiddenRows];
 
     for (const row of rows) {
       const rowId = getRowId(row, rowKey);
       // 判断当前row是否需要被展开
-      const isRowExpanded = this.isRowExpanded(row);
+      const isRowExpanded = checkRowExpanded(row, rowKey, oldExpandedRows);
       const canExpandRow = !isRowExpanded && (isExpand || isExpand === undefined);
       const canCollapseRow = isRowExpanded && (!isExpand || isExpand === undefined);
 
       if (canExpandRow) {
-        const rowChildren = getRowChildren(row, treeProps);
+        const rowChildren = getExpandedNestChildren(row, rowKey, treeProps, expandedRows, true);
         const rowChildrenIds = rowChildren.map(child => getRowId(child, rowKey));
         expandedRows = [...expandedRows, rowId];
         hiddenRows = hiddenRows.filter(hiddenRowId => !rowChildrenIds.includes(hiddenRowId));
       }
       if (canCollapseRow) {
-        const rowChildren = getRowChildren(row, treeProps);
+        const rowChildren = getAllNestChildren(row, treeProps);
         const rowChildrenIds = rowChildren.map(child => getRowId(child, rowKey));
         expandedRows = expandedRows.filter(expandedRowId => expandedRowId !== rowId);
         hiddenRows = [...hiddenRows, ...rowChildrenIds];
@@ -86,18 +86,11 @@ export default class TreeTable extends PureComponent {
     this.setState({ expandedRows, hiddenRows });
   }
 
-  isRowExpanded(row) {
-    const { rowKey } = this.props;
-    const { expandedRows } = this.state;
-    const rowId = getRowId(row, rowKey);
-
-    return expandedRows.includes(rowId);
-  }
-
   renderExpandColumn(render, row, column, index) {
-    const { indent } = this.props;
+    const { indent, rowKey } = this.props;
+    const { expandedRows } = this.state;
     const renderText = row[column.prop];
-    const isRowExpanded = this.isRowExpanded(row);
+    const isRowExpanded = checkRowExpanded(row, rowKey, expandedRows);
     const isLeafRow = !(row.children && row.children.length);
 
     const expandIconClass = classnames('el-tree-node__expand-icon', { expanded: isRowExpanded });
