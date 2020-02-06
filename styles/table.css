@@ -222,7 +222,7 @@
       top: 0;
       z-index: 3;
 
-      & thead div {
+      & thead > div {
         background-color: var(--table-header-background);
         color: var(--table-header-text-color);
       }
@@ -267,7 +267,7 @@
     @e header-wrapper, footer-wrapper {
       overflow: hidden;
 
-      & thead div {
+      & thead > div {
         background-color: var(--table-header-background);
         color: var(--table-header-text-color);
       }
