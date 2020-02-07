@@ -30,6 +30,7 @@ export default class TreeTable extends PureComponent {
   state = {
     expandedRows: [],
     hiddenRows: [],
+    filterMethod: () => true,
   };
 
   constructor(props) {
@@ -57,6 +58,14 @@ export default class TreeTable extends PureComponent {
     const expandColumn = { ...firstColumn, render };
 
     return [expandColumn, ...otherColumns];
+  }
+
+  filter(filterMethod = () => true) {
+    const { treeProps, rowKey, data } = this.props;
+    const allData = this.getData(data, treeProps, rowKey);
+    const { expandedRows, hiddenRows } = getInitState(allData, true, rowKey);
+
+    this.setState({ filterMethod, expandedRows, hiddenRows });
   }
 
   toggleExpandedRows(rows, isExpand) {
@@ -90,11 +99,6 @@ export default class TreeTable extends PureComponent {
     this.setState({ expandedRows, hiddenRows });
   }
 
-  handleFilterRow(row) {
-    const { filterMethod } = this.props;
-    return filterMethod(row);
-  }
-
   renderExpandColumn(render, row, column, index) {
     const { indent, rowKey } = this.props;
     const { expandedRows } = this.state;
@@ -126,9 +130,8 @@ export default class TreeTable extends PureComponent {
 
   render() {
     const { data, rowKey, treeProps } = this.props;
-    const { hiddenRows } = this.state;
-    const { handleFilterRow } = this;
-    const allData = this.getData(data, treeProps, rowKey).filter(handleFilterRow);
+    const { hiddenRows, filterMethod } = this.state;
+    const allData = this.getData(data, treeProps, rowKey).filter(filterMethod);
     const tableData = this.getDataWithoutHidden(allData, hiddenRows, rowKey);
 
     return (
