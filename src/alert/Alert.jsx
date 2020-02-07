@@ -42,7 +42,7 @@ export default class Alert extends Component {
         <View show={this.state.visible}>
           <div style={this.style()} className={this.className('el-alert', `el-alert--${ this.props.type }`)}>
             {
-              this.props.showIcon && <i className={this.classNames('el-alert__icon', TYPE_CLASSES_MAP[this.props.type] || 'el-icon-information', {
+              this.props.showIcon && <i className={this.classNames('el-alert__icon', this.props.icon || TYPE_CLASSES_MAP[this.props.type] || 'el-icon-information', {
                 'is-big': this.props.description
               })} />
             }
@@ -75,7 +75,8 @@ Alert.propTypes = {
   type: PropTypes.string,
   closable: PropTypes.bool,
   closeText: PropTypes.string,
-  showIcon: PropTypes.bool
+  showIcon: PropTypes.bool,
+  icon: PropTypes.string
 }
 
 Alert.defaultProps = {
