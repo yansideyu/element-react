@@ -1,8 +1,9 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import memoize from 'memoize-one';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import PureComponent from '../../../libs/pureComponent';
 import Table from '../TableStore';
 import { getTreeTableRows, getRowId, getExpandedNestChildren, getAllNestChildren, filterHiddenRows, getInitState, checkRowExpanded } from './handler';
 
