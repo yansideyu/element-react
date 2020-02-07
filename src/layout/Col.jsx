@@ -28,7 +28,7 @@ export default class Col extends Component {
       }
     });
 
-    ['xs', 'sm', 'md', 'lg'].forEach(size => {
+    ['xs', 'sm', 'md', 'lg', 'xl'].forEach(size => {
       if (typeof this.props[size] === 'object') {
         let props = this.props[size];
         Object.keys(props).forEach(prop => {
@@ -63,6 +63,7 @@ Col.propTypes = {
   sm: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]),
   md: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]),
   lg: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]),
+  xl: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]),
   tag: PropTypes.string
 }
 
