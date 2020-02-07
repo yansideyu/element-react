@@ -13,6 +13,7 @@ export default class TreeTable extends PureComponent {
     data: PropTypes.arrayOf(PropTypes.object),
     columns: PropTypes.arrayOf(PropTypes.object),
     treeProps: PropTypes.shape({ children: PropTypes.string }),
+    filterMethod: PropTypes.func,
     indent: PropTypes.number,
     isExpandAll: PropTypes.bool,
   };
@@ -23,6 +24,7 @@ export default class TreeTable extends PureComponent {
     treeProps: { children: 'children' },
     indent: 16,
     isExpandAll: false,
+    filterMethod: () => true,
   };
 
   state = {
@@ -87,6 +89,11 @@ export default class TreeTable extends PureComponent {
     this.setState({ expandedRows, hiddenRows });
   }
 
+  handleFilterRow(row) {
+    const { filterMethod } = this.props;
+    return filterMethod(row);
+  }
+
   renderExpandColumn(render, row, column, index) {
     const { indent, rowKey } = this.props;
     const { expandedRows } = this.state;
@@ -119,7 +126,8 @@ export default class TreeTable extends PureComponent {
   render() {
     const { data, rowKey, treeProps } = this.props;
     const { hiddenRows } = this.state;
-    const allData = this.getData(data, treeProps, rowKey);
+    const { handleFilterRow } = this;
+    const allData = this.getData(data, treeProps, rowKey).filter(handleFilterRow);
     const tableData = this.getDataWithoutHidden(allData, hiddenRows, rowKey);
 
     return (
