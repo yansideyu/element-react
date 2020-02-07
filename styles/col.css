@@ -100,7 +100,7 @@
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1300px) {
   @for $i from 0 to 24 {
     .el-col-xl-$i {
       width: calc(1 / 24 * $(i) * 100)%;
@@ -113,6 +113,25 @@
       right: calc(1 / 24 * $(i) * 100)%;
     }
     .el-col-xl-push-$i {
+      position: relative;
+      left: calc(1 / 24 * $(i) * 100)%;
+    }
+  }
+}
+
+@media (min-width: 1440px) {
+  @for $i from 0 to 24 {
+    .el-col-xxl-$i {
+      width: calc(1 / 24 * $(i) * 100)%;
+    }
+    .el-col-xxl-offset-$i {
+      margin-left: calc(1 / 24 * $(i) * 100)%;
+    }
+    .el-col-xxl-pull-$i {
+      position: relative;
+      right: calc(1 / 24 * $(i) * 100)%;
+    }
+    .el-col-xxl-push-$i {
       position: relative;
       left: calc(1 / 24 * $(i) * 100)%;
     }
