@@ -41,6 +41,7 @@ export default class TreeTable extends PureComponent {
 
     this.state.expandedRows = expandedRows;
     this.state.hiddenRows = hiddenRows;
+    this.handleFilterRow = this.handleFilterRow.bind(this);
     this.renderExpandColumn = this.renderExpandColumn.bind(this);
   }
 
