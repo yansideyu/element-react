@@ -487,23 +487,23 @@
   --tag-border-radius: 4px;
 
   --tag-gray-fill: var(--color-light-gray);
-  --tag-gray-border: var(--color-light-gray);
+  --tag-gray-border: var(--link-color);
   --tag-gray-color: var(--link-color);
 
   --tag-primary-fill: rgba(var(--color-primary),0.10);
-  --tag-primary-border: rgba(var(--color-primary),0.20);
+  --tag-primary-border: var(--color-primary);
   --tag-primary-color: var(--color-primary);
 
   --tag-success-fill: rgba(18,206,102,0.10);
-  --tag-success-border: rgba(18,206,102,0.20);
+  --tag-success-border: var(--color-success);
   --tag-success-color: var(--color-success);
 
   --tag-warning-fill: rgba(247,186,41,0.10);
-  --tag-warning-border: rgba(247,186,41,0.20);
+  --tag-warning-border: var(--color-warning);
   --tag-warning-color: var(--color-warning);
 
   --tag-danger-fill: rgba(255,73,73,0.10);
-  --tag-danger-border: rgba(255,73,73,0.20);
+  --tag-danger-border: var(--color-danger);
   --tag-danger-color: var(--color-danger);
 
   /* Dropdown
