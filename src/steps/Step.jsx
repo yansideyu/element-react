@@ -140,7 +140,7 @@ export default class Step extends Component {
 }
 
 Step.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   icon: PropTypes.string,
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   status: PropTypes.string,
