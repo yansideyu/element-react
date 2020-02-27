@@ -91,7 +91,7 @@ export default class Step extends Component {
     const directionClass = `is-${direction}`;
     const statusClass = `is-${status}`;
     const iconNode = icon
-      ? <i className={`el-icon-${icon}`} />
+      ? <i className={icon} />
       : <div>{stepNumber}</div>;
 
     return (
