@@ -91,6 +91,7 @@
     "kyligence-react-click-outside": "^0.0.2",
     "lodash": "^4.17.15",
     "memoize-one": "^5.1.1",
+    "natives": "^1.1.6",
     "popper.js": "^1.14.7",
     "prop-types": "^15.6.2",
     "raf": "^3.4.1",
