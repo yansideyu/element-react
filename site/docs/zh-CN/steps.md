@@ -83,9 +83,9 @@ render() {
 render() {
   return (
     <Steps space={100} active={1}>
-      <Steps.Step title="步骤 1" icon="edit"></Steps.Step>
-      <Steps.Step title="步骤 2" icon="upload"></Steps.Step>
-      <Steps.Step title="步骤 3" icon="picture"></Steps.Step>
+      <Steps.Step title="步骤 1" icon="el-icon-edit"></Steps.Step>
+      <Steps.Step title="步骤 2" icon="el-icon-upload"></Steps.Step>
+      <Steps.Step title="步骤 3" icon="el-icon-picture"></Steps.Step>
     </Steps>
   )
 }
