@@ -70,7 +70,7 @@ export default class Alert extends Component {
 
 Alert.propTypes = {
   onClose: PropTypes.func,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
   description: PropTypes.string,
   type: PropTypes.string,
   closable: PropTypes.bool,
