@@ -30,3 +30,8 @@
   height: 100%;
   background: rgba(0, 0, 0, .5);
 }
+
+.overflow-tooltip > .el-tooltip__rel > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

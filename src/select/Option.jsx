@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Component, PropTypes, View } from '../../libs';
+import OverflowTooltip from '../OverflowTooltip/OverflowTooltip';
 
 type State = {
   index: number,
@@ -105,9 +106,14 @@ export default class Option extends Component {
     });
   }
 
+  renderChildren() {
+    const { children } = this.props;
+    return children || <span>{this.currentLabel()}</span>
+  }
+
   render() {
     const { visible, index } = this.state;
-    const { disabled, children } = this.props;
+    const { disabled, showOverflowTooltip } = this.props;
 
     const events = {
       onMouseEnter: this.hoverItem,
@@ -125,7 +131,11 @@ export default class Option extends Component {
           })}
           {...events}
         >
-          { children || <span>{this.currentLabel()}</span> }
+          {showOverflowTooltip ? (
+            <OverflowTooltip content={this.currentLabel()}>
+              {this.renderChildren()}
+            </OverflowTooltip>
+          ) : (this.renderChildren())}
         </li>
       </View>
     )
@@ -140,5 +150,7 @@ Option.propTypes = {
   value: PropTypes.any,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selected: PropTypes.bool,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  children: PropTypes.element,
+  showOverflowTooltip: PropTypes.bool,
 }

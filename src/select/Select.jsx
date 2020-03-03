@@ -1,12 +1,11 @@
 /* @flow */
 
-import React from 'react';
+import React, { Children } from 'react';
 import ReactDOM from 'react-dom';
 import ClickOutside from 'kyligence-react-click-outside';
 import { debounce } from 'throttle-debounce';
 import Popper from 'popper.js';
 import { isEqual } from 'lodash';
-import StyleSheet from '../../libs/utils/style';
 import { Component, PropTypes, Transition, View } from '../../libs';
 import { addResizeListener, removeResizeListener } from '../../libs/utils/resize-event';
 
@@ -424,6 +423,7 @@ class Select extends Component {
   onEnter(): void {
     const { positionFixed } = this.props;
     this.popperJS = new Popper(this.reference, this.popper, {
+      placement: 'bottom-start',
       modifiers: {
         computeStyle: {
           gpuAcceleration: false
@@ -823,7 +823,7 @@ class Select extends Component {
   }
 
   render() {
-    const { multiple, size, disabled, filterable, loading, prefixIcon, warningMsg } = this.props;
+    const { multiple, size, disabled, filterable, loading, prefixIcon, warningMsg, showOverflowTooltip, children } = this.props;
     const { selected, inputWidth, inputLength, query, selectedLabel, visible, options, filteredOptionsCount, currentPlaceholder } = this.state;
 
     return (
@@ -960,7 +960,10 @@ class Select extends Component {
                   { warningMsg && filteredOptionsCount > 0 &&
                     <div className="el-select-dropdown__warning"><span>{warningMsg}</span></div>
                   }
-                  {this.props.children}
+                  {Children.map(children, child => React.cloneElement(child, {
+                    ...child.props,
+                    showOverflowTooltip,
+                  }))}
                 </Scrollbar>
               </View>
               {this.emptyText() && <p className="el-select-dropdown__empty">{this.emptyText()}</p>}
@@ -971,6 +974,10 @@ class Select extends Component {
     )
   }
 }
+
+Select.defaultProps = {
+  showOverflowTooltip: false,
+};
 
 Select.childContextTypes = {
   component: PropTypes.any
@@ -998,6 +1005,7 @@ Select.propTypes = {
   onClear: PropTypes.func,
   prefixIcon: PropTypes.string,
   warningMsg: PropTypes.string,
+  showOverflowTooltip: PropTypes.bool,
 }
 
 export default ClickOutside(Select);
