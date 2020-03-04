@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, { Children } from 'react';
 import { Component, PropTypes, View } from '../../libs';
 import OverflowTooltip from '../OverflowTooltip/OverflowTooltip';
 
@@ -40,6 +40,11 @@ export default class Option extends Component {
   get clickEvent(): string {
     const isMobileTouch = 'ontouchend' in (document.documentElement || {});
     return isMobileTouch ? 'onTouchEnd' : 'onClick';
+  }
+
+  get showOverflowTooltip() {
+    const { showOverflowTooltip, children } = this.props;
+    return showOverflowTooltip && Children.count(children) === 0;
   }
 
   parent(): Object {
@@ -113,7 +118,8 @@ export default class Option extends Component {
 
   render() {
     const { visible, index } = this.state;
-    const { disabled, showOverflowTooltip } = this.props;
+    const { disabled } = this.props;
+    const { showOverflowTooltip } = this;
 
     const events = {
       onMouseEnter: this.hoverItem,
@@ -151,6 +157,6 @@ Option.propTypes = {
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selected: PropTypes.bool,
   disabled: PropTypes.bool,
-  children: PropTypes.element,
+  children: PropTypes.node,
   showOverflowTooltip: PropTypes.bool,
 }

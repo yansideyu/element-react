@@ -630,7 +630,7 @@ render() {
 | remoteMethod | 远程搜索方法 | function | — | — |
 | loading | 是否正在从远程获取数据 | boolean | — | false |
 | prefixIcon | 前缀图表 | string | — | - |
-| showOverflowTooltip | 文字溢出是否展示tooltip，有必要时才去开启，目测会影响一丢丢性能 | boolean | — | false |
+| showOverflowTooltip | 文字溢出是否展示tooltip，在自定义模板中不支持该功能。 | boolean | — | false |
 
 ### Select Events
 | 事件名称 | 说明 | 回调参数 |
