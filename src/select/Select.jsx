@@ -389,8 +389,11 @@ class Select extends Component {
     const { multiple, filterable, remote, remoteMethod, filterMethod } = this.props;
     let { voidRemoteQuery, hoverIndex, options, optionsCount } = this.state;
 
-    const isShowAll = options.some(option => inputQuery.toLowerCase() === option.currentLabel().toLowerCase());
-    const query = isShowAll ? '' : inputQuery;
+    // to do: selected items filter options, so user can not get all options
+    // const isShowAll = options.some(option => inputQuery.toLowerCase() === option.currentLabel().toLowerCase());
+    // const query = isShowAll ? '' : inputQuery;
+
+    const query = inputQuery;
 
     if (multiple && filterable) {
       this.resetInputHeight();
