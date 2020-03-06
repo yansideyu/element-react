@@ -963,10 +963,12 @@ class Select extends Component {
                   { warningMsg && filteredOptionsCount > 0 &&
                     <div className="el-select-dropdown__warning"><span>{warningMsg}</span></div>
                   }
-                  {Children.map(children, child => React.cloneElement(child, {
-                    ...child.props,
-                    showOverflowTooltip,
-                  }))}
+                  {showOverflowTooltip ? (
+                    Children.map(children, child => React.cloneElement(child, {
+                      ...child.props,
+                      showOverflowTooltip,
+                    }))
+                  ) : children}
                 </Scrollbar>
               </View>
               {this.emptyText() && <p className="el-select-dropdown__empty">{this.emptyText()}</p>}
