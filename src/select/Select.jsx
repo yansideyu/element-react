@@ -141,10 +141,6 @@ class Select extends Component {
       this.onVisibleChange(state.visible);
     }
 
-    if (state.query != this.state.query) {
-      this.onQueryChange(state.query);
-    }
-
     if (Array.isArray(state.selected)) {
       if (state.selected.length != this.state.selected.length) {
         this.onSelectedChange(state.selected);
@@ -165,6 +161,24 @@ class Select extends Component {
 
   debounce(): number {
     return this.props.remote ? 300 : 0;
+  }
+
+  handleFilter = value => {
+    this.setState({ selectedLabel: value }, () => {
+      this.onQueryChange(value);
+    });
+  }
+
+  handleFilterMultiple = e => {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      const { value: query } = this.state;
+      this.setState({ query }, () => {
+        this.onQueryChange(query);
+      });
+    }, this.debounce());
+
+    this.state.value = e.target.value;
   }
 
   handleClickOutside() {
@@ -279,7 +293,11 @@ class Select extends Component {
         }
       }
 
-      this.setState({ query: query || '', dropdownUl });
+      this.setState({ query: query || '', dropdownUl }, () => {
+        if (!multiple) {
+          this.onQueryChange();
+        }
+      });
     }
   }
 
@@ -371,6 +389,7 @@ class Select extends Component {
           this.refs.input.value = '';
         }
       });
+      this.onQueryChange();
     } else {
       if (selectedInit) {
         return this.setState({
@@ -385,15 +404,9 @@ class Select extends Component {
     }
   }
 
-  onQueryChange(inputQuery: string) {
+  onQueryChange(query = '') {
     const { multiple, filterable, remote, remoteMethod, filterMethod } = this.props;
     let { voidRemoteQuery, hoverIndex, options, optionsCount } = this.state;
-
-    // to do: selected items filter options, so user can not get all options
-    // const isShowAll = options.some(option => inputQuery.toLowerCase() === option.currentLabel().toLowerCase());
-    // const query = isShowAll ? '' : inputQuery;
-
-    const query = inputQuery;
 
     if (multiple && filterable) {
       this.resetInputHeight();
@@ -889,17 +902,7 @@ class Select extends Component {
                           break;
                       }
                     }}
-                    onChange={e => {
-                      clearTimeout(this.timeout);
-
-                      this.timeout = setTimeout(() => {
-                        this.setState({
-                          query: this.state.value
-                        });
-                      }, this.debounce());
-
-                      this.state.value = e.target.value;
-                    }}
+                    onChange={this.handleFilterMultiple}
                   />
                 )
               }
@@ -917,7 +920,7 @@ class Select extends Component {
           readOnly={!filterable || multiple}
           prefixIcon={prefixIcon}
           suffixIcon={this.iconClass() || undefined}
-          onChange={value => this.setState({ selectedLabel: value })}
+          onChange={this.handleFilter}
           onSuffixIconClick={this.handleIconClick.bind(this)}
           onMouseDown={this.onMouseDown.bind(this)}
           onMouseEnter={this.onMouseEnter.bind(this)}
