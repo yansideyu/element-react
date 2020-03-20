@@ -135,13 +135,14 @@ export class Scrollbar extends PureComponent {
       ]
     }
 
-    return React.createElement('div', {className: this.classNames('el-scrollbar', className)}, nodes)
+    return React.createElement('div', {className: this.classNames('el-scrollbar', className), style: others.style}, nodes)
   }
 }
 
 Scrollbar.propTypes = {
   native: PropTypes.bool,
   wrapStyle: PropTypes.object,
+  style: PropTypes.object,
   wrapClass: PropTypes.oneOfType([
     PropTypes.string, PropTypes.object
   ]),

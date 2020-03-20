@@ -479,7 +479,7 @@ class Select extends Component {
   }
 
   emptyText() {
-    const { loading, filterable } = this.props;
+    const { loading, filterable, noMatchText, noDataText } = this.props;
     const { voidRemoteQuery, options, filteredOptionsCount } = this.state;
 
     if (loading) {
@@ -488,15 +488,15 @@ class Select extends Component {
       if (voidRemoteQuery) {
         this.state.voidRemoteQuery = false;
 
-        return i18n.t('el.select.noMatch');
+        return noMatchText || i18n.t('el.select.noMatch');
       }
 
       if (filterable && filteredOptionsCount === 0) {
-        return i18n.t('el.select.noMatch');
+        return noMatchText || i18n.t('el.select.noMatch');
       }
 
       if (options.length === 0) {
-        return i18n.t('el.select.noData');
+        return noDataText || i18n.t('el.select.noData');
       }
     }
 
@@ -1014,6 +1014,8 @@ Select.propTypes = {
   prefixIcon: PropTypes.string,
   warningMsg: PropTypes.string,
   showOverflowTooltip: PropTypes.bool,
+  noMatchText: PropTypes.string,
+  noDataText: PropTypes.string
 }
 
 export default ClickOutside(Select);
