@@ -206,11 +206,16 @@ constructor(props) {
       label: 'label'
     }
   };
-  this.handleClick = this.handleClick.bind(this);
+  this.handleClickHighlight = this.handleClickHighlight.bind(this);
+  this.handleRemoveHighlight = this.handleRemoveHighlight.bind(this);
 }
 
-handleClick() {
+handleClickHighlight() {
   this.refs.$tree.setCurrentNodeKey(6);
+}
+
+handleRemoveHighlight() {
+  this.refs.$tree.clearCurrentNodeKey();
 }
 
 render() {
@@ -229,7 +234,8 @@ render() {
         defaultCheckedKeys={[5]}
       />
       <div className="buttons">
-        <Button onClick={this.handleClick}>设置 二级 2-2 为高亮</Button>
+        <Button onClick={this.handleClickHighlight}>设置 二级 2-2 为高亮</Button>
+        <Button onClick={this.handleRemoveHighlight}>清除高亮</Button>
       </div>
     </div>
   )

@@ -97,6 +97,11 @@ export default class Tree extends Component {
     }
   }
 
+  clearCurrentNodeKey(): void {
+    this.store.setCurrentNode(null);
+    this.setState({ currentNode: null });
+  }
+
   // used by child nodes, use tree store to store this info?
   getCurrentNode(): ?Object {
     return this.state.currentNode;

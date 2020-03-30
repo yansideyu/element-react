@@ -25,7 +25,7 @@ function inChina() {
       .then(res => res.json())
       .then(({ city }) => {
         if (city && typeof city === 'string') {
-          inChinaConfirm();
+          // inChinaConfirm();
         }
       })
   }
