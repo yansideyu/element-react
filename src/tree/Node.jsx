@@ -130,12 +130,12 @@ export default class Node extends Component {
   }
 
 
-  handleClick(evt: ?SyntheticEvent<any>): void {
+  handleClick(evt: ?SyntheticEvent<any>, isExpandNode: boolean = true): void {
     if (evt) evt.stopPropagation();
     const { nodeModel, treeNode } = this.props;
 
     treeNode.setCurrentNode(this);
-    if (treeNode.props.expandOnClickNode){
+    if (treeNode.props.expandOnClickNode && isExpandNode){
       this.handleExpandIconClick()
     }
   }

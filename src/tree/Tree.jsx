@@ -93,7 +93,7 @@ export default class Tree extends Component {
     const nodeEl = nodeData.$el;
 
     if (nodeEl) {
-      nodeEl.handleClickNode();
+      nodeEl.handleClickNode(null, false);
     }
   }
 
