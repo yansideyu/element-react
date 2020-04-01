@@ -48,7 +48,17 @@ render() {
             })
           }
         </Select>
-        <Select size="small" value={this.state.value} placeholder="请选择" onChange={this.handleInput}> 
+        <Select
+          size="small"
+          value={this.state.value}
+          placeholder="请选择"
+          onChange={this.handleInput}
+          popperProps={{
+            modifiers: {
+              flip: { enabled: false },
+            },
+          }}
+        > 
           {
             this.state.options.map(el => {
               return <Select.Option key={el.value} label={el.label} value={el.value} />
@@ -631,6 +641,7 @@ render() {
 | loading | 是否正在从远程获取数据 | boolean | — | false |
 | prefixIcon | 前缀图表 | string | — | - |
 | showOverflowTooltip | 文字溢出是否展示tooltip，在自定义模板中不支持该功能。 | boolean | — | false |
+| popperProps | 弹出下拉属性设置，详情见[popper.js](https://popper.js.org/docs/v1/) | object | - | — |
 
 ### Select Events
 | 事件名称 | 说明 | 回调参数 |

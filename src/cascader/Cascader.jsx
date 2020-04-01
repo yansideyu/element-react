@@ -6,6 +6,7 @@ import ClickOutside from 'kyligence-react-click-outside';
 import { debounce } from 'throttle-debounce';
 import Popper from 'popper.js';
 import { Component, PropTypes, View } from '../../libs';
+import { merge } from '../../libs/utils/dataHelper';
 
 import CascaderMenu from './Menu';
 import Input from '../input';
@@ -95,14 +96,16 @@ class Cascader extends Component {
         if (this.popperJS) {
           this.popperJS.update();
         } else {
-          this.popperJS = new Popper(this.input, ReactDOM.findDOMNode(this.refs.menu), {
+          const defaultProps = {
             placement: 'bottom-start',
             modifiers: {
               computeStyle: {
                 gpuAcceleration: false
               }
             }
-          });
+          };
+          const popperProps = merge(defaultProps, props.popperProps);
+          this.popperJS = new Popper(this.input, ReactDOM.findDOMNode(this.refs.menu), popperProps);
         }
       } else {
         this.hideMenu();
@@ -395,7 +398,8 @@ Cascader.propTypes = {
   debounce: PropTypes.number,
   activeItemChange: PropTypes.func,
   beforeFilter: PropTypes.func,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  popperProps: PropTypes.object
 }
 
 Cascader.defaultProps = {

@@ -235,6 +235,11 @@ render() {
           onBlur={e=>console.log(e, 'onblur')}
           fetchSuggestions={this.querySearch.bind(this)}
           onSelect={this.handleSelect.bind(this)}
+          popperProps={{
+            modifiers: {
+              flip: { enabled: false },
+            },
+          }}
         ></AutoComplete>
       </Layout.Col>
       <Layout.Col span="12" className="tac">
@@ -487,6 +492,7 @@ render() {
 | triggerOnFocus | 是否在输入框 focus 时显示建议列表 | boolean | — | true |
 | onIconClick | 点击图标的回调函数 | function | — | — |
 | icon          | 输入框尾部图标    | string          | — | — |
+| popperProps | 弹出下拉属性设置，详情见[popper.js](https://popper.js.org/docs/v1/) | object | - | — |
 
 ### Autocomplete Events
 | 事件名称 | 说明 | 回调参数 |

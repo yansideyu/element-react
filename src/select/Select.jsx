@@ -7,6 +7,7 @@ import { debounce } from 'throttle-debounce';
 import Popper from 'popper.js';
 import { isEqual } from 'lodash';
 import { Component, PropTypes, Transition, View } from '../../libs';
+import { merge } from '../../libs/utils/dataHelper';
 import { addResizeListener, removeResizeListener } from '../../libs/utils/resize-event';
 
 import { Scrollbar } from '../scrollbar';
@@ -437,8 +438,8 @@ class Select extends Component {
   }
 
   onEnter(): void {
-    const { positionFixed } = this.props;
-    this.popperJS = new Popper(this.reference, this.popper, {
+    const { popperProps: customProps, positionFixed } = this.props;
+    const defaultProps = {
       placement: 'bottom-start',
       modifiers: {
         computeStyle: {
@@ -447,7 +448,9 @@ class Select extends Component {
         preventOverflow: { enabled: false }
       },
       positionFixed,
-    });
+    };
+    const popperProps = merge(defaultProps, customProps);
+    this.popperJS = new Popper(this.reference, this.popper, popperProps);
   }
 
   onAfterLeave(): void {
@@ -1015,7 +1018,9 @@ Select.propTypes = {
   warningMsg: PropTypes.string,
   showOverflowTooltip: PropTypes.bool,
   noMatchText: PropTypes.string,
-  noDataText: PropTypes.string
+  noDataText: PropTypes.string,
+  positionFixed: PropTypes.bool,
+  popperProps: PropTypes.object
 }
 
 export default ClickOutside(Select);

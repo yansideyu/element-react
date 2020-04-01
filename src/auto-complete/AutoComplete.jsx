@@ -33,7 +33,8 @@ type Props = {
   append: Element,
   prepend: Element,
   onFocus: Function,
-  onBlur: Function
+  onBlur: Function,
+  popperProps: Object
 }
 
 type AutoCompleteDefaultProps = {
@@ -200,7 +201,7 @@ class AutoComplete extends Component {
   }
 
   render(): React.DOM {
-    const { disabled, placeholder, name, size, prefixIcon, suffixIcon, append, prepend, onPrefixIconClick, onSuffixIconClick, popperClass, onBlur } = this.props;
+    const { disabled, placeholder, name, size, prefixIcon, suffixIcon, append, prepend, onPrefixIconClick, onSuffixIconClick, popperClass, onBlur, popperProps } = this.props;
     const { inputValue, suggestions } = this.state;
 
     return (
@@ -227,6 +228,7 @@ class AutoComplete extends Component {
           ref={node => this.suggestionsNode = node}
           className={this.classNames(popperClass)}
           suggestions={suggestions}
+          popperProps={popperProps}
         />
       </div>
     )

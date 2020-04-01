@@ -234,6 +234,11 @@ render() {
           options={this.state.options}
           expandTrigger="hover"
           value={this.state.selectedOptions2}
+          popperProps={{
+            modifiers: {
+              flip: { enabled: false },
+            },
+          }}
           onChange={this.handleChange.bind(this, 'selectedOptions2')} />
       </div>
     </div>
@@ -1422,6 +1427,7 @@ render() {
 | changeOnSelect | 是否允许选择任意一级的选项 | boolean | — | false |
 | size | 尺寸 | string | large / small / mini | — |
 | beforeFilter | 可选参数, 筛选之前的钩子，参数为输入的值，若返回 false 或者返回 Promise 且被 reject，则停止筛选。 | function(value) | — | — |
+| popperProps | 弹出下拉属性设置，详情见[popper.js](https://popper.js.org/docs/v1/) | object | - | — |
 
 ### props
 | 参数     | 说明              | 类型   | 可选值 | 默认值 |

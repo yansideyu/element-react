@@ -6,9 +6,11 @@ import Popper from 'popper.js';
 import { Component, PropTypes, Transition, View } from '../../libs';
 
 import { Scrollbar } from '../scrollbar';
+import { merge } from '../../libs/utils/dataHelper';
 
 type Props = {
   suggestions: Array<any>,
+  popperProps: Object
 }
 
 type State = {
@@ -45,15 +47,18 @@ export default class Suggestions extends Component {
   }
 
   onEnter(): void {
+    const { popperProps: customProps } = this.props;
     const reference = ReactDOM.findDOMNode(this.parent().inputNode);
 
-    this.popperJS = new Popper(reference, this.refs.popper, {
+    const defaultProps = {
       modifiers: {
         computeStyle: {
           gpuAcceleration: false
         }
       }
-    });
+    };
+    const popperProps = merge(defaultProps, customProps);
+    this.popperJS = new Popper(reference, this.refs.popper, popperProps);
   }
 
   onAfterLeave(): void {
