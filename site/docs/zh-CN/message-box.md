@@ -37,10 +37,10 @@ onClick() {
       type: 'success',
       message: '删除成功!'
     });
-  }).catch(() => {
+  }).catch((error) => {
     Message({
       type: 'info',
-      message: '已取消删除'
+      message: `已取消删除，action: ${error}`
     });
   });
 }

@@ -92,7 +92,8 @@ export default class MessageBox extends Component {
     if (modal) {
       switch (action) {
         case 'cancel':
-          promise.reject();
+        case 'close':
+          promise.reject(action);
           break;
         case 'confirm':
           if (modal === 'prompt') {
@@ -149,7 +150,7 @@ export default class MessageBox extends Component {
                         {
                           showClose && (
                             <button type="button" className="el-message-box__headerbtn" aria-label="Close"
-                                    onClick={this.handleAction.bind(this, 'cancel')}>
+                                    onClick={this.handleAction.bind(this, 'close')}>
                               <i className="el-message-box__close el-icon-close" />
                             </button>
                           )
