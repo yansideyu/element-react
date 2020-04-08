@@ -445,7 +445,8 @@ class Select extends Component {
         computeStyle: {
           gpuAcceleration: false
         },
-        preventOverflow: { enabled: false }
+        preventOverflow: { enabled: false },
+        hide: { enabled: false }
       },
       positionFixed,
     };
