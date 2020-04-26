@@ -32,7 +32,6 @@ type State = {
   optionsCount: number,
   hoverIndex: number,
   bottomOverflowBeforeHidden: number,
-  cachedPlaceHolder: string,
   currentPlaceholder: string,
   selectedLabel: string,
   value: any,
@@ -70,7 +69,6 @@ class Select extends Component {
       optionsCount: 0,
       hoverIndex: -1,
       bottomOverflowBeforeHidden: 0,
-      cachedPlaceHolder: props.placeholder || i18n.t('el.select.placeholder'),
       currentPlaceholder: props.placeholder || i18n.t('el.select.placeholder'),
       selectedLabel: '',
       selectedInit: false,
@@ -303,7 +301,7 @@ class Select extends Component {
   }
 
   onValueChange(val: mixed) {
-    const { multiple } = this.props;
+    const { multiple, placeholder } = this.props;
 
     let {
       options,
@@ -311,8 +309,7 @@ class Select extends Component {
       selectedInit,
       selected,
       selectedLabel,
-      currentPlaceholder,
-      cachedPlaceHolder
+      currentPlaceholder
     } = this.state;
 
     if (valueChangeBySelected) {
@@ -326,7 +323,7 @@ class Select extends Component {
 
       selectedInit = true;
       selected = [];
-      currentPlaceholder = cachedPlaceHolder;
+      currentPlaceholder = placeholder;
 
       val.forEach(item => {
         let option = options.filter(option => option.props.value === item)[0];
@@ -356,14 +353,14 @@ class Select extends Component {
 
   onSelectedChange(val: any, bubble: boolean = true) {
     const { form } = this.context;
-    const { multiple, filterable, onChange } = this.props;
-    let { query, hoverIndex, inputLength, selectedInit, currentPlaceholder, cachedPlaceHolder, valueChangeBySelected } = this.state;
+    const { multiple, filterable, onChange, placeholder } = this.props;
+    let { query, hoverIndex, inputLength, selectedInit, currentPlaceholder, valueChangeBySelected } = this.state;
 
     if (multiple) {
       if (val.length > 0) {
         currentPlaceholder = '';
       } else {
-        currentPlaceholder = cachedPlaceHolder;
+        currentPlaceholder = placeholder;
       }
 
       this.setState({ currentPlaceholder }, () => {
@@ -563,10 +560,11 @@ class Select extends Component {
   }
 
   managePlaceholder() {
-    let { currentPlaceholder, cachedPlaceHolder } = this.state;
+    const { placeholder } = this.props
+    let { currentPlaceholder } = this.state;
 
     if (currentPlaceholder !== '') {
-      currentPlaceholder = this.refs.input.value ? '' : cachedPlaceHolder;
+      currentPlaceholder = this.refs.input.value ? '' : placeholder;
     }
 
     this.setState({ currentPlaceholder });
