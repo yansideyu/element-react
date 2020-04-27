@@ -861,6 +861,8 @@ class Select extends Component {
                       closable={!disabled}
                       closeTransition={true}
                       onClose={this.deleteTag.bind(this, el)}
+                      icon={el.props.icon}
+                      onIconClick={el.props.onIconClick}
                     >
                       <span className="el-select__tags-text">{el.currentLabel()}</span>
                     </Tag>

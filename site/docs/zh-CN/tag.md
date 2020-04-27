@@ -15,7 +15,7 @@ render() {
       <Tag type="primary">标签三</Tag>
       <Tag type="success">标签四</Tag>
       <Tag type="warning">标签五</Tag>
-      <Tag type="danger">标签六</Tag>
+      <Tag type="danger" icon="el-icon-time" onIconClick={() => console.log(123)}>标签六</Tag>
     </div>
   )
 }
@@ -162,6 +162,8 @@ render() {
 | closeTransition | 是否禁用关闭时的渐变动画 | boolean | — | false |
 | hit | 是否有边框描边 | boolean | — | false |
 | color | 背景色 | string | — | — |
+| icon | 前缀icon | string | — | — |
+| onIconClick | 前缀icon点击事件 | function | — | — |
 
 ### Events
 | 事件名称 | 说明 | 回调参数 |

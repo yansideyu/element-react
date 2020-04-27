@@ -159,4 +159,6 @@ Option.propTypes = {
   disabled: PropTypes.bool,
   children: PropTypes.node,
   showOverflowTooltip: PropTypes.bool,
+  icon: PropTypes.string,
+  onIconClick: PropTypes.func
 }

@@ -16,6 +16,13 @@
     border: 1px solid transparent;
     white-space: nowrap;
 
+    .el-tag--prefix {
+      margin-right: 5px;
+      &.clickable {
+        cursor: pointer;
+      }
+    }
+
     & .el-icon-close {
       border-radius: 50%;
       text-align: center;

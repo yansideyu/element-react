@@ -10,6 +10,7 @@ export default class Tag extends Component {
     this.state = {
       visible: true
     };
+    this.handleIconClick = this.onIconClick.bind(this)
   }
 
   handleClose(event?: SyntheticEvent<any>): void {
@@ -25,8 +26,14 @@ export default class Tag extends Component {
     });
   }
 
+  onIconClick(event: SyntheticEvent<any>): void {
+    const { onIconClick = (event: SyntheticEvent<any>) => {} } = this.props;
+    event.stopPropagation();
+    onIconClick(event);
+  }
+
   render() {
-    const { type, hit, closable, closeTransition, color } = this.props;
+    const { type, hit, closable, closeTransition, color, icon, onIconClick } = this.props;
 
     return(
       <Transition name={closeTransition ? '' : 'el-zoom-in-center'}>
@@ -39,8 +46,13 @@ export default class Tag extends Component {
               'is-hit': hit
             })}
           >
+            {icon && (
+              <i className={this.className('el-tag--prefix', icon, onIconClick && 'clickable')} onClick={this.handleIconClick} />
+            )}
             {this.props.children}
-            { closable && <i className="el-tag__close el-icon-close" onClick={this.handleClose.bind(this)}></i> }
+            {closable && (
+              <i className="el-tag__close el-icon-close" onClick={this.handleClose.bind(this)}></i>
+            )}
           </span>
         </View>
       </Transition>
@@ -54,5 +66,7 @@ Tag.propTypes = {
   hit: PropTypes.bool,
   color: PropTypes.string,
   closeTransition: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  icon: PropTypes.string,
+  onIconClick: PropTypes.func
 }

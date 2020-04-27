@@ -261,7 +261,7 @@ render() {
     <Select value={this.state.value} multiple={true} onChange={this.handleInput}>
       {
         this.state.options.map(el => {
-          return <Select.Option key={el.value} label={el.label} value={el.value} />
+          return <Select.Option key={el.value} label={el.label} value={el.value} icon="el-icon-time" onIconClick={() => console.log(el.value)} />
         })
       }
     </Select>
@@ -663,3 +663,5 @@ render() {
 | value | 选项的值 | string/number/object | — | — |
 | label | 选项的标签，若不设置则默认与 `value` 相同 | string/number | — | — |
 | disabled | 是否禁用该选项 | boolean | — | false |
+| icon | Tag的前缀icon(多选生效) | string | — | - |
+| onIconClick | Tag的前缀icon点击事件(多选生效) | function | — | - |
