@@ -363,6 +363,8 @@ constructor(props) {
         { validator: (rule, value, callback) => {
           if (value === '') {
             callback(new Error('请输入密码'));
+          } else if (value.indexOf(' ') !== -1) {
+            callback(new Error());
           } else {
             if (this.state.form.checkPass !== '') {
               this.refs.form.validateField('checkPass');

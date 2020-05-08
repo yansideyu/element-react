@@ -5,7 +5,7 @@ import AsyncValidator from 'async-validator';
 import { Component, PropTypes, Transition, View } from '../../libs';
 
 type State = {
-  error: string,
+  error: ?string,
   valid: boolean,
   validating: boolean
 };
@@ -17,7 +17,7 @@ export default class FormItem extends Component {
     super(props);
 
     this.state = {
-      error: '',
+      error: null,
       valid: false,
       validating: false
     }
@@ -28,6 +28,22 @@ export default class FormItem extends Component {
     return {
       form: this
     };
+  }
+
+  getErrorString(errors: any) {
+    const error = errors && errors[0].message;
+    const isEmptyError = errors && Object.prototype.toString.call(errors[0].message) === '[object Error]';
+    let errorString;
+
+    if (isEmptyError) {
+      errorString = '';
+    } else if (error) {
+      errorString = error;
+    } else {
+      errorString = null;
+    }
+
+    return errorString;
   }
 
   componentDidMount() {
@@ -102,7 +118,7 @@ export default class FormItem extends Component {
 
     validator.validate(model, { ...options, firstFields: true }, errors => {
       this.setState({
-        error: errors ? errors[0].message : '',
+        error: this.getErrorString(errors),
         validating: false,
         valid: !errors
       }, () => {
@@ -127,7 +143,7 @@ export default class FormItem extends Component {
     let { valid, error } = this.state;
 
     valid = true;
-    error = '';
+    error = null;
 
     this.setState({ valid, error });
 
@@ -208,7 +224,8 @@ export default class FormItem extends Component {
 
     return (
       <div ref={this.fieldRef} style={this.style()} className={this.className('el-form-item', {
-        'is-error': error !== '',
+        'is-error': error !== null,
+        'is-empty-error': error === '',
         'is-validating': validating,
         'is-required': this.isRequired() || required
       })} onBlur={this.onFieldBlur.bind(this)} onChange={this.onFieldChange.bind(this)}>
