@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Popper from 'popper.js';
+import { merge } from '../../libs/utils/dataHelper';
 import { Component, PropTypes, Transition, View } from '../../libs';
 
 type State = {
@@ -60,13 +61,13 @@ export default class Tooltip extends Component {
 
   onEnter(): void {
     const { popper, reference, arrow } = this.refs;
-    const { placement, positionFixed } = this.props;
+    const { placement, positionFixed, popperProps: customProps } = this.props;
 
     if (arrow) {
       arrow.setAttribute('x-arrow', '');
     }
 
-    this.popperJS = new Popper(reference, popper, {
+    const defaultProps = {
       placement,
       positionFixed,
       modifiers: {
@@ -77,7 +78,10 @@ export default class Tooltip extends Component {
           boundariesElement: 'window',
         }
       }
-    });
+    };
+
+    const popperProps = merge(defaultProps, customProps);
+    this.popperJS = new Popper(reference, popper, popperProps);
   }
 
   onAfterLeave(): void {
