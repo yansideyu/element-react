@@ -141,19 +141,15 @@ export default class FormItem extends Component {
 
     this.setState({ valid, error });
 
-    let value = this.fieldValue();
-
-    if (value) {
-      Children.map(children, child => {
-        // 防止FormItem.children的外部触发setState调和作用
-        // 防止造成合并state，引起只更新最后一个FormItem值的现象
-        setTimeout(() => {
-          const { onChange, onSelect } = child.props;
-          if (onChange) onChange(this.initialValue);
-          if (onSelect) onSelect(this.initialValue);
-        });
-      });
-    }
+    Children.map(children, child => {
+    // 防止FormItem.children的外部触发setState调和作用
+    // 防止造成合并state，引起只更新最后一个FormItem值的现象
+    setTimeout(() => {
+      const { onChange, onSelect } = child.props;
+      if (onChange) onChange(this.initialValue);
+      if (onSelect) onSelect(this.initialValue);
+    });
+  });
   }
 
   getRules(): Array<any> {
