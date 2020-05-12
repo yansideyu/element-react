@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, { Children } from 'react';
 import AsyncValidator from 'async-validator';
 import { Component, PropTypes, Transition, View } from '../../libs';
 
@@ -87,15 +87,8 @@ export default class FormItem extends Component {
   }
 
   onFieldChange(): void {
-    if (this.validateDisabled) {
-      this.validateDisabled = false;
-
-      return;
-    }
-    
     setTimeout(() => {
       this.validate('change');
-      
     });
   }
 
@@ -140,6 +133,7 @@ export default class FormItem extends Component {
   }
 
   resetField(): void {
+    const { children } = this.props;
     let { valid, error } = this.state;
 
     valid = true;
@@ -149,12 +143,16 @@ export default class FormItem extends Component {
 
     let value = this.fieldValue();
 
-    if (Array.isArray(value) && value.length > 0) {
-      this.validateDisabled = true;
-      this.parent().props.model[this.props.prop] = [];
-    } else if (value) {
-      this.validateDisabled = true;
-      this.parent().props.model[this.props.prop] = this.initialValue;
+    if (value) {
+      Children.map(children, child => {
+        // 防止FormItem.children的外部触发setState调和作用
+        // 防止造成合并state，引起只更新最后一个FormItem值的现象
+        setTimeout(() => {
+          const { onChange, onSelect } = child.props;
+          if (onChange) onChange(this.initialValue);
+          if (onSelect) onSelect(this.initialValue);
+        });
+      });
     }
   }
 
