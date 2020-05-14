@@ -140,6 +140,10 @@ class Select extends Component {
       this.onVisibleChange(state.visible);
     }
 
+    if (state.query != this.state.query && props.remote && !props.multiple) {	
+      this.onQueryChange(state.query);	
+    }
+
     if (Array.isArray(state.selected)) {
       if (state.selected.length != this.state.selected.length) {
         this.onSelectedChange(state.selected);
@@ -159,12 +163,13 @@ class Select extends Component {
   }
 
   debounce(): number {
-    return this.props.remote ? 300 : 0;
+    const { debounceMs, remote } = this.props;
+    return remote ? debounceMs : 0;
   }
 
   handleFilter = value => {
     this.setState({ selectedLabel: value }, () => {
-      this.onQueryChange(value);
+      // this.onQueryChange(value);
     });
   }
 
@@ -989,6 +994,7 @@ class Select extends Component {
 
 Select.defaultProps = {
   showOverflowTooltip: false,
+  debounceMs: 300,
 };
 
 Select.childContextTypes = {
@@ -1007,6 +1013,7 @@ Select.propTypes = {
   filterable: PropTypes.bool,
   loading: PropTypes.bool,
   remote: PropTypes.bool,
+  debounceMs: PropTypes.number,
   remoteMethod: PropTypes.func,
   filterMethod: PropTypes.func,
   multiple: PropTypes.bool,
