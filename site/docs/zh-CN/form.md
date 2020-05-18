@@ -222,36 +222,47 @@ constructor(props) {
     form: {
       name: '',
       region: '',
+      users: [],
       date1: null,
       date2: null,
       delivery: false,
       type: [],
       resource: '',
       desc: ''
-    },
-    rules: {
-      name: [
-        { required: true, message: '请输入活动名称', trigger: 'blur' }
-      ],
-      region: [
-        { required: true, message: '请选择活动区域', trigger: 'change' }
-      ],
-      date1: [
-        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-      ],
-      date2: [
-        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-      ],
-      type: [
-        { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-      ],
-      resource: [
-        { required: true, message: '请选择活动资源', trigger: 'change' }
-      ],
-      desc: [
-        { required: true, message: '请填写活动形式', trigger: 'blur' }
-      ]
     }
+  };
+  this.onChange = this.onChange.bind(this);
+  this.handleReset = this.handleReset.bind(this);
+  this.handleSubmit = this.handleSubmit.bind(this);
+  this.handleResetValidation = this.handleResetValidation.bind(this);
+}
+
+get rules() {
+  return {
+    name: [
+      { required: true, message: '请输入活动名称', trigger: 'blur' }
+    ],
+    region: [
+      { required: true, message: '请选择活动区域', trigger: 'change' }
+    ],
+    users: [
+      { type: 'array', required: true, message: '请选择活动用户', trigger: 'change' }
+    ],
+    date1: [
+      { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+    ],
+    date2: [
+      { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+    ],
+    type: [
+      { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+    ],
+    resource: [
+      { required: true, message: '请选择活动资源', trigger: 'change' }
+    ],
+    desc: [
+      { required: true, message: '请填写活动形式', trigger: 'blur' }
+    ]
   };
 }
 
@@ -269,9 +280,11 @@ handleSubmit(e) {
 }
 
 handleReset(e) {
-  e.preventDefault();
+  this.refs.form.resetFields(e);
+}
 
-  this.refs.form.resetFields();
+handleResetValidation(e) {
+  this.refs.form.clearValidation(e);
 }
 
 onChange(key, value) {
@@ -282,14 +295,20 @@ onChange(key, value) {
 
 render() {
   return (
-    <Form ref="form" model={this.state.form} rules={this.state.rules} labelWidth="80" className="demo-ruleForm">
+    <Form ref="form" model={this.state.form} rules={this.rules} labelWidth="80" className="demo-ruleForm">
       <Form.Item label="活动名称" prop="name">
-        <Input value={this.state.form.name} onChange={this.onChange.bind(this, 'name')}></Input>
+        <Input value={this.state.form.name} onChange={value => this.onChange('name', value)}></Input>
       </Form.Item>
       <Form.Item label="活动区域" prop="region">
-        <Select value={this.state.form.region} placeholder="请选择活动区域" onChange={this.onChange.bind(this, 'region')}>
+        <Select value={this.state.form.region} placeholder="请选择活动区域" onChange={value => this.onChange('region', value)}>
           <Select.Option label="区域一" value="shanghai"></Select.Option>
           <Select.Option label="区域二" value="beijing"></Select.Option>
+        </Select>
+      </Form.Item>
+      <Form.Item label="活动用户" prop="users">
+        <Select multiple value={this.state.form.users} placeholder="请选择活动用户" onChange={value => this.onChange('users', value)}>
+          <Select.Option label="张三" value="zhangsan"></Select.Option>
+          <Select.Option label="李四" value="lisi"></Select.Option>
         </Select>
       </Form.Item>
       <Form.Item label="活动时间" required={true}>
@@ -298,7 +317,7 @@ render() {
             <DatePicker
               value={this.state.form.date1}
               placeholder="选择日期"
-              onChange={this.onChange.bind(this, 'date1')}
+              onChange={value => this.onChange('date1', value)}
             />
           </Form.Item>
         </Layout.Col>
@@ -309,16 +328,16 @@ render() {
               value={this.state.form.date2}
               selectableRange="18:30:00 - 20:30:00"
               placeholder="选择时间"
-              onChange={this.onChange.bind(this, 'date2')}
+              onChange={value => this.onChange('date2', value)}
             />
           </Form.Item>
         </Layout.Col>
       </Form.Item>
       <Form.Item label="即时配送" prop="delivery">
-        <Switch value={this.state.form.delivery} onChange={this.onChange.bind(this, 'delivery')}></Switch>
+        <Switch value={this.state.form.delivery} onChange={value => this.onChange('delivery', value)}></Switch>
       </Form.Item>
       <Form.Item label="活动性质" prop="type">
-        <Checkbox.Group value={this.state.form.type} onChange={this.onChange.bind(this, 'type')}>
+        <Checkbox.Group value={this.state.form.type} onChange={value => this.onChange('type', value)}>
           <Checkbox label="美食/餐厅线上活动" name="type"></Checkbox>
           <Checkbox label="地推活动" name="type"></Checkbox>
           <Checkbox label="线下主题活动" name="type"></Checkbox>
@@ -326,17 +345,22 @@ render() {
         </Checkbox.Group>
       </Form.Item>
       <Form.Item label="特殊资源" prop="resource">
-        <Radio.Group value={this.state.form.resource} onChange={this.onChange.bind(this, 'resource')}>
+        <Radio.Group value={this.state.form.resource} onChange={value => this.onChange('resource', value)}>
           <Radio value="线上品牌商赞助"></Radio>
           <Radio value="线下场地免费"></Radio>
         </Radio.Group>
       </Form.Item>
       <Form.Item label="活动形式" prop="desc">
-        <Input type="textarea" value={this.state.form.desc} onChange={this.onChange.bind(this, 'desc')}></Input>
+        <Input type="textarea" value={this.state.form.desc} onChange={value => this.onChange('desc', value)}></Input>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" onClick={this.handleSubmit.bind(this)}>立即创建</Button>
-        <Button onClick={this.handleReset.bind(this)}>重置</Button>
+        <Button onClick={() => this.handleReset('users')}>重置活动用户</Button>
+        <Button onClick={() => this.handleResetValidation('users')}>清除活动用户校验</Button>
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" onClick={this.handleSubmit}>立即创建</Button>
+        <Button onClick={this.handleReset}>重置表单内容</Button>
+        <Button onClick={this.handleResetValidation}>清除表单校验</Button>
       </Form.Item>
     </Form>
   )
@@ -578,7 +602,8 @@ render() {
 |---------- |-------------- |
 | validate(cb) | 对整个表单进行校验的方法 |
 | validateField(prop, cb) | 对部分表单字段进行校验的方法 |
-| resetFields | 对整个表单进行重置，将所有字段值重置为空并移除校验结果 |
+| resetFields(prop) | 对整个表单或某个字段进行重置，将所有字段值重置为初始值并移除校验结果 |
+| clearValidation(prop) | 对整个表单或某个字段的校验结果进行清空 |
 
 ### Form-Item Attributes
 

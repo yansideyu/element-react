@@ -34,10 +34,32 @@ export default class Form extends Component {
     }
   }
 
-  resetFields(): void {
-    this.state.fields.forEach(field => {
-      field.resetField();
-    });
+  resetFields(prop?: String): void {
+    const { fields } = this.state;
+    if (typeof prop === 'string') {
+      const field = fields.filter(field => field.props.prop === prop)[0];
+      if (field) {
+        field.resetField();
+      }
+    } else {
+      fields.forEach(field => {
+        field.resetField();
+      });
+    }
+  }
+
+  clearValidation(prop?: String): void {
+    const { fields } = this.state;
+    if (typeof prop === 'string') {
+      const field = fields.filter(field => field.props.prop === prop)[0];
+      if (field) {
+        field.clearValidation();
+      }
+    } else {
+      fields.forEach(field => {
+        field.clearValidation();
+      });
+    }
   }
 
   scrollToError(errorsList: Array<any>): void {

@@ -6,7 +6,6 @@ import { Component, PropTypes, Transition, View } from '../../libs';
 
 type State = {
   error: ?string,
-  valid: boolean,
   validating: boolean
 };
 
@@ -18,7 +17,6 @@ export default class FormItem extends Component {
 
     this.state = {
       error: null,
-      valid: false,
       validating: false
     }
     this.fieldRef = React.createRef();
@@ -112,13 +110,19 @@ export default class FormItem extends Component {
     validator.validate(model, { ...options, firstFields: true }, errors => {
       this.setState({
         error: this.getErrorString(errors),
-        validating: false,
-        valid: !errors
+        validating: false
       }, () => {
         if (cb instanceof Function) {
           cb(errors);
         }
       });
+    });
+  }
+
+  clearValidation() {
+    this.setState({
+      error: null,
+      validating: false
     });
   }
 
@@ -134,22 +138,19 @@ export default class FormItem extends Component {
 
   resetField(): void {
     const { children } = this.props;
-    let { valid, error } = this.state;
-
-    valid = true;
-    error = null;
-
-    this.setState({ valid, error });
 
     Children.map(children, child => {
-    // 防止FormItem.children的外部触发setState调和作用
-    // 防止造成合并state，引起只更新最后一个FormItem值的现象
-    setTimeout(() => {
-      const { onChange, onSelect } = child.props;
-      if (onChange) onChange(this.initialValue);
-      if (onSelect) onSelect(this.initialValue);
+      // 防止FormItem.children的外部触发setState调和作用
+      // 防止造成合并state，引起只更新最后一个FormItem值的现象
+      setTimeout(() => {
+        const { onChange, onSelect } = child.props;
+        if (onChange) onChange(this.initialValue);
+        if (onSelect) onSelect(this.initialValue);
+        setTimeout(() => {
+          this.clearValidation();
+        });
+      });
     });
-  });
   }
 
   getRules(): Array<any> {
