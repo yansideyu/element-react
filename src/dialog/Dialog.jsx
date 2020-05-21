@@ -47,7 +47,7 @@ export default class Dialog extends Component {
     if (this.willOpen(this.props, nextProps)) {
       cleanScrollBar();
       notifyDialogOpen();
-      // nextProps.onOpen();
+      nextProps.onOpen();
       if (lockScroll && document.body && document.body.style) {
         if (!bodyOverflow) {
           this.setState({
@@ -61,7 +61,7 @@ export default class Dialog extends Component {
 
     if (this.willClose(this.props, nextProps) && lockScroll) {
       notifyDialogClose();
-      // nextProps.onClose();
+      nextProps.onClose();
       if (modal && bodyOverflow !== 'hidden' && document.body && document.body.style) {
         document.body.style.overflow = bodyOverflow;
       }
