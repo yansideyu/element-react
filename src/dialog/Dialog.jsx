@@ -45,6 +45,7 @@ export default class Dialog extends Component {
     if (this.willOpen(this.props, nextProps)) {
       cleanScrollBar();
       notifyDialogOpen();
+      nextProps.onOpen();
       if (lockScroll && document.body && document.body.style) {
         if (!bodyOverflow) {
           this.setState({
@@ -58,6 +59,7 @@ export default class Dialog extends Component {
 
     if (this.willClose(this.props, nextProps) && lockScroll) {
       notifyDialogClose();
+      nextProps.onClose();
       if (modal && bodyOverflow !== 'hidden' && document.body && document.body.style) {
         document.body.style.overflow = bodyOverflow;
       }
@@ -176,6 +178,11 @@ export default class Dialog extends Component {
   }
 }
 
+Dialog.defaultProps = {
+  onOpen: () => {},
+  onClose: () => {},
+};
+
 Dialog.propTypes = {
   // 控制对话框是否可见
   visible: PropTypes.bool,
@@ -202,6 +209,6 @@ Dialog.propTypes = {
   onCancel: PropTypes.func.isRequired,
   showClose: PropTypes.bool,
   appendToBody: PropTypes.bool,
-  beforeOpen: PropTypes.func,
-  beforeClose: PropTypes.func
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func,
 };
