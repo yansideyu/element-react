@@ -169,7 +169,10 @@ class Select extends Component {
 
   handleFilter = value => {
     this.setState({ selectedLabel: value }, () => {
-      // this.onQueryChange(value);
+      const { remote } = this.props;
+      if (!remote) {
+        this.onQueryChange(value);
+      }
     });
   }
 
