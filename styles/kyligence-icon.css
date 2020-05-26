@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'superset-kylin';
-  src:  url('fonts/superset-kylin.eot?u8kyer');
-  src:  url('fonts/superset-kylin.eot?u8kyer#iefix') format('embedded-opentype'),
-    url('fonts/superset-kylin.ttf?u8kyer') format('truetype'),
-    url('fonts/superset-kylin.woff?u8kyer') format('woff'),
-    url('fonts/superset-kylin.svg?u8kyer#superset-kylin') format('svg');
+  src:  url('fonts/superset-kylin.eot?t6eea1');
+  src:  url('fonts/superset-kylin.eot?t6eea1#iefix') format('embedded-opentype'),
+    url('fonts/superset-kylin.ttf?t6eea1') format('truetype'),
+    url('fonts/superset-kylin.woff?t6eea1') format('woff'),
+    url('fonts/superset-kylin.svg?t6eea1#superset-kylin') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-superset-type_user:before {
+  content: "\e978";
+}
+.icon-superset-type_group:before {
+  content: "\e979";
+}
+.icon-superset-return:before {
+  content: "\e97a";
+}
+.icon-superset-user_manager:before {
+  content: "\e97b";
+}
 .icon-superset-move:before {
   content: "\e900";
 }
