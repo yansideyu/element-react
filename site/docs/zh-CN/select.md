@@ -28,44 +28,46 @@ constructor(props) {
       value: '选项5',
       label: '北京烤鸭'
     }],
-    value: ''
+    value1: '',
+    value2: '选项1',
   };
   this.handleInput = this.handleInput.bind(this);
 }
 
-handleInput(value) {
-  this.setState({ value });
+handleInput(key, value) {
+  this.setState({ [key]: value });
   console.log(value);
 }
 
 render() {
+  const { value1, value2, options } = this.state;
   return (
-      <div>
-        <Select style={{ marginRight: '10px' }} value={this.state.value} placeholder="请选择" onChange={this.handleInput}>
-          {
-            this.state.options.map(el => {
-              return <Select.Option key={el.value} label={el.label} value={el.value} />
-            })
-          }
-        </Select>
-        <Select
-          size="small"
-          value={this.state.value}
-          placeholder="请选择"
-          onChange={this.handleInput}
-          popperProps={{
-            modifiers: {
-              flip: { enabled: false },
-            },
-          }}
-        > 
-          {
-            this.state.options.map(el => {
-              return <Select.Option key={el.value} label={el.label} value={el.value} />
-            })
-          }
-        </Select>
-      </div>
+    <div>
+      <Select
+        value={value1}
+        placeholder="请选择"
+        onChange={value => this.handleInput('value1', value)}
+      >
+        {options.map(el => (
+          <Select.Option key={el.value} label={el.label} value={el.value} />
+        ))}
+      </Select>
+      <Select
+        size="small"
+        value={value2}
+        placeholder="请选择"
+        onChange={value => this.handleInput('value2', value)}
+        popperProps={{
+          modifiers: {
+            flip: { enabled: false },
+          },
+        }}
+      >
+        {options.map(el => (
+          <Select.Option key={el.value} label={el.label} value={el.value} />
+        ))}
+      </Select>
+    </div>
   )
 }
 ```
@@ -107,13 +109,12 @@ handleInput(value) {
 }
 
 render() {
+  const { value, options } = this.state;
   return (
-    <Select value={this.state.value} onChange={this.handleInput}>
-      {
-        this.state.options.map(el => {
-          return <Select.Option key={el.value} label={el.label} value={el.value} disabled={el.disabled} />
-        })
-      }
+    <Select value={value} onChange={this.handleInput}>
+      {options.map(el => (
+        <Select.Option key={el.value} label={el.label} value={el.value} disabled={el.disabled} />
+      ))}
     </Select>
   )
 }
@@ -146,25 +147,32 @@ constructor(props) {
       value: '选项5',
       label: '北京烤鸭'
     }],
-    value: ''
+    value1: '',
+    value2: '选项1'
   };
   this.handleInput = this.handleInput.bind(this);
 }
 
-handleInput(value) {
-  this.setState({ value });
+handleInput(key, value) {
+  this.setState({ [key]: value });
   console.log(value);
 }
 
 render() {
+  const { value1, value2, options } = this.state;
   return (
-    <Select value={this.state.value} disabled={true} onChange={this.handleInput}>
-      {
-        this.state.options.map(el => {
-          return <Select.Option key={el.value} label={el.label} value={el.value} />
-        })
-      }
-    </Select>
+    <div>
+      <Select disabled value={value1} onChange={value => this.handleInput('value1', value)}>
+        {options.map(el => (
+          <Select.Option key={el.value} label={el.label} value={el.value} />
+        ))}
+      </Select>
+      <Select disabled value={value2} onChange={value => this.handleInput('value2', value)}>
+        {options.map(el => (
+          <Select.Option key={el.value} label={el.label} value={el.value} />
+        ))}
+      </Select>
+    </div>
   )
 }
 ```
@@ -207,13 +215,12 @@ handleInput(value) {
 }
 
 render() {
+  const { value, options } = this.state;
   return (
-    <Select value={this.state.value} clearable={true} onChange={this.handleInput}>
-      {
-        this.state.options.map(el => {
-          return <Select.Option key={el.value} label={el.label} value={el.value} />
-        })
-      }
+    <Select value={value} clearable={true} onChange={this.handleInput}>
+      {options.map(el => (
+        <Select.Option key={el.value} label={el.label} value={el.value} />
+      ))}
     </Select>
   )
 }
@@ -426,25 +433,50 @@ constructor(props) {
       value: '选项5',
       label: '北京烤鸭'
     }],
-    value: []
+    value: {
+      multiple: [],
+      multiple1: ["选项1", "选项2"],
+      single: "",
+      single1: "选项1",
+    },
   };
-  this.handleInput = this.handleInput.bind(this);
 }
 
-handleInput(value) {
-  this.setState({ value });
-  console.log(value);
+handleInput(inputName, inputValue) {
+  const { value } = this.state;
+  this.setState({ value: Object.assign({}, value, { [inputName]: inputValue }) });
+  console.log(inputValue);
 }
 
 render() {
+  const { value, options } = this.state;
   return (
-    <Select value={this.state.value} filterable={true} multiple={true} onChange={this.handleInput}>
-      {
-        this.state.options.map(el => {
-          return <Select.Option key={el.value} label={el.label} value={el.value} />
-        })
-      }
-    </Select>
+    <div>
+      <div>
+        <Select filterable multiple value={value.multiple} onChange={value => this.handleInput('multiple', value)}>
+          {options.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+        <Select filterable multiple value={value.multiple1} onChange={value => this.handleInput('multiple1', value)}>
+          {options.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+      </div>
+      <div>
+        <Select filterable value={value.single} onChange={value => this.handleInput('single', value)}>
+          {options.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+        <Select filterable value={value.single1} onChange={value => this.handleInput('single1', value)}>
+          {options.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+      </div>
+    </div>
   )
 }
 ```
@@ -460,51 +492,130 @@ constructor(props) {
   super(props);
 
   this.state = {
-    value: [],
-    options: [],
-    states: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",   "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
-    "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+    value: {
+      multiple: [],
+      multiple1: ["Alabama", "Alaska"],
+      single: "",
+      single1: "Alabama",
+    },
+    options: {
+      multiple: [],
+      multiple1: [],
+      single: [],
+      single1: [],
+    },
+    loading: {
+      multiple: false,
+      multiple1: false,
+      single: false,
+      single1: false,
+    },
+    states: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",   "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
   };
-  this.handleInput = this.handleInput.bind(this);
 }
 
-handleInput(value) {
-  this.setState({ value });
-  console.log(value);
+get allOptions () {
+  const { states } = this.state;
+  return states.map(item => ({ value: item, label: item }));
 }
 
-onSearch(query) {
-  if (query !== '') {
-    this.setState({
-      loading: true
-    });
+handleInput(inputName, inputValue) {
+  const { value } = this.state;
+  this.setState({ value: Object.assign({}, value, { [inputName]: inputValue }) });
+  console.log(inputValue);
+}
 
+handleLoading(inputName, inputValue) {
+  const { loading } = this.state;
+  this.setState({ loading: Object.assign({}, loading, { [inputName]: inputValue }) });
+}
+
+handleOptions(inputName, inputValue) {
+  const { options } = this.state;
+  this.setState({ options: Object.assign({}, options, { [inputName]: inputValue }) });
+}
+
+onSearch(inputName, query) {
+  this.handleLoading(inputName, true);
+
+  return new Promise(resolve => {
     setTimeout(() => {
-      this.setState({
-        loading: false,
-        options: this.state.states.map(item => {
-          return { value: item, label: item };
-        }).filter(item => {
-          return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        })
-      });
+      const { states } = this.state;
+      const options = this.allOptions.filter(item => (
+        item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+      ));
+      this.handleLoading(inputName, false);
+      this.handleOptions(inputName, options);
+      resolve();
     }, 200);
-  } else {
-    this.setState({
-      options: []
-    });
-  }
+  });
 }
 
 render() {
+  const { value, options, loading } = this.state;
   return (
-    <Select value={this.state.value} multiple={true} filterable={true} remote={true} remoteMethod={this.onSearch.bind(this)} loading={this.state.loading} onChange={this.handleInput}>
-      {
-        this.state.options.map(el => {
-          return <Select.Option key={el.value} label={el.label} value={el.value} />
-        })
-      }
-    </Select>
+    <div>
+      <div>
+        <Select
+          remote
+          multiple
+          filterable
+          name="multiple"
+          value={value.multiple}
+          loading={loading.multiple}
+          onChange={value => this.handleInput('multiple', value)}
+          remoteMethod={value => this.onSearch('multiple', value)}
+        >
+          {options.multiple.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+        <Select
+          remote
+          multiple
+          filterable
+          size="small"
+          name="multiple1"
+          value={value.multiple1}
+          loading={loading.multiple1}
+          onChange={value => this.handleInput('multiple1', value)}
+          remoteMethod={value => this.onSearch('multiple1', value)}
+        >
+          {options.multiple1.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+      </div>
+      <div>
+        <Select
+          remote
+          filterable
+          name="single"
+          value={value.single}
+          loading={loading.single}
+          onChange={value => this.handleInput('single', value)}
+          remoteMethod={value => this.onSearch('single', value)}
+        >
+          {options.single.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+        <Select
+          remote
+          filterable
+          size="small"
+          name="single1"
+          value={value.single1}
+          loading={loading.single1}
+          onChange={value => this.handleInput('single1', value)}
+          remoteMethod={value => this.onSearch('single1', value)}
+        >
+          {options.single1.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+      </div>
+    </div>
   )
 }
 ```

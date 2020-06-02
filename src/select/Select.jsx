@@ -61,7 +61,6 @@ class Select extends Component {
 
     this.state = {
       options: [],
-      isSelect: true,
       inputLength: 20,
       inputWidth: 0,
       inputHovering: false,
@@ -77,7 +76,6 @@ class Select extends Component {
       value: props.value,
       valueChangeBySelected: false,
       voidRemoteQuery: false,
-      positionFixed: false,
       query: '',
     };
 
@@ -88,6 +86,19 @@ class Select extends Component {
 
     if (props.remote) {
       this.state.voidRemoteQuery = true;
+      this.lockAutoFocus = true;
+      const promise = props.remoteMethod(this.state.query);
+      if (promise) {
+        promise.then(() => {
+          this.handleValueChange(false);
+          this.lockAutoFocus = false;
+        });
+      } else {
+        setTimeout(() => {
+          this.handleValueChange(false);
+          this.lockAutoFocus = false;
+        });
+      }
     }
 
     this.debouncedOnInputChange = debounce(this.debounce(), () => {
@@ -194,7 +205,7 @@ class Select extends Component {
     }
   }
 
-  handleValueChange() {
+  handleValueChange(isAutoFocus = true) {
     const { multiple, remote, filterMethod } = this.props;
     const { value, options, selected: oldSelected } = this.state;
 
@@ -213,7 +224,7 @@ class Select extends Component {
       const selected = !remote ? currentSelected : [...otherSelected, ...currentSelected];
 
       this.setState({ selected }, () => {
-        this.onSelectedChange(this.state.selected, false);
+        this.onSelectedChange(this.state.selected, false, isAutoFocus);
       });
     } else {
       const selected = options.filter(option => {
@@ -359,7 +370,7 @@ class Select extends Component {
     }
   }
 
-  onSelectedChange(val: any, bubble: boolean = true) {
+  onSelectedChange(val: any, bubble: boolean = true, isAutoFocus = true) {
     const { form } = this.context;
     const { multiple, filterable, onChange, placeholder } = this.props;
     let { query, hoverIndex, inputLength, selectedInit, currentPlaceholder, valueChangeBySelected } = this.state;
@@ -387,7 +398,9 @@ class Select extends Component {
         hoverIndex = -1;
         inputLength = 20;
 
-        this.refs.input.focus();
+        if (isAutoFocus && !this.lockAutoFocus) {
+          this.refs.input.focus();
+        }
       }
 
       this.setState({ valueChangeBySelected, query, hoverIndex, inputLength }, () => {
