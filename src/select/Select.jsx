@@ -225,14 +225,17 @@ class Select extends Component {
         this.onSelectedChange(this.state.selected, false, isAutoFocus);
       });
     } else {
-      const selected = options.filter(option => {
-        // use lodash isEqual function in case of value type is object or array
-        return isEqual(option.props.value , value)
-      })[0];
+      setTimeout(() => {
+        const { visible } = this.state;
+        const selected = options.filter(option => {
+          // use lodash isEqual function in case of value type is object or array
+          return isEqual(option.props.value , value)
+        })[0];
 
-      if (selected && !filterMethod) {
-        this.state.selectedLabel = selected.props.label || selected.props.value;
-      }
+        if (selected && !filterMethod && !visible) {
+          this.state.selectedLabel = selected.props.label || selected.props.value;
+        }
+      });
     }
   }
 
@@ -557,7 +560,7 @@ class Select extends Component {
 
   addOptionToValue(option: any, init?: boolean) {
     const { multiple, remote } = this.props;
-    let { selected, selectedLabel, hoverIndex, value } = this.state;
+    let { selected, selectedLabel, hoverIndex, value, visible } = this.state;
 
     if (multiple) {
       if (selected.indexOf(option) === -1 && (remote ? value.indexOf(option.props.value) === -1 : true)) {
@@ -571,7 +574,9 @@ class Select extends Component {
       this.selectedInit = !!init;
 
       selected = option;
-      selectedLabel = option.currentLabel();
+      if (!visible) {
+        selectedLabel = option.currentLabel();
+      }
       hoverIndex = option.index;
 
       this.setState({ selected, selectedLabel, hoverIndex });
