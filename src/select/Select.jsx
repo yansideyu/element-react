@@ -24,7 +24,6 @@ import i18n from '../locale';
 
 type State = {
   options: Array<Object>,
-  isSelect: boolean,
   inputLength: number,
   inputWidth: number,
   inputHovering: boolean,
@@ -41,7 +40,6 @@ type State = {
   voidRemoteQuery: boolean,
   valueChangeBySelected: boolean,
   selectedInit: boolean,
-  positionFixed: boolean,
   dropdownUl?: HTMLElement
 };
 
