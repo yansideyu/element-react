@@ -444,13 +444,12 @@ class Select extends Component {
     } else if (typeof filterMethod === 'function') {
       filterMethod(query);
     } else {
-      this.setState({
-        filteredOptionsCount: optionsCount
-      }, () => {
-        options.forEach(option => {
-          option.queryChange(query);
-        });
+      options.forEach(option => {
+        option.queryChange(query);
       });
+      setTimeout(() => this.setState({
+        filteredOptionsCount: options.filter(o => o.state.visible && !o.props.hidden).length,
+      }));
     }
 
     this.setState({ hoverIndex, voidRemoteQuery });
