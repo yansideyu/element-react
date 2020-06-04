@@ -92,16 +92,16 @@ export default class Option extends Component {
   }
 
   queryChange(query: string) {
+    const { hidden } = this.props;
     // query 里如果有正则中的特殊字符，需要先将这些字符转义
     const parsedQuery = query.replace(/(\^|\(|\)|\[|\]|\$|\*|\+|\.|\?|\\|\{|\}|\|)/g, '\\$1');
     const visible = new RegExp(parsedQuery, 'i').test(this.currentLabel());
 
-    if (!visible) {
+    if (hidden || !visible) {
       this.parent().setState({
         filteredOptionsCount: this.parent().state.filteredOptionsCount - 1
       });
     }
-
     this.setState({ visible });
   }
 
@@ -118,7 +118,7 @@ export default class Option extends Component {
 
   render() {
     const { visible, index } = this.state;
-    const { disabled } = this.props;
+    const { disabled, hidden } = this.props;
     const { showOverflowTooltip } = this;
 
     const events = {
@@ -127,7 +127,7 @@ export default class Option extends Component {
     };
 
     return (
-      <View show={visible}>
+      <View show={visible && !hidden}>
         <li
           style={this.style()}
           className={this.className('el-select-dropdown__item', {

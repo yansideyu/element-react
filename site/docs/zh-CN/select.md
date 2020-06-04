@@ -121,6 +121,57 @@ render() {
 ```
 :::
 
+### 有隐藏选项
+
+:::demo 在`Option`中，设定`hidden`值为 true，即可隐藏该选项，隐藏项不支持
+```js
+constructor(props) {
+  super(props);
+
+  this.state = {
+    options: [{
+      value: '选项1',
+      label: '黄金糕',
+      hidden: true
+    }, {
+      value: '选项2',
+      label: '双皮奶',
+      hidden: true
+    }, {
+      value: '选项3',
+      label: '蚵仔煎',
+    }, {
+      value: '选项4',
+      label: '龙须面',
+    }, {
+      value: '选项5',
+      label: '北京烤鸭',
+    }],
+    value: '选项1'
+  };
+  this.handleInput = this.handleInput.bind(this);
+}
+
+handleInput(value) {
+  this.setState({ value });
+  console.log(value);
+}
+
+render() {
+  return (
+    <Select value={this.state.value} onChange={this.handleInput} filterable>
+      {
+        this.state.options.map(el => {
+          return <Select.Option key={el.value} label={el.label} value={el.value} hidden={el.hidden} />
+        })
+      }
+    </Select>
+  )
+}
+```
+:::
+
+
 ### 禁用状态
 
 选择器不可用状态
