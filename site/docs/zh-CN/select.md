@@ -1,5 +1,3 @@
-<!-- ## Select 选择器
-
 当选项过多时，使用下拉菜单展示并选择内容。
 
 ### 基础用法
@@ -531,7 +529,7 @@ render() {
   )
 }
 ```
-::: -->
+:::
 
 ### 远程搜索
 
@@ -676,7 +674,6 @@ render() {
 ```
 :::
 
-<!-- 
 ### 穿越overflow
 
 防止外层元素的overflow
@@ -830,4 +827,4 @@ render() {
 | label | 选项的标签，若不设置则默认与 `value` 相同 | string/number | — | — |
 | disabled | 是否禁用该选项 | boolean | — | false |
 | icon | Tag的前缀icon(多选生效) | string | — | - |
-| onIconClick | Tag的前缀icon点击事件(多选生效) | function | — | - | -->
+| onIconClick | Tag的前缀icon点击事件(多选生效) | function | — | - |
