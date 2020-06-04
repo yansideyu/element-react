@@ -46,25 +46,14 @@ export default class Transition extends Component {
 
   get transitionClass() {
     const { name } = this.props;
-    if (name) {
-      return {
-        enter: `${name}-enter`,
-        enterActive: `${name}-enter-active`,
-        enterTo: `${name}-enter-to`,
-        leave: `${name}-leave`,
-        leaveActive: `${name}-leave-active`,
-        leaveTo: `${name}-leave-to`,
-      }
-    } else {
-      return {
-        enter: '',
-        enterActive: '',
-        enterTo: '',
-        leave: '',
-        leaveActive: '',
-        leaveTo: '',
-      }
-    }
+    return {
+      enter: name ? `${name}-enter` : '',
+      enterActive: name ? `${name}-enter-active` : '',
+      enterTo: name ? `${name}-enter-to` : '',
+      leave: name ? `${name}-leave` : '',
+      leaveActive: name ? `${name}-leave-active` : '',
+      leaveTo: name ? `${name}-leave-to` : '',
+    };
   }
 
   getEnhanceChildren(children) {
@@ -154,10 +143,7 @@ export default class Transition extends Component {
         childDOM.removeEventListener('animationend', this.didLeave);
       }
     }
-    
-    if (isViewComponent) {
-      childDOM.style.display = '';
-    }
+
     // 防止display样式造成enter过渡样式的冲突
     if (enter && enterActive) {
       requestAnimationFrame(() => {
@@ -165,6 +151,9 @@ export default class Transition extends Component {
         childDOM.addEventListener('animationend', this.didEnter);
 
         addClass(childDOM, enter);
+        if (isViewComponent) {
+          childDOM.style.display = '';
+        }
         onEnter && onEnter();
 
         requestAnimationFrame(() => {

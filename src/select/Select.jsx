@@ -84,19 +84,6 @@ class Select extends Component {
 
     if (props.remote) {
       this.state.voidRemoteQuery = true;
-      this.lockAutoFocus = true;
-      const promise = props.remoteMethod(this.state.query);
-      if (promise) {
-        promise.then(() => {
-          this.handleValueChange(false);
-          this.lockAutoFocus = false;
-        });
-      } else {
-        setTimeout(() => {
-          this.handleValueChange(false);
-          this.lockAutoFocus = false;
-        });
-      }
     }
 
     this.debouncedOnInputChange = debounce(this.debounce(), () => {
@@ -118,6 +105,13 @@ class Select extends Component {
 
     this.handleValueChange();
     addResizeListener(this.refs.root, this.resetInputWidth);
+
+    const { remote, remoteMethod, multiple } = this.props;
+    const { query } = this.state;
+    // remote单选补执行远程方法
+    if (remote && remoteMethod && !multiple) {
+      remoteMethod(query);
+    }
   }
 
   componentWillReceiveProps(props: Object) {
@@ -203,9 +197,9 @@ class Select extends Component {
     }
   }
 
-  handleValueChange(isAutoFocus = true) {
+  handleValueChange() {
     const { multiple, remote, filterMethod } = this.props;
-    const { value, options, selected: oldSelected } = this.state;
+    const { value, options, selected: oldSelected, visible } = this.state;
 
     if (multiple && Array.isArray(value)) {
       const currentSelected = value.reduce((selecteds, selectedValue) => {
@@ -222,20 +216,18 @@ class Select extends Component {
       const selected = !remote ? currentSelected : [...otherSelected, ...currentSelected];
 
       this.setState({ selected }, () => {
-        this.onSelectedChange(this.state.selected, false, isAutoFocus);
+        this.onSelectedChange(this.state.selected, false);
       });
     } else {
-      setTimeout(() => {
-        const { visible } = this.state;
-        const selected = options.filter(option => {
-          // use lodash isEqual function in case of value type is object or array
-          return isEqual(option.props.value , value)
-        })[0];
+      const selected = options.filter(option => {
+        // use lodash isEqual function in case of value type is object or array
+        return isEqual(option.props.value , value)
+      })[0];
 
-        if (selected && !filterMethod && !visible) {
-          this.state.selectedLabel = selected.props.label || selected.props.value;
-        }
-      });
+      if (remote && visible) return;
+      if (selected && !filterMethod) {
+        this.state.selectedLabel = selected.props.label || selected.props.value;
+      }
     }
   }
 
@@ -371,7 +363,7 @@ class Select extends Component {
     }
   }
 
-  onSelectedChange(val: any, bubble: boolean = true, isAutoFocus = true) {
+  onSelectedChange(val: any, bubble: boolean = true) {
     const { form } = this.context;
     const { multiple, filterable, onChange, placeholder } = this.props;
     let { query, hoverIndex, inputLength, selectedInit, currentPlaceholder, valueChangeBySelected } = this.state;
@@ -398,10 +390,6 @@ class Select extends Component {
         query = '';
         hoverIndex = -1;
         inputLength = 20;
-
-        if (isAutoFocus && !this.lockAutoFocus) {
-          this.refs.input.focus();
-        }
       }
 
       this.setState({ valueChangeBySelected, query, hoverIndex, inputLength }, () => {
@@ -574,9 +562,7 @@ class Select extends Component {
       this.selectedInit = !!init;
 
       selected = option;
-      if (!visible) {
-        selectedLabel = option.currentLabel();
-      }
+      selectedLabel = option.currentLabel();
       hoverIndex = option.index;
 
       this.setState({ selected, selectedLabel, hoverIndex });
@@ -978,7 +964,7 @@ class Select extends Component {
             }
           }}
         />
-        <Transition name="" onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
+        <Transition name="el-zoom-in-top" onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
           <View show={visible && this.emptyText() !== false}>
             <div
               ref="popper"
