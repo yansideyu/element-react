@@ -505,7 +505,7 @@ class Select extends Component {
         return noMatchText || i18n.t('el.select.noMatch');
       }
 
-      if (options.length === 0) {
+      if (options.length === 0 || options.filter(o => !o.props.hidden).length === 0) {
         return noDataText || i18n.t('el.select.noData');
       }
     }

@@ -1,6 +1,7 @@
 /* @flow */
 
 import React, { Children } from 'react';
+import { isEqual } from 'lodash';
 import { Component, PropTypes, View } from '../../libs';
 import OverflowTooltip from '../OverflowTooltip/OverflowTooltip';
 
@@ -56,7 +57,7 @@ export default class Option extends Component {
     const { selected, value } = this.props;
     return selected || (this.parent().props.multiple ?
       this.parent().state.value.indexOf(value) > -1 :
-      this.parent().state.value === value);
+      isEqual(this.parent().state.value, value));
   }
 
   currentLabel(): string {
@@ -67,7 +68,7 @@ export default class Option extends Component {
   itemSelected(): boolean {
     const { value } = this.props;
     if (Object.prototype.toString.call(this.parent().state.selected) === '[object Object]') {
-      return this === this.parent().state.selected;
+      return isEqual(this, this.parent().state.selected);
     } else if (Array.isArray(this.parent().state.selected)) {
       return this.parent().state.selected.map(el => el.props.value).indexOf(value) > -1;
     }
