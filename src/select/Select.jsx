@@ -77,6 +77,8 @@ class Select extends Component {
       query: '',
     };
 
+    this.isSingleRemoteOpend = false;
+
     if (props.multiple) {
       this.state.selectedInit = true;
       this.state.selected = [];
@@ -143,8 +145,8 @@ class Select extends Component {
       this.onVisibleChange(state.visible);
     }
 
-    if (state.query != this.state.query && props.remote && !props.multiple) {	
-      this.onQueryChange(state.query);	
+    if (state.query != this.state.query && props.remote && !props.multiple && this.isSingleRemoteOpend) {	
+      this.onQueryChange(state.query);
     }
 
     if (Array.isArray(state.selected)) {
@@ -268,6 +270,7 @@ class Select extends Component {
 
         this.setState({ bottomOverflowBeforeHidden, selectedLabel });
       }
+      this.isSingleRemoteOpend = false;
     } else {
       let icon = this.refs.root.querySelector('.el-input__icon');
 
@@ -307,6 +310,7 @@ class Select extends Component {
       this.setState({ query: query || '', dropdownUl }, () => {
         if (!multiple) {
           this.onQueryChange();
+          this.isSingleRemoteOpend = true;
         }
       });
     }
