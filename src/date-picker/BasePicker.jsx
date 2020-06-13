@@ -73,8 +73,6 @@ export default class BasePicker extends Component {
 
   static get defaultProps() {
     return {
-      value: new Date(),
-      // (thisReactElement)=>Unit
       onFocus() { },
       onBlur() { },
     }

@@ -12,11 +12,15 @@
 
 constructor(props) {
   super(props)
-  this.state = {}
+  this.state = {
+    value1: undefined,
+    value2: undefined,
+    value3: new Date(),
+  }
 }
 
 render() {
-  const {value1, value2} = this.state
+  const { value1, value2, value3 } = this.state
 
   return (
     <div className="source">
@@ -30,7 +34,16 @@ render() {
             this.setState({value1: date})
           }}
           disabledDate={time=>time.getTime() < Date.now() - 8.64e7}
-          />
+        />
+        <DatePicker
+          value={value3}
+          placeholder="选择日期"
+          onChange={date=>{
+            console.debug('DatePicker3 changed: ', date)
+            this.setState({value3: date})
+          }}
+          disabledDate={time=>time.getTime() < Date.now() - 8.64e7}
+        />
       </div>
       <div className="block">
         <span className="demonstration">带快捷选项</span>
