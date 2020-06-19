@@ -43,16 +43,16 @@
       }
     }
 
-    @m gray {
-      background-color: var(--tag-gray-fill);
-      border-color: var(--tag-gray-border);
-      color: var(--tag-gray-color);
+    @m info {
+      background-color: var(--tag-info-fill);
+      border-color: var(--tag-info-border);
+      color: var(--tag-info-color);
       @when hit {
-        border-color: var(--tag-gray-color);
+        border-color: var(--tag-info-color);
       }
 
       & .el-tag__close:hover {
-        background-color: var(--tag-gray-color);
+        background-color: var(--tag-info-color);
         color: var(--color-white);
       }
     }

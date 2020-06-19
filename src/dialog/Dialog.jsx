@@ -149,7 +149,7 @@ export default class Dialog extends Component {
                   {
                     showClose && (
                       <button type="button" className="el-dialog__headerbtn" onClick={e => this.close(e)}>
-                        <i className="el-dialog__close el-icon el-icon-close" />
+                        <i className="el-dialog__close icon-superset-close" />
                       </button>
                     )
                   }

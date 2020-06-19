@@ -3,9 +3,7 @@ declare module 'popper.js' {
 }
 
 declare module 'classnames' {
-  declare var exports: {
-    (): any
-  }
+  declare export default any;
 }
 
 declare module 'kyligence-react-click-outside' {

@@ -41,8 +41,8 @@
     }
 
     @e header {
-      padding: 15px 20px;
-      border-bottom: 1px solid #cccccc;
+      padding: 13px 20px;
+      border-bottom: 1px solid var(--dialog-border-color);
       @utils-clearfix;
     }
 
@@ -57,9 +57,11 @@
 
       .el-dialog__close {
         color: var(--dialog-close-color);
-        font-size: 12px;
-        vertical-align: middle;
+        font-size: 18px;
         line-height: 22px;
+        /* position: relative; */
+        /* transform: translate(-2px, -2px); */
+        display: inline-block;
       }
       
       &:focus, &:hover {
@@ -85,7 +87,7 @@
       padding: 10px 20px;
       text-align: right;
       box-sizing: border-box;
-      border-top: 1px solid #cccccc;
+      border-top: 1px solid var(--dialog-border-color);
     }
   }
 }

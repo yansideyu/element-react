@@ -19,6 +19,18 @@
   --color-danger: #E73371;
   --color-info: #7F7F7F;
 
+  --color-primary-light: tint(var(--color-primary), 80%);
+  --color-success-light: tint(var(--color-success), 80%);
+  --color-warning-light: tint(var(--color-warning), 80%);
+  --color-danger-light: tint(var(--color-danger), 80%);
+  --color-info-light: tint(var(--color-info), 80%);
+
+  --color-primary-lighter: tint(var(--color-primary), 90%);
+  --color-success-lighter: tint(var(--color-success), 90%);
+  --color-warning-lighter: tint(var(--color-warning), 90%);
+  --color-danger-lighter: tint(var(--color-danger), 90%);
+  --color-info-lighter: tint(var(--color-info), 90%);
+
   --color-success-background: #EAFFEA;
   --color-warning-background: #FFF6E0;
   --color-danger-background: #FFE7EF;
@@ -35,8 +47,13 @@
   --color-black: #000;
   --color-base-black: #191919;
   --color-base-grey: #323232;
-  --color-light-grey: #7F7F7F;
-  --color-light-blue: #e6f3fb;
+  --color-light-grey: #F5F5F5;
+
+  --color-text-primary: #252525;
+  --color-text-regular: #5c5c5c;
+  --color-text-secondary: #b0bec5;
+  --color-text-placeholder: #b6b6b6;
+  --color-text-disabled: var(--disabled-color-base);
 
   --color-base-dark: color(var(--color-primary) h(+6) s(33%) l(18%));
   /* --color-light-black: color(var(--color-base-dark) h(+5) s(27%) l(27%)); */
@@ -60,12 +77,16 @@
   -------------------------- */
   --border-width-base: 1px;
   --border-style-base: solid;
-  --border-color-base: #CCCCCC;
-  --border-color-hover: #B2B2B2;
+  --border-color-base: var(--disabled-border-base);
+  --border-color-light: #e4e7ed;
+  --border-color-lighter: #ebeef5;
+  --border-color-extra-light: #f2f6fc;
+  --border-color-hover: var(--color-text-placeholder);
   --border-base: var(--border-width-base) var(--border-style-base) var(--border-color-base);
   --border-radius-base: 2px;
   --border-radius-small: 2px;
   --border-radius-circle: 100%;
+  --border-split-color: var(--disabled-border-base);
 
   /* Box-shadow
   -------------------------- */
@@ -95,9 +116,9 @@
 
   /* Disable base
   -------------------------- */
-  --disabled-fill-base: #f4f4f4;
-  --disabled-color-base: #7f7f7f;
-  --disabled-border-base: #cccccc;
+  --disabled-fill-base: #f5f5f5;
+  --disabled-color-base: #989898;
+  --disabled-border-base: #ddd;
 
   /* Icon
   -------------------------- */
@@ -187,7 +208,7 @@
   --select-option-disabled-color: var(--color-extra-light-silver);
   --select-option-disabled-background: var(--color-white);
   --select-option-height: 36px;
-  --select-option-hover-background: var(--color-light-blue);
+  --select-option-hover-background: var(--color-primary-lighter);
   --select-option-selected: var(--color-white);
   --select-option-selected-hover: var(--select-option-hover-background);
 
@@ -224,8 +245,8 @@
 
   /* Message Box
   -------------------------- */
-  --msgbox-width: 480px;
-  --msgbox-border-radius: 2px;
+  --msgbox-width: 420px;
+  --msgbox-border-radius: 4px;
   --msgbox-font-size: 16px;
   --msgbox-content-font-size: 14px;
   --msgbox-content-color: var(--link-color);
@@ -368,17 +389,18 @@
   --button-mini-padding-vertical: 4px;
   --button-mini-padding-horizontal: 4px;
 
-  --button-default-color: #7F7F7F;
+  --button-default-color: var(--color-text-primary);
   --button-default-fill: var(--color-white);
-  --button-default-border: var(--border-color-base);
+  --button-default-border: var(--border-split-color);
+  --button-hover-default-color: #3AA0E5;
 
   --button-ghost-color: #666;
   --button-ghost-fill: transparent;
   --button-ghost-border: none;
 
-  --button-disabled-color: #7F7F7F;
-  --button-disabled-fill: #f4f4f4;
-  --button-disabled-border: #CCCCCC;
+  --button-disabled-color: var(--color-text-disabled);
+  --button-disabled-fill: var(--disabled-fill-base);
+  --button-disabled-border: var(--disabled-border-base);
 
   --button-primary-border: var(--color-primary);
   --button-primary-color: var(--color-white);
@@ -426,10 +448,11 @@
  -------------------------- */
   --dialog-background-color: var(--color-secondary);
   --dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --dialog-border-color: var(--disabled-border-base);
   --dialog-tiny-width: 480px;
   --dialog-small-width: 720px;
   --dialog-large-width: 960px;
-  --dialog-close-color: #B2B2B2;
+  --dialog-close-color: var(--disabled-color-base);
   --dialog-close-hover-color: var(--color-primary);
   --dialog-title-font-size: 16px;
   --dialog-font-size: 14px;
@@ -437,9 +460,9 @@
   /* Table
  -------------------------- */
   --table-border-color: var(--border-color-base);
-  --table-text-color: var(--color-base-black);
+  --table-text-color: var(--color-text-primary);
   --table-header-text-color: #323232;
-  --table-header-background: #CDE7F8;
+  --table-header-background: var(--color-light-grey);
   --table-row-hover-background: #E6F3FB;
   --table-footer-background: var(--color-dark-white);
 
@@ -484,25 +507,25 @@
   --tag-color: var(--color-white);
   --tag-close-color: #666;
   --tag-font-size: 12px;
-  --tag-border-radius: 4px;
+  --tag-border-radius: 2px;
 
-  --tag-gray-fill: var(--color-light-gray);
-  --tag-gray-border: var(--link-color);
-  --tag-gray-color: var(--link-color);
+  --tag-info-fill: var(--color-light-grey);
+  --tag-info-border: var(--color-text-placeholder);
+  --tag-info-color: var(--color-text-regular);
 
   --tag-primary-fill: rgba(var(--color-primary),0.10);
   --tag-primary-border: var(--color-primary);
   --tag-primary-color: var(--color-primary);
 
-  --tag-success-fill: rgba(18,206,102,0.10);
+  --tag-success-fill: var(--color-success-lighter);
   --tag-success-border: var(--color-success);
   --tag-success-color: var(--color-success);
 
-  --tag-warning-fill: rgba(247,186,41,0.10);
+  --tag-warning-fill: var(--color-warning-lighter);
   --tag-warning-border: var(--color-warning);
   --tag-warning-color: var(--color-warning);
 
-  --tag-danger-fill: rgba(255,73,73,0.10);
+  --tag-danger-fill: var(--color-danger-lighter);
   --tag-danger-border: var(--color-danger);
   --tag-danger-color: var(--color-danger);
 
@@ -636,6 +659,6 @@
   --transfer-panel-footer-height: 36px;
   --transfer-panel-body-height: 246px;
   --transfer-item-height: 30px;
-  --transfer-item-hover-background: var(--color-light-blue);
+  --transfer-item-hover-background: var(--color-primary-lighter);
   --transfer-filter-height: 24px;
 }

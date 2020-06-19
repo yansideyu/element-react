@@ -151,7 +151,7 @@ export default class MessageBox extends Component {
                           showClose && (
                             <button type="button" className="el-message-box__headerbtn" aria-label="Close"
                                     onClick={this.handleAction.bind(this, 'close')}>
-                              <i className="el-message-box__close el-icon-close" />
+                              <i className="el-message-box__close icon-superset-close" />
                             </button>
                           )
                         }
@@ -191,7 +191,7 @@ export default class MessageBox extends Component {
                               onClick={this.handleAction.bind(this, 'cancel')}>{this.cancelButtonText()}</Button>
                     </View>
                     <View show={showConfirmButton}>
-                      <Button plain type="primary" className={this.classNames(confirmButtonClass)}
+                      <Button type="primary" className={this.classNames(confirmButtonClass)}
                               onClick={this.handleAction.bind(this, 'confirm')}>{this.confirmButtonText()}</Button>
                     </View>
                   </div>

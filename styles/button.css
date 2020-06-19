@@ -26,10 +26,10 @@
 
     &:hover,
     &:focus {
-      color: var(--color-primary);
+      color: var(--button-hover-default-color);
       border-color: @color;
       &.el-button--default:not(.el-button--text):not(.is-plain):not(.is-disabled) {
-        background: var(--color-light-blue);
+        background: var(--color-primary-lighter);
       }
     }
 
@@ -50,11 +50,13 @@
     }
 
     @when plain {
+      background: var(--color-white);
+      border-color: var(--border-split-color);
+      color: var(--color-text-primary);
       &:hover,
       &:focus {
-        background: var(--color-white);
-        border-color: var(--color-primary);
-        color: var(--color-primary);
+        color: var(--button-hover-default-color);
+        border-color: @color;
       }
       
       &:active {

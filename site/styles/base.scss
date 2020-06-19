@@ -411,3 +411,10 @@ body {
 .page-component-up:hover {
   opacity: 1;
 }
+
+.tooltip-button {
+  display: inline-block;
+  & + .tooltip-button {
+    margin-left: 10px;
+  }
+}

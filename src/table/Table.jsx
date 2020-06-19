@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classnames from 'classnames';
 import { Component, PropTypes } from '../../libs';
 import TableHeader from './TableHeader';
 import TableBody from './TableBody';
@@ -24,7 +25,9 @@ export default class Table extends Component<TableProps, TableState> {
 
   constructor(props: TableProps) {
     super(props);
-    this.state = {};
+    this.state = {
+      scrollPositionY: props.tableStoreState.fixedColumns.length ? 'left' : null,
+    };
 
     // this.tableId = `el-table_${tableIdSeed++}_`;
     // this.tableId = tableIdSeed++;
@@ -85,6 +88,7 @@ export default class Table extends Component<TableProps, TableState> {
 
   syncScroll() {
     const { headerWrapper, footerWrapper, bodyWrapper, fixedBodyWrapper, rightFixedBodyWrapper } = this;
+    const { scrollPositionY } = this.state;
     if (headerWrapper) {
       headerWrapper.scrollLeft = bodyWrapper.scrollLeft;
     }
@@ -98,6 +102,14 @@ export default class Table extends Component<TableProps, TableState> {
     if (rightFixedBodyWrapper) {
       rightFixedBodyWrapper.scrollTop = bodyWrapper.scrollTop;
     }
+
+    if (bodyWrapper.scrollLeft === 0) {
+      this.setState({ scrollPositionY: 'left' });
+    } else if (bodyWrapper.scrollLeft >= +this.bodyWidth - bodyWrapper.clientWidth) {
+      this.setState({ scrollPositionY: 'right' });
+    } else if (scrollPositionY !== 'middle') {
+      this.setState({ scrollPositionY: 'middle' });
+    }
   }
 
   bindRef(key: string) {
@@ -106,7 +118,7 @@ export default class Table extends Component<TableProps, TableState> {
 
   render() {
     const { tableStoreState, layout, ...props } = this.props;
-    const { isHidden } = this.state;
+    const { isHidden, scrollPositionY } = this.state;
 
     return (
       <div
@@ -135,7 +147,10 @@ export default class Table extends Component<TableProps, TableState> {
         )}
         <div
           style={this.bodyWrapperHeight}
-          className="el-table__body-wrapper"
+          className={classnames([
+            'el-table__body-wrapper',
+            scrollPositionY && `is-scrolling-${scrollPositionY}`,
+          ])}
           ref={this.bindRef('bodyWrapper')}
           onScroll={this.syncScroll}
         >

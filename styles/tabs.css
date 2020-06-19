@@ -5,7 +5,7 @@
   @b tabs {
     clear: both;
     @e header {
-      border-bottom: 1px solid var(--color-base-gray);
+      border-bottom: 1px solid var(--disabled-border-base);
       padding: 0;
       position: relative;
       margin: 0 0 15px;
@@ -74,14 +74,14 @@
       float: left;
     }
     @e item {
-      padding: 0 10px;
+      padding: 0 16px;
       height: 30px;
       box-sizing: border-box;
       line-height: @height;
       display: inline-block;
       list-style: none;
       font-size: 14px;
-      color: #323232;
+      color: var(--color-text-regular);
       position: relative;
 
       & .el-icon-close {

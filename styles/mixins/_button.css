@@ -35,15 +35,15 @@
     }
 
     &:hover {
-      background: $background-color;
+      background: tint($background-color, 90%);
       border-color: $border-color;
-      color: var(--color-white);
+      color: $border-color;
     }
     
     &:active {
-      background: shade($background-color, var(--button-active-shade-percent));;
+      background: tint($background-color, 90%);
       border-color: shade($border-color, var(--button-active-shade-percent));
-      color: var(--color-white);
+      color: shade($border-color, var(--button-active-shade-percent));
       outline: none;
     }
   }

@@ -11,7 +11,7 @@ render() {
   return (
     <div>
       <Tag>标签一</Tag>
-      <Tag type="gray">标签二</Tag>
+      <Tag type="info">标签二</Tag>
       <Tag type="primary">标签三</Tag>
       <Tag type="success">标签四</Tag>
       <Tag type="warning">标签五</Tag>
@@ -33,7 +33,7 @@ constructor(props) {
   this.state = {
     tags: [
       { key: 1, name: '标签一', type: '' },
-      { key: 2, name: '标签二', type: 'gray' },
+      { key: 2, name: '标签二', type: 'info' },
       { key: 5, name: '标签三', type: 'primary' },
       { key: 3, name: '标签四', type: 'success' },
       { key: 4, name: '标签五', type: 'warning' },
@@ -157,7 +157,7 @@ render() {
 ### Attributes
 | 参数      | 说明          | 类型      | 可选值                           | 默认值  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
-| type | 主题 | string | 'primary', 'gray', 'success', 'warning', 'danger' | — |
+| type | 主题 | string | 'primary', 'info', 'success', 'warning', 'danger' | — |
 | closable | 是否可关闭 | boolean | — | false |
 | closeTransition | 是否禁用关闭时的渐变动画 | boolean | — | false |
 | hit | 是否有边框描边 | boolean | — | false |
