@@ -58,13 +58,6 @@ export default class Table extends Component<TableProps, TableState> {
     return bodyWidth ? bodyWidth - (scrollY ? gutterWidth : 0) : '';
   }
 
-  get fixedHeight(): Object {
-    const { layout } = this.props;
-    return {
-      bottom: layout.scrollX ? layout.gutterWidth - 1 : 0
-    };
-  }
-
   get fixedBodyHeight(): Object {
     const { layout, ...props } = this.props;
     const style = {};
@@ -181,7 +174,7 @@ export default class Table extends Component<TableProps, TableState> {
         )}
         {!!tableStoreState.fixedColumns.length && (
           <div
-            style={Object.assign({}, this.fixedHeight, {
+            style={Object.assign({}, {
               width: layout.fixedWidth || ''
             })}
             className="el-table__fixed"
@@ -227,7 +220,7 @@ export default class Table extends Component<TableProps, TableState> {
             style={Object.assign({}, {
               width: layout.rightFixedWidth || '',
               right: layout.scrollY ? (props.border ? layout.gutterWidth : (layout.gutterWidth || 1)) : ''
-            }, this.fixedHeight)}
+            })}
           >
             {props.showHeader && (
               <div className="el-table__fixed-header-wrapper" ref={this.bindRef('rightFixedHeaderWrapper')}>

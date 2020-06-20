@@ -43,7 +43,7 @@ export default class TableHeader extends Component<TableHeaderProps> {
     if (!column.resizable) return;
     if (column.subColumns && column.subColumns.length) return;
 
-    if (!this.dragging && this.props.border) {
+    if (!this.dragging) {
       let target: any = event.target;
       while (target && target.tagName !== 'TH') {
         target = target.parentNode;

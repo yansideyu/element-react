@@ -168,6 +168,16 @@
       }
     }
 
+    &:not(.el-table--border) th > .cell:after {
+      content: ' ';
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      right: 0;
+      width: 1px;
+      background-color: var(--table-border-color);
+    }
+
     @modifier hidden {
       visibility: hidden;
     }
@@ -196,7 +206,9 @@
       position: absolute;
       top: 0;
       left: 0;
+      bottom: 0;
       overflow-x: hidden;
+      border-bottom: 1px solid var(--table-border-color);
     }
 
     @e fixed-right-patch {
