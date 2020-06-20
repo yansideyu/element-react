@@ -168,7 +168,7 @@
       }
     }
 
-    &:not(.el-table--border) th > .cell:after {
+    &:not(.el-table--border) th:not(:nth-last-child(2)) > .cell:after {
       content: ' ';
       position: absolute;
       top: 5px;
