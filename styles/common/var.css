@@ -39,19 +39,16 @@
   --color-header-dark-background: #102D41;
 
   --color-base-header: #CDE7F8;
-  --color-base-border: #CCC;
+  --color-base-border: #DDD;
 
   --color-secondary: color(var(--color-primary) s(99%) l(*0.9));
   --color-white: #fff;
   --color-dark-white: color(var(--color-white) blend(var(--color-primary) 2%));
   --color-black: #000;
-  --color-base-black: #191919;
-  --color-base-grey: #323232;
   --color-light-grey: #F5F5F5;
 
   --color-text-primary: #252525;
-  --color-text-regular: #5c5c5c;
-  --color-text-secondary: #b0bec5;
+  --color-text-regular: #5C5C5C;
   --color-text-placeholder: #b6b6b6;
   --color-text-disabled: var(--disabled-color-base);
 
@@ -70,14 +67,14 @@
 
   /* Link
   -------------------------- */
-  --link-color: var(--color-base-black);
+  --link-color: var(--color-text-primary);
   --link-hover-color: var(--color-primary);
 
   /* Border
   -------------------------- */
   --border-width-base: 1px;
   --border-style-base: solid;
-  --border-color-base: var(--disabled-border-base);
+  --border-color-base: var(--color-base-border);
   --border-color-light: #e4e7ed;
   --border-color-lighter: #ebeef5;
   --border-color-extra-light: #f2f6fc;
@@ -86,7 +83,7 @@
   --border-radius-base: 2px;
   --border-radius-small: 2px;
   --border-radius-circle: 100%;
-  --border-split-color: var(--disabled-border-base);
+  --border-split-color: var(--color-base-border);
 
   /* Box-shadow
   -------------------------- */
@@ -127,7 +124,7 @@
   /* Checkbox
   -------------------------- */
   --checkbox-font-size: 14px;
-  --checkbox-color: var(--color-base-black);
+  --checkbox-color: var(--color-text-primary);
   --checkbox-input-height: 18px;
   --checkbox-input-width: 18px;
   --checkbox-input-border-radius: var(--border-radius-base);
@@ -160,7 +157,7 @@
   /* Radio
   -------------------------- */
   --radio-font-size: 14px;
-  --radio-color: var(--color-base-black);
+  --radio-color: var(--color-text-primary);
   --radio-input-height: 18px;
   --radio-input-width: 18px;
   --radio-input-border-radius: var(--border-radius-circle);
@@ -222,7 +219,7 @@
   --select-dropdown-max-height: 274px;
   --select-dropdown-padding: 6px 0;
   --select-dropdown-empty-padding: 10px 0;
-  --select-dropdown-border: solid 1px var(--disabled-border-base);
+  --select-dropdown-border: solid 1px var(--color-base-border);
 
   /* Alert
   -------------------------- */
@@ -233,7 +230,7 @@
   --alert-close-font-size: 12px;
   --alert-close-customed-font-size: 13px;
 
-  --alert-text-color: var(--color-base-black);
+  --alert-text-color: var(--color-text-primary);
   --alert-notice-color: var(--color-info-background);
   --alert-success-color: var(--color-success-background);
   --alert-info-color: var(--color-normal-background);
@@ -294,7 +291,7 @@
   /* Input
   -------------------------- */
   --input-font-size: var(--font-size-base);
-  --input-color: var(--color-base-black);
+  --input-color: var(--color-text-primary);
   --input-width: 140px;
   --input-height: 30px;
   --input-border: var(--border-base);
@@ -448,7 +445,7 @@
  -------------------------- */
   --dialog-background-color: var(--color-secondary);
   --dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --dialog-border-color: var(--disabled-border-base);
+  --dialog-border-color: var(--color-base-border);
   --dialog-tiny-width: 480px;
   --dialog-small-width: 720px;
   --dialog-large-width: 960px;
@@ -477,7 +474,7 @@
   --pagination-button-size: 24px;
   --pagination-button-disabled-color: #e4e4e4;
   --pagination-button-disabled-fill: var(--color-white);
-  --pagination-border-color: var(--disabled-border-base);
+  --pagination-border-color: var(--color-base-border);
   --pagination-hover-fill: var(--color-primary);
   --pagination-hover-color: var(--color-white);
 
@@ -485,7 +482,7 @@
  -------------------------- */
   --popover-fill: var(--color-white);
   --popover-font-size: 12px;
-  --popover-border-color: var(--disabled-border-base);
+  --popover-border-color: var(--color-base-border);
   --popover-arrow-size: 6px;
   --popover-padding: 10px;
   --popover-title-font-size: 13px;
@@ -584,7 +581,7 @@
   --menu-item-color: var(--link-color);
   /* --menu-item-fill: var(--color-extra-light-gray); */
   --menu-item-fill: var(--color-white);
-  --menu-item-hover-fill: var(--disabled-border-base);
+  --menu-item-hover-fill: var(--color-base-border);
   --menu-box-shadow: 0 2px 4px 0 #e5e5e5;
 
   --dark-menu-item-color: var(--link-color);
@@ -606,7 +603,7 @@
   --datepicker-off-color: #ddd;
   --datepicker-header-color: var(--border-color-hover);
   --datepicker-icon-color: var(--color-light-silver);
-  --datepicker-border-color: var(--disabled-border-base);
+  --datepicker-border-color: var(--color-base-border);
   --datepicker-inner-border-color: #e4e4e4;
   --datepicker-cell-hover-color: var(--color-light-gray);
   --datepicker-inrange-color: var(--color-info-background);
@@ -655,7 +652,7 @@
   --transfer-box-shadow: var(--box-shadow-base);
   --transfer-panel-width: 200px;
   --transfer-panel-header-height: 36px;
-  --transfer-panel-header-background: var(--color-base-header);
+  --transfer-panel-header-background: var(--color-light-grey);
   --transfer-panel-footer-height: 36px;
   --transfer-panel-body-height: 246px;
   --transfer-item-height: 30px;

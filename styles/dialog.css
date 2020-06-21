@@ -74,12 +74,12 @@
     @e title {
       font-size: var(--dialog-title-font-size);
       font-weight: var(--font-weight-medium);
-      color: var(--color-base-black);
+      color: var(--color-text-primary);
     }
 
     @e body {
       padding: 20px 20px;
-      color: var(--color-base-black);
+      color: var(--color-text-primary);
       font-size: var(--dialog-font-size);
     }
 

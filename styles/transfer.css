@@ -121,7 +121,7 @@
       padding-left: 10px;
       border-bottom: 1px solid var(--transfer-border-color);
       box-sizing: border-box;
-      color: var(--color-base-black);
+      color: var(--color-text-primary);
       font-weight: var(--font-weight-medium);
     }
 
@@ -140,7 +140,7 @@
 
       .el-checkbox {
         padding-left: 10px;
-        color: var(--color-light-grey);
+        color: var(--color-text-regular);
       }
     }
 
@@ -149,7 +149,7 @@
       height: var(--transfer-item-height);
       line-height: var(--transfer-item-height);
       padding: 6px 20px 0;
-      color: var(--color-light-grey);
+      color: var(--color-text-regular);
       text-align: center;
     }
 
