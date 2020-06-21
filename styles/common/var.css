@@ -31,11 +31,11 @@
   --color-danger-lighter: tint(var(--color-danger), 90%);
   --color-info-lighter: tint(var(--color-info), 90%);
 
-  --color-success-background: #EAFFEA;
-  --color-warning-background: #FFF6E0;
-  --color-danger-background: #FFE7EF;
-  --color-info-background: #E6F3FC;
-  --color-normal-background: #F4F4F4;
+  --color-success-background: var(--color-success-lighter);
+  --color-warning-background: var(--color-warning-lighter);
+  --color-danger-background: var(--color-danger-lighter);
+  --color-info-background: var(--color-primary-lighter);
+  --color-normal-background: var(--color-light-grey);
   --color-header-dark-background: #102D41;
 
   --color-base-header: #CDE7F8;
@@ -547,7 +547,7 @@
   --------------------------*/
   --card-border-color: var(--border-color-base);
   --card-border-radius: 2px;
-  --card-default-header-color: #F4F4F4;
+  --card-default-header-color: var(--color-light-grey);
   --card-primary-header-color: #CDE7F8;
 
   /* Slider
