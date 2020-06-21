@@ -16,12 +16,12 @@
       box-sizing: border-box;
       font-weight: var(--font-weight-medium);
       background-color: var(--card-default-header-color);
-      color: var(--color-base-black);
+      color: var(--color-text-primary);
     }
 
     @e body {
       padding: 10px 15px;
-      color: var(--color-base-black);
+      color: var(--color-text-primary);
     }
 
     @m primary {

@@ -32,7 +32,7 @@
         font-size: var(--message-content-font-size);
         margin: 0 34px 0 0;
         white-space: nowrap;
-        color: var(--color-base-black);
+        color: var(--color-text-primary);
         text-align: justify;
       }
       

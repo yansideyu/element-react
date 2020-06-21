@@ -121,7 +121,7 @@
       padding-left: 10px;
       border-bottom: 1px solid var(--transfer-border-color);
       box-sizing: border-box;
-      color: var(--color-base-black);
+      color: var(--color-text-primary);
       font-weight: var(--font-weight-medium);
     }
 
