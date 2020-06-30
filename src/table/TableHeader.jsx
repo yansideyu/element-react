@@ -52,7 +52,7 @@ export default class TableHeader extends Component<TableHeaderProps> {
       const rect = target.getBoundingClientRect();
       const bodyStyle = _document.body.style;
       if (rect.width > 12 && rect.right - event.pageX < 8) {
-        bodyStyle.cursor = 'col-resize';
+        bodyStyle.cursor = 'col-resize !important';
         this.draggingColumn = column;
       } else {
         bodyStyle.cursor = '';
