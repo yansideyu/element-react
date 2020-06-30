@@ -13,6 +13,7 @@
     background-color: var(--color-white);
     font-size: 14px;
     color: var(--table-text-color);
+    overflow: hidden;
 
     &::before {
       content: '';
@@ -146,7 +147,6 @@
     @modifier border {
       border-top: 1px solid var(--table-border-color);
       border-left: 1px solid var(--table-border-color);
-      overflow: hidden;
 
       &::after {
         content: '';
@@ -173,7 +173,7 @@
       position: absolute;
       top: 5px;
       bottom: 5px;
-      right: 0;
+      right: 1px;
       width: 1px;
       background-color: var(--table-border-color);
     }
@@ -208,7 +208,16 @@
       left: 0;
       bottom: 0;
       overflow-x: hidden;
-      border-bottom: 1px solid var(--table-border-color);
+      &:after {
+        content: ' ';
+        position: absolute;
+        height: 1px;
+        background-color: var(--table-border-color);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+      }
     }
 
     @e fixed-right-patch {
@@ -230,6 +239,9 @@
       .el-table__fixed-footer-wrapper {
         left: auto;
         right: 0;
+      }
+      th > .cell:after {
+        display: none;
       }
     }
 
@@ -302,16 +314,25 @@
         & + .el-table__fixed,
         & ~ .el-table__fixed-right {
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+          th > .cell:after {
+            display: none;
+          }
         }
       }
       @when scrolling-left {
         & ~ .el-table__fixed-right {
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+          th > .cell:after {
+            display: none;
+          }
         }
       }
       @when scrolling-right {
         & ~ .el-table__fixed {
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+          th > .cell:after {
+            display: none;
+          }
         }
       }
     }

@@ -55,7 +55,7 @@
       margin-left: 10px;
       border: 6px solid transparent;
       border-right-width: 0;
-      border-left-color: var(--color-light-silver);
+      border-left-color: var(--disabled-color-base);
       border-left-width: 7px;
 
       transform: rotate(0deg);

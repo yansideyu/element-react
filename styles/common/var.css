@@ -529,7 +529,7 @@
   /* Dropdown
   -------------------------- */
   --dropdown-menu-box-shadow: var(--box-shadow-dark);
-  --dropdown-menuItem-hover-fill: var(--color-light-gray);
+  --dropdown-menuItem-hover-fill: #E6F3FC;
   --dropdown-menuItem-hover-color: var(--link-color);
 
   /* Badge
@@ -649,7 +649,8 @@
   /* Transfer
   --------------------------*/
   --transfer-border-color: var(--color-base-border);
-  --transfer-box-shadow: var(--box-shadow-base);
+  /* --transfer-box-shadow: var(--box-shadow-base); */
+  --transfer-box-shadow: none;
   --transfer-panel-width: 200px;
   --transfer-panel-header-height: 36px;
   --transfer-panel-header-background: var(--color-light-grey);
