@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Popper from 'popper.js';
+import { merge } from '../../libs/utils/dataHelper';
 import { Component, PropTypes, Transition, View } from '../../libs';
 
 type State = {
@@ -100,18 +101,21 @@ export default class Popover extends Component {
   }
 
   onEnter(): void {
+    const { popperProps: customProps, placement } = this.props;
+
     if (this.refs.arrow) {
       this.refs.arrow.setAttribute('x-arrow', '');
     }
-
-    this.popperJS = new Popper(this.reference, this.refs.popper, {
-      placement: this.props.placement,
+    const defaultProps = {
+      placement,
       modifiers: {
         computeStyle: {
           gpuAcceleration: false
         }
       }
-    });
+    };
+    const popperProps = merge(defaultProps, customProps);
+    this.popperJS = new Popper(this.reference, this.refs.popper, popperProps);
   }
 
   onAfterLeave(): void {
@@ -147,5 +151,6 @@ Popover.propTypes = {
   popperClass: PropTypes.string,
   transition: PropTypes.string,
   visible: PropTypes.bool,
-  visibleArrow: PropTypes.bool
+  visibleArrow: PropTypes.bool,
+  popperProps: PropTypes.object,
 }

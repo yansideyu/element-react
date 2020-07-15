@@ -605,7 +605,6 @@ render() {
   return (
     <div>
       <div>
-        {/*
         <Select
           remote
           multiple
@@ -620,7 +619,6 @@ render() {
             <Select.Option key={el.value} label={el.label} value={el.value} />
           ))}
         </Select>
-        */}
         <Select
           remote
           multiple
@@ -638,7 +636,6 @@ render() {
         </Select>
       </div>
       <div>
-      {/*
         <Select
           remote
           filterable
@@ -666,7 +663,6 @@ render() {
             <Select.Option key={el.value} label={el.label} value={el.value} />
           ))}
         </Select>
-        */}
       </div>
     </div>
   )
