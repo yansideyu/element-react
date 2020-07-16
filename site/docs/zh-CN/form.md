@@ -203,6 +203,11 @@ render() {
           <Input value={this.state.form.type} onChange={this.onChange.bind(this, 'type')}></Input>
         </Form.Item>
       </Form>
+      <Form labelPosition={this.state.labelPosition} labelWidth="200" style={{ margin: '10px 0 0 0' }}>
+        <Form.Item label="回车该输入框，不会刷新页面">
+          <Input />
+        </Form.Item>
+      </Form>
     </div>
   )
 }

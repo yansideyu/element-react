@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Component, PropTypes } from '../../libs';
+import Input from '../input';
 
 type State = {
   fields: Array<Component>,
@@ -103,7 +104,10 @@ export default class Form extends Component {
     return (
       <form style={this.style()} className={this.className('el-form', this.props.labelPosition && `el-form--label-${this.props.labelPosition}`, {
         'el-form--inline': this.props.inline
-      })} onSubmit={this.props.onSubmit}>{this.props.children}</form>
+      })} onSubmit={this.props.onSubmit}>
+        <Input style={{ display: 'none' }} />
+        {this.props.children}
+      </form>
     )
   }
 }
