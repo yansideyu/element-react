@@ -546,18 +546,24 @@ constructor(props) {
       multiple1: ["Alabama", "Alaska"],
       single: "",
       single1: "Alabama",
+      showOptionsAfterFilter: "",
+      showOptionsAfterFilter1: "Alabama",
     },
     options: {
       multiple: [],
       multiple1: [],
       single: [],
       single1: [],
+      showOptionsAfterFilter: [],
+      showOptionsAfterFilter1: [],
     },
     loading: {
       multiple: false,
       multiple1: false,
       single: false,
       single1: false,
+      showOptionsAfterFilter: false,
+      showOptionsAfterFilter1: false,
     },
     states: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",   "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
   };
@@ -660,6 +666,37 @@ render() {
           remoteMethod={value => this.onSearch('single1', value)}
         >
           {options.single1.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+      </div>
+      <div>
+        <Select
+          remote
+          filterable
+          isShowOptionsAfterFilter
+          name="showOptionsAfterFilter"
+          value={value.showOptionsAfterFilter}
+          loading={loading.showOptionsAfterFilter}
+          onChange={value => this.handleInput('showOptionsAfterFilter', value)}
+          remoteMethod={value => this.onSearch('showOptionsAfterFilter', value)}
+        >
+          {options.showOptionsAfterFilter.map(el => (
+            <Select.Option key={el.value} label={el.label} value={el.value} />
+          ))}
+        </Select>
+        <Select
+          remote
+          filterable
+          isShowOptionsAfterFilter
+          size="small"
+          name="showOptionsAfterFilter1"
+          value={value.showOptionsAfterFilter1}
+          loading={loading.showOptionsAfterFilter1}
+          onChange={value => this.handleInput('showOptionsAfterFilter1', value)}
+          remoteMethod={value => this.onSearch('showOptionsAfterFilter1', value)}
+        >
+          {options.showOptionsAfterFilter1.map(el => (
             <Select.Option key={el.value} label={el.label} value={el.value} />
           ))}
         </Select>
@@ -801,6 +838,7 @@ render() {
 | prefixIcon | 前缀图表 | string | — | - |
 | showOverflowTooltip | 文字溢出是否展示tooltip，在自定义模板中不支持该功能。 | boolean | — | false |
 | popperProps | 弹出下拉属性设置，详情见[popper.js](https://popper.js.org/docs/v1/) | object | - | — |
+| isShowOptionsAfterFilter | 是否在过滤框输入之后，再弹出下拉选项 | boolean | - | — |
 
 ### Select Events
 | 事件名称 | 说明 | 回调参数 |

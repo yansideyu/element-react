@@ -40,7 +40,9 @@ type State = {
   voidRemoteQuery: boolean,
   valueChangeBySelected: boolean,
   selectedInit: boolean,
-  dropdownUl?: HTMLElement
+  dropdownUl?: HTMLElement,
+  isFocus: boolean,
+  isDirty: boolean,
 };
 
 const sizeMap: { [size: string]: number } = {
@@ -75,6 +77,8 @@ class Select extends Component {
       valueChangeBySelected: false,
       voidRemoteQuery: false,
       query: '',
+      isFocus: false,
+      isDirty: false,
     };
 
     this.isSingleRemoteOpend = false;
@@ -154,6 +158,8 @@ class Select extends Component {
         this.onSelectedChange(state.selected);
       }
     }
+
+    this.handleAfterFilterMenuState(props, state);
   }
 
   componentDidUpdate(props: Object) {
@@ -165,6 +171,13 @@ class Select extends Component {
 
   componentWillUnmount() {
     removeResizeListener(this.refs.root, this.resetInputWidth);
+  }
+
+  get isNormalDropdown() {
+    const { isShowOptionsAfterFilter, remote, filterable } = this.props;
+    const isValidShowOptionAfterFilter = isShowOptionsAfterFilter && (remote || filterable);
+
+    return !isShowOptionsAfterFilter || !isValidShowOptionAfterFilter
   }
 
   debounce(): number {
@@ -179,6 +192,11 @@ class Select extends Component {
         this.onQueryChange(value);
       }
     });
+    if (!this.isNormalDropdown) {
+      this.setState({ isDirty: true }, () => {
+        this.onQueryChange(value);
+      });
+    }
   }
 
   handleFilterMultiple = e => {
@@ -188,6 +206,11 @@ class Select extends Component {
       this.setState({ query }, () => {
         this.onQueryChange(query);
       });
+      if (!this.isNormalDropdown) {
+        this.setState({ isDirty: true }, () => {
+          this.onQueryChange(query);
+        });
+      }
     }, this.debounce());
 
     this.state.value = e.target.value;
@@ -196,6 +219,11 @@ class Select extends Component {
   handleClickOutside() {
     if (this.state.visible) {
       this.setState({ visible: false });
+    }
+    // 输入才展示下拉框逻辑
+    if (!this.isNormalDropdown) {
+      const { value } = this.props;
+      this.setState({ isFocus: false, isDirty: false, selectedLabel: value });
     }
   }
 
@@ -228,7 +256,9 @@ class Select extends Component {
 
       if (remote && visible) return;
       if (selected && !filterMethod) {
-        this.state.selectedLabel = selected.props.label || selected.props.value;
+        if (this.isNormalDropdown || (!this.isNormalDropdown && !this.state.isDirty)) {
+          this.state.selectedLabel = selected.props.label || selected.props.value;
+        }
       }
     }
   }
@@ -262,7 +292,9 @@ class Select extends Component {
 
         if (selected && selected.props) {
           if (selected.props.value) {
-            selectedLabel = selected.currentLabel();
+            if (this.isNormalDropdown || (!this.isNormalDropdown && !this.state.isDirty)) {
+              selectedLabel = selected.currentLabel();
+            }
           }
         } else if (filterable) {
           selectedLabel = '';
@@ -308,7 +340,7 @@ class Select extends Component {
       }
 
       this.setState({ query: query || '', dropdownUl }, () => {
-        if (!multiple) {
+        if (!multiple && this.isNormalDropdown) {
           this.onQueryChange();
           this.isSingleRemoteOpend = true;
         }
@@ -629,14 +661,16 @@ class Select extends Component {
     }, 300);
   }
 
-  toggleMenu() {
-    const { filterable, disabled } = this.props;
-    const { query, visible } = this.state;
+  toggleMenu(isVisiable) {
+    const { disabled } = this.props;
+    const { visible } = this.state;
 
-    if (!disabled) {
-      this.setState({
-        visible: !visible
-      });
+    if (isVisiable === undefined) {
+      if (!disabled) {
+        this.setState({ visible: !visible });
+      }
+    } else {
+      this.setState({ visible: isVisiable });
     }
   }
 
@@ -829,6 +863,10 @@ class Select extends Component {
 
       this.setState({ visible });
     });
+
+    if (!this.isNormalDropdown) {
+      this.setState({ isFocus: false, isDirty: false });
+    }
   }
 
   onMouseDown(event) {
@@ -838,7 +876,7 @@ class Select extends Component {
       this.refs.input.focus();
     }
 
-    this.toggleMenu();
+    this.handleClickSelect();
   }
 
   onMouseEnter() {
@@ -853,6 +891,46 @@ class Select extends Component {
     })
   }
 
+  handleClickSelect = () => {
+    if (this.isNormalDropdown) {
+      this.toggleMenu();
+    } else {
+      // 输入才展示下拉框逻辑
+      this.setState({ isFocus: true });
+    }
+  }
+
+  // 输入才展示下拉框逻辑
+  handleAfterFilterMenuState(props, state) {
+    const { multiple } = props;
+    const { isFocus, visible, isDirty, selectedLabel } = state;
+    if (!this.isNormalDropdown && isFocus) {
+      if (multiple) {
+        if (!visible) {
+          this.refs.input.focus();
+          if (isDirty) {
+            if (selectedLabel) {
+              this.toggleMenu(true);
+            }
+          }
+        } else if (isDirty && !selectedLabel) {
+          this.toggleMenu(false);
+        }
+      } else {
+        if (!visible) {
+          this.refs.reference.focus();
+          if (isDirty) {
+            if (selectedLabel) {
+              this.toggleMenu(true);
+            }
+          }
+        } else if (isDirty && !selectedLabel) {
+          this.toggleMenu(false);
+        }
+      }
+    }
+  }
+
   render() {
     const { multiple, size, disabled, filterable, loading, prefixIcon, warningMsg, showOverflowTooltip, children } = this.props;
     const { selected, inputWidth, inputLength, query, selectedLabel, visible, options, filteredOptionsCount, currentPlaceholder } = this.state;
@@ -861,7 +939,7 @@ class Select extends Component {
       <div ref="root" style={this.style()} className={this.className('el-select', visible && 'is-open')}>
         {
           multiple && (
-            <div ref="tags" className="el-select__tags" onClick={this.toggleMenu.bind(this)} style={{
+            <div ref="tags" className="el-select__tags" onClick={this.handleClickSelect} style={{
               maxWidth: inputWidth - 32
             }}>
               {
@@ -1003,6 +1081,7 @@ class Select extends Component {
 Select.defaultProps = {
   showOverflowTooltip: false,
   debounceMs: 300,
+  isShowOptionsAfterFilter: false,
 };
 
 Select.childContextTypes = {
@@ -1036,7 +1115,8 @@ Select.propTypes = {
   noMatchText: PropTypes.string,
   noDataText: PropTypes.string,
   positionFixed: PropTypes.bool,
-  popperProps: PropTypes.object
+  popperProps: PropTypes.object,
+  isShowOptionsAfterFilter: PropTypes.bool,
 }
 
 export default ClickOutside(Select);
