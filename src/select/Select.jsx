@@ -896,7 +896,14 @@ class Select extends Component {
       this.toggleMenu();
     } else {
       // 输入才展示下拉框逻辑
-      this.setState({ isFocus: true });
+      this.setState({ isFocus: true }, () => {
+        const { multiple } = this.props;
+        if (multiple) {
+          this.refs.input.focus();
+        } else {
+          this.refs.reference.focus();
+        }
+      });
     }
   }
 
@@ -932,7 +939,7 @@ class Select extends Component {
   }
 
   render() {
-    const { multiple, size, disabled, filterable, loading, prefixIcon, warningMsg, showOverflowTooltip, children } = this.props;
+    const { multiple, size, disabled, filterable, loading, prefixIcon, warningMsg, showOverflowTooltip, children, isShowMenu } = this.props;
     const { selected, inputWidth, inputLength, query, selectedLabel, visible, options, filteredOptionsCount, currentPlaceholder } = this.state;
 
     return (
@@ -1046,7 +1053,7 @@ class Select extends Component {
           }}
         />
         <Transition name="el-zoom-in-top" onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
-          <View show={visible && this.emptyText() !== false}>
+          <View show={visible && this.emptyText() !== false && isShowMenu}>
             <div
               ref="popper"
               className={this.classNames('el-select-dropdown', { 'is-multiple': multiple })}
@@ -1082,6 +1089,7 @@ Select.defaultProps = {
   showOverflowTooltip: false,
   debounceMs: 300,
   isShowOptionsAfterFilter: false,
+  isShowMenu: true
 };
 
 Select.childContextTypes = {
@@ -1117,6 +1125,7 @@ Select.propTypes = {
   positionFixed: PropTypes.bool,
   popperProps: PropTypes.object,
   isShowOptionsAfterFilter: PropTypes.bool,
+  isShowMenu: PropTypes.bool
 }
 
 export default ClickOutside(Select);

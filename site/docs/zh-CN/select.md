@@ -565,6 +565,7 @@ constructor(props) {
       showOptionsAfterFilter: false,
       showOptionsAfterFilter1: false,
     },
+    isShowMenu: false,
     states: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",   "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
   };
 }
@@ -595,19 +596,25 @@ onSearch(inputName, query) {
 
   return new Promise(resolve => {
     setTimeout(() => {
-      const { states } = this.state;
+      const { states, isShowMenu } = this.state;
       const options = this.allOptions.filter(item => (
         item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
       ));
       this.handleLoading(inputName, false);
       this.handleOptions(inputName, options);
+
+      if (query) {
+        this.setState({ isShowMenu: true });
+      } else {
+        this.setState({ isShowMenu: false });
+      }
       resolve();
     }, 200);
   });
 }
 
 render() {
-  const { value, options, loading } = this.state;
+  const { value, options, loading, isShowMenu } = this.state;
   return (
     <div>
       <div>
@@ -616,6 +623,7 @@ render() {
           multiple
           filterable
           name="multiple"
+          isShowMenu={isShowMenu}
           value={value.multiple}
           loading={loading.multiple}
           onChange={value => this.handleInput('multiple', value)}
