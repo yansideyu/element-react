@@ -27,23 +27,18 @@
 
 .icon-superset-column:before {
   content: "\e901";
-  color: #5c5c5c;
 }
 .icon-superset-divider:before {
   content: "\e902";
-  color: #5c5c5c;
 }
 .icon-superset-header:before {
   content: "\e903";
-  color: #5c5c5c;
 }
 .icon-superset-row:before {
   content: "\e904";
-  color: #5c5c5c;
 }
 .icon-superset-tab:before {
   content: "\e905";
-  color: #5c5c5c;
 }
 .icon-superset-component:before {
   content: "\e900";
