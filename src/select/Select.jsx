@@ -423,17 +423,12 @@ class Select extends Component {
       }
 
       if (filterable) {
-        query = '';
         hoverIndex = -1;
         inputLength = 20;
       }
 
-      this.setState({ valueChangeBySelected, query, hoverIndex, inputLength }, () => {
-        if (this.refs.input) {
-          this.refs.input.value = '';
-        }
-      });
-      this.onQueryChange();
+      this.setState({ valueChangeBySelected, query, hoverIndex, inputLength });
+      this.onQueryChange(query);
     } else {
       if (selectedInit) {
         return this.setState({
