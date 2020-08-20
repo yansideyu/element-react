@@ -55,6 +55,7 @@ const sizeMap: { [size: string]: number } = {
 class Select extends Component {
   state: State;
   debouncedOnInputChange: Function;
+  timer: TimeoutID;
 
   constructor(props: Object) {
     super(props);
@@ -95,6 +96,10 @@ class Select extends Component {
     this.debouncedOnInputChange = debounce(this.debounce(), () => {
       this.onInputChange();
     });
+    this.onQueryChange = query => {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => this._onQueryChange(query), 100);
+    };
 
     this.resetInputWidth = this._resetInputWidth.bind(this)
   }
@@ -303,6 +308,12 @@ class Select extends Component {
         this.setState({ bottomOverflowBeforeHidden, selectedLabel });
       }
       this.isSingleRemoteOpend = false;
+      if (this.props.multiple && this.props.filterable) {
+        this.refs.input.value = '';
+        this.setState({ query: '' }, () => {
+          this.onQueryChange();
+        });
+      }
     } else {
       let icon = this.refs.root.querySelector('.el-input__icon');
 
@@ -443,7 +454,7 @@ class Select extends Component {
     }
   }
 
-  onQueryChange(query = '') {
+  _onQueryChange(query = '') {
     const { multiple, filterable, remote, remoteMethod, filterMethod } = this.props;
     let { voidRemoteQuery, hoverIndex, options, optionsCount } = this.state;
 
