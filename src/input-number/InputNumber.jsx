@@ -56,7 +56,7 @@ export default class InputNumber extends Component {
         value = Number(this.props.min);
       }
     } else {
-      value = undefined;
+      value = this.props.value || this.props.defaultValue;
     }
 
     this.setState({ value }, this.onChange);
