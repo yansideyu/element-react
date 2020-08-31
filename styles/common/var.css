@@ -43,7 +43,7 @@
 
   --color-secondary: color(var(--color-primary) s(99%) l(*0.9));
   --color-white: #fff;
-  --color-dark-white: color(var(--color-white) blend(var(--color-primary) 2%));
+  --color-dark-white: #FAFAFA;
   --color-black: #000;
   --color-light-grey: #F5F5F5;
 
