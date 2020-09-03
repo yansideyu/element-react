@@ -80,6 +80,7 @@ class Jumper extends Component {
           type="number"
           min={1}
           size="small"
+          ref="editor"
           max={this.props.internalPageCount}
           defaultValue={this.props.internalCurrentPage}
           onBlur={this.handleChange.bind(this)}
@@ -171,6 +172,7 @@ export default class Pagination extends Component {
               ? this.getValidCurrentPage(nextProps.currentPage)
               : 1
           });
+          this.updatePageEditor(nextProps.currentPage);
         }
       );
     }
@@ -188,6 +190,7 @@ export default class Pagination extends Component {
         if (this.state.internalCurrentPage !== oldPage) {
           const onCurrentChange = this.props.onCurrentChange;
           onCurrentChange && onCurrentChange(this.state.internalCurrentPage);
+          this.updatePageEditor(this.state.internalCurrentPage);
         }
       }
     );
@@ -205,6 +208,7 @@ export default class Pagination extends Component {
         if (this.state.internalCurrentPage !== oldPage) {
           const onCurrentChange = this.props.onCurrentChange;
           onCurrentChange && onCurrentChange(this.state.internalCurrentPage);
+          this.updatePageEditor(this.state.internalCurrentPage);
         }
       }
     );
@@ -257,6 +261,7 @@ export default class Pagination extends Component {
         if (oldPage !== this.state.internalCurrentPage) {
           const onCurrentChange = this.props.onCurrentChange;
           onCurrentChange && onCurrentChange(this.state.internalCurrentPage);
+          this.updatePageEditor(this.state.internalCurrentPage);
         }
       }
     );
@@ -274,9 +279,16 @@ export default class Pagination extends Component {
         if (oldPage !== this.state.internalCurrentPage) {
           const onCurrentChange = this.props.onCurrentChange;
           onCurrentChange && onCurrentChange(this.state.internalCurrentPage);
+          this.updatePageEditor(this.state.internalCurrentPage);
         }
       }
     );
+  }
+
+  updatePageEditor(currentPage: number) {
+    if (this.refs.jumper && this.refs.jumper.refs.editor) {
+      this.refs.jumper.refs.editor.value = currentPage;
+    }
   }
 
   onSizeChange(val: number) {
@@ -288,11 +300,16 @@ export default class Pagination extends Component {
           internalPageSize: val
         },
         () => {
-          this.setState({
-            internalCurrentPage: this.getValidCurrentPage(
-              this.state.internalCurrentPage
-            )
-          });
+          this.setState(
+            {
+              internalCurrentPage: this.getValidCurrentPage(
+                this.state.internalCurrentPage
+              )
+            },
+            () => {
+              this.updatePageEditor(this.state.internalCurrentPage);
+            }
+          );
           const { onSizeChange } = this.props;
           onSizeChange && onSizeChange(val);
         }
@@ -326,6 +343,7 @@ export default class Pagination extends Component {
       jumper: (
         <Jumper
           key="jumper"
+          ref="jumper"
           jumper={this.jumperToPage.bind(this)}
           internalPageCount={this.internalPageCount()}
           internalCurrentPage={internalCurrentPage}

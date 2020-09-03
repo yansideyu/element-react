@@ -59,7 +59,7 @@ render() {
       </div>
       <div className="block">
         <span className="demonstration">完整功能</span>
-        <Pagination layout="total, sizes, prev, pager, next, jumper" total={400} pageSizes={[100, 200, 300, 400]} pageSize={100} currentPage={5}/>
+        <Pagination layout="total, sizes, prev, pager, next, jumper" total={400} pageSizes={[100, 200, 300, 400]} pageSize={100} currentPage={4}/>
       </div>
     </div>
   )
