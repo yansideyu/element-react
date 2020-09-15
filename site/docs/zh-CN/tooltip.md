@@ -16,7 +16,7 @@ render() {
         <Tooltip className="item" effect="dark" content="Top Left 提示文字" placement="top-start">
           <Button>上左</Button>
         </Tooltip>
-        <Tooltip className="item" effect="dark" content="Top Center 提示文字" placement="top">
+        <Tooltip appendToBody className="item" effect="dark" content="Top Center 提示文字" placement="top">
           <Button>上边</Button>
         </Tooltip>
         <Tooltip className="item" effect="dark" content="Top Right 提示文字" placement="top-end">
@@ -144,3 +144,4 @@ render() {
 | manual | 手动控制模式，设置为 true 后，mouseenter 和 mouseleave 事件将不会生效 | Boolean | true,false| false |
 | positionFixed       | 是否fixed定位     | boolean          | — | false |
 | popperClass       | tooltip的popper样式类名     | string          | — | undefined |
+| appendToBody | 是否挂载到body上 | Boolean | - | - |

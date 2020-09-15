@@ -3,7 +3,7 @@
 import React from 'react';
 import Popper from 'popper.js';
 import { merge } from '../../libs/utils/dataHelper';
-import { Component, PropTypes, Transition, View } from '../../libs';
+import { Component, PropTypes, Transition, View, MountBody } from '../../libs';
 
 type State = {
   showPopper: boolean;
@@ -21,6 +21,7 @@ export default class Tooltip extends Component {
     openDelay: 0,
     manual: false,
     positionFixed: false,
+    appendToBody: false,
   }
 
   constructor(props: Object) {
@@ -88,29 +89,35 @@ export default class Tooltip extends Component {
     this.popperJS.destroy();
   }
 
-  render(): React.DOM {
-    const { effect, content, disabled, transition, visibleArrow, popperClass, children } = this.props;
+  renderTooltip() {
+    const { effect, content, disabled, transition, visibleArrow, popperClass } = this.props;
     const { showPopper } = this.state;
+
+    return !disabled && (
+      <Transition name={transition} onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
+        <View show={showPopper}>
+          <div ref="popper" className={this.classNames("el-tooltip__popper", `is-${effect}`, popperClass)}>
+            <div>{content}</div>
+            {visibleArrow && (
+              <div ref="arrow" className="popper__arrow" />
+            )}
+          </div>
+        </View>
+      </Transition>
+    )
+  }
+
+  render(): React.DOM {
+    const { children, appendToBody } = this.props;
 
     return (
       <div style={this.style()} className={this.className('el-tooltip')} onMouseEnter={this.showPopper.bind(this)} onMouseLeave={this.hidePopper.bind(this)}>
         <div ref="reference" className="el-tooltip__rel">
           <div>{children}</div>
         </div>
-        {
-          !disabled && (
-            <Transition name={transition} onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
-              <View show={showPopper}>
-                <div ref="popper" className={this.classNames("el-tooltip__popper", `is-${effect}`, popperClass)}>
-                  <div>{content}</div>
-                  {visibleArrow && (
-                    <div ref="arrow" className="popper__arrow" />
-                  )}
-                </div>
-              </View>
-            </Transition>
-          )
-        }
+        {appendToBody
+          ? <MountBody>{this.renderTooltip()}</MountBody>
+          : this.renderTooltip()}
       </div>
     )
   }
@@ -137,4 +144,5 @@ Tooltip.propTypes = {
   visible: PropTypes.bool,
   positionFixed: PropTypes.bool,
   popperClass: PropTypes.string,
+  appendToBody: PropTypes.bool,
 };
