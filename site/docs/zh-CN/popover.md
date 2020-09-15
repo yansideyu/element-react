@@ -11,7 +11,7 @@ render() {
       <Popover placement="top-start" title="标题" width="200" trigger="hover" content="这是一段容,这是一段容,这是一段容,这是一段容。">
         <Button>hover 激活</Button>
       </Popover>
-      <Popover placement="bottom" title="标题" width="200" trigger="click" content="这是一段容,这是一段容,这是一段容,这是一段容。">
+      <Popover appendToBody placement="bottom" title="标题" width="200" trigger="click" content="这是一段容,这是一段容,这是一段容,这是一段容。">
         <Button>click 激活</Button>
       </Popover>
       <Popover placement="right" title="标题" width="200" trigger="focus" content="这是一段容,这是一段容,这是一段容,这是一段容。">
@@ -134,3 +134,4 @@ render() {
 |  transition     |  定义渐变动画      | String             | — | fade-in-linear |
 |  visibleArrow   |  是否显示 Tooltip 箭头 | Boolean | — | true |
 | popperClass | 为 popper 添加类名 | String | - | -|
+| appendToBody | 是否挂载到body上 | Boolean | - | -|

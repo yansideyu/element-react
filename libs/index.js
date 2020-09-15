@@ -11,3 +11,4 @@ export { default as PropTypes } from './props';
 export { default as View } from './view';
 export { default as Animate } from './animate';
 export { default as LazyList } from './lazyList';
+export { default as MountBody } from './MountBody/MountBody';

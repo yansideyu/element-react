@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Popper from 'popper.js';
 import { merge } from '../../libs/utils/dataHelper';
-import { Component, PropTypes, Transition, View } from '../../libs';
+import { Component, PropTypes, Transition, View, MountBody } from '../../libs';
 
 type State = {
   showPopper: boolean
@@ -18,7 +18,8 @@ export default class Popover extends Component {
     transition: 'fade-in-linear',
     trigger: 'click',
     placement: 'bottom',
-    width: 150
+    width: 150,
+    appendToBody: false
   }
 
   constructor(props: Object) {
@@ -122,20 +123,28 @@ export default class Popover extends Component {
     this.popperJS.destroy();
   }
 
-  render(): React.DOM {
+  renderPopover(): React.DOM {
     const { transition, popperClass, width, title, content, visibleArrow } = this.props;
 
     return (
+      <Transition name={transition} onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
+        <View show={this.state.showPopper}>
+          <div ref="popper" className={this.className('el-popover', popperClass)} style={this.style({ width: Number(width) })}>
+            { title && <div className="el-popover__title">{title}</div> }
+            { content }
+            { visibleArrow && <div ref="arrow" className="popper__arrow"/>}
+          </div>
+        </View>
+      </Transition>
+    )
+  }
+
+  render(): React.DOM {
+    const { appendToBody } = this.props;
+
+    return (
       <span>
-        <Transition name={transition} onEnter={this.onEnter.bind(this)} onAfterLeave={this.onAfterLeave.bind(this)}>
-          <View show={this.state.showPopper}>
-            <div ref="popper" className={this.className('el-popover', popperClass)} style={this.style({ width: Number(width) })}>
-              { title && <div className="el-popover__title">{title}</div> }
-              { content }
-              { visibleArrow && <div ref="arrow" className="popper__arrow"/>}
-            </div>
-          </View>
-        </Transition>
+        {appendToBody ? <MountBody>{this.renderPopover()}</MountBody> : this.renderPopover()}
         { React.cloneElement(React.Children.only(this.props.children), { ref: 'reference' }) }
       </span>
     )
@@ -153,4 +162,5 @@ Popover.propTypes = {
   visible: PropTypes.bool,
   visibleArrow: PropTypes.bool,
   popperProps: PropTypes.object,
+  appendToBody: PropTypes.bool,
 }
