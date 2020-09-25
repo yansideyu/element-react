@@ -843,7 +843,7 @@ render() {
 | remote | 是否为远程搜索 | boolean | — | false |
 | remoteMethod | 远程搜索方法 | function | — | — |
 | loading | 是否正在从远程获取数据 | boolean | — | false |
-| prefixIcon | 前缀图表 | string | — | - |
+| prefixIcon | 前缀图标 | string | — | - |
 | showOverflowTooltip | 文字溢出是否展示tooltip，在自定义模板中不支持该功能。 | boolean | — | false |
 | popperProps | 弹出下拉属性设置，详情见[popper.js](https://popper.js.org/docs/v1/) | object | - | — |
 | isShowOptionsAfterFilter | 是否在过滤框输入之后，再弹出下拉选项 | boolean | - | — |

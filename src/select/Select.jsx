@@ -515,7 +515,7 @@ class Select extends Component {
 
     if (!this.refs.root) return false;
 
-    let icon = this.refs.root.querySelector('.el-input__icon');
+    let icon = this.refs.root.querySelector('.el-input__suffix.el-input__icon');
 
     if (icon) {
       if (criteria) {
