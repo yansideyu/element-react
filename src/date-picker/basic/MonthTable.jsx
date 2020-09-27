@@ -45,11 +45,7 @@ export default class MonthTable extends Component {
             months.map((key, idx) => {
               return (
                 <td className={this.classNames(this.getCellStyle(idx))} key={idx}>
-                  <div>
-                    <span>
-                      <a className="cell">{$t(`el.datepicker.months.${key}`)}</a>
-                    </span>
-                  </div>
+                  <a className="cell">{$t(`el.datepicker.months.${key}`)}</a>
                 </td>
               )
             }).reduce((col, item) => {
